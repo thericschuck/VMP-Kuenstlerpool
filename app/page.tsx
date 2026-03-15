@@ -2,9 +2,7 @@ import ScrollIndicator      from '@/components/ScrollIndicator'
 import BandCard             from '@/components/BandCard'
 import ContactForm          from '@/components/ContactForm'
 import VinylRecord          from '@/components/VinylRecord'
-import FloatingNotes        from '@/components/FloatingNotes'
 import RevealCards          from '@/components/RevealCards'
-import CountUp              from '@/components/CountUp'
 
 // ── Static data ───────────────────────────────────────────────────
 
@@ -172,79 +170,296 @@ export default function HomePage() {
       ═══════════════════════════════════════════════════════════ */}
       <section
         id="hero"
-        className="relative min-h-screen flex items-center"
         aria-labelledby="hero-heading"
         style={{
+          position:   'relative',
           overflow:   'visible',
-          background: 'radial-gradient(ellipse 55% 70% at 88% 75%, rgba(184,148,60,0.18) 0%, rgba(184,148,60,0.08) 30%, rgba(247,243,237,0) 65%)',
+          minHeight:  '100vh',
+          display:    'flex',
+          flexDirection: 'column',
+          background: [
+            'radial-gradient(ellipse 55% 70% at 88% 75%, rgba(184,148,60,0.18) 0%, rgba(184,148,60,0.08) 30%, rgba(247,243,237,0) 65%)',
+            'var(--color-cream)',
+          ].join(', '),
         }}
       >
-
         {/* ── Vinyl Record – overflows into Easy Listening ── */}
         <div className="vinyl-hero" aria-hidden="true">
           <VinylRecord />
         </div>
 
-        {/* ── Text content ── */}
-        <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-10 pt-24 pb-28" style={{ zIndex: 1 }}>
-          <div className="max-w-xl lg:max-w-2xl">
+        {/* ══ Block 1: Branding Header ══════════════════════════════ */}
+        <div
+          style={{
+            textAlign:    'center',
+            paddingTop:   '72px',
+            paddingBottom:'36px',
+            borderBottom: '1px solid var(--color-cream-dark)',
+            position:     'relative',
+            zIndex:        1,
+          }}
+        >
+          <p style={{
+            fontFamily:    'var(--font-display)',
+            fontSize:      '13px',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color:         'var(--color-gold)',
+            marginBottom:  '10px',
+          }}>
+            Vivid Music Productions
+          </p>
+          <h1
+            id="hero-heading"
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize:   'clamp(26px, 4vw, 36px)',
+              fontWeight: 700,
+              color:      'var(--color-ink)',
+              marginBottom: '10px',
+            }}
+          >
+            VMP – Künstlerpool
+          </h1>
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize:   '14px',
+            color:      'var(--color-brown)',
+            fontStyle:  'italic',
+          }}>
+            Seit 20 Jahren Livemusik auf höchstem Niveau
+          </p>
+        </div>
 
-            <h1
-              id="hero-heading"
-              className="text-4xl sm:text-5xl lg:text-[3.25rem] xl:text-[3.75rem] font-bold leading-tight mb-5"
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--color-ink)' }}
+        {/* ══ Block 2: Direktkontakt – zweispaltig ═════════════════ */}
+        <div
+          style={{
+            flex:     1,
+            display:  'flex',
+            alignItems: 'center',
+            position: 'relative',
+            zIndex:    1,
+          }}
+        >
+          <div className="w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-16">
+            <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
+
+              {/* Left column – 40% */}
+              <div className="w-full lg:w-[40%] flex-shrink-0">
+                <h2
+                  style={{
+                    fontFamily:   'var(--font-display)',
+                    fontSize:     'clamp(24px, 3.5vw, 36px)',
+                    fontWeight:   700,
+                    color:        'var(--color-ink)',
+                    lineHeight:   1.25,
+                    marginBottom: '16px',
+                  }}
+                >
+                  Ihr Künstler<br />Direktkontakt
+                </h2>
+                <p style={{
+                  fontFamily:   'var(--font-body)',
+                  fontSize:     '15px',
+                  color:        'var(--color-brown)',
+                  lineHeight:   1.7,
+                  marginBottom: '24px',
+                  maxWidth:     '420px',
+                }}>
+                  Top Livemusik aus Frankfurt am Main für Ihren Event,
+                  Ihre Firmenfeier, Ihre Hochzeit oder Ihr Stadtfest.
+                  Im VMP-Künstlerpool organisieren sich Profimusiker in Eigenregie.
+                </p>
+
+                {/* Phone */}
+                <a
+                  href="tel:+4960787595868"
+                  style={{
+                    display:      'flex',
+                    alignItems:   'center',
+                    gap:          '10px',
+                    fontFamily:   'var(--font-display)',
+                    fontSize:     '22px',
+                    color:        'var(--color-gold)',
+                    marginBottom: '28px',
+                    textDecoration: 'none',
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/>
+                  </svg>
+                  +49 6078 759568
+                </a>
+
+                {/* CTA */}
+                <a
+                  href="#kontakt"
+                  className="inline-block transition-all duration-200 hover:brightness-110 hover:shadow-lg active:scale-95"
+                  style={{
+                    padding:        '12px 32px',
+                    borderRadius:   '999px',
+                    background:     'var(--color-gold)',
+                    color:          '#ffffff',
+                    fontFamily:     'var(--font-body)',
+                    fontSize:       '15px',
+                    fontWeight:     500,
+                    textDecoration: 'none',
+                  }}
+                >
+                  Jetzt anfragen
+                </a>
+              </div>
+
+              {/* Right column – 60% */}
+              <div className="w-full lg:w-[60%]" style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ display: 'flex', gap: '12px', height: 'clamp(220px, 28vw, 360px)' }}>
+                  {/* Small portrait photo (Bobby) */}
+                  <div style={{
+                    width:        '35%',
+                    flexShrink:    0,
+                    borderRadius:  '12px',
+                    background:    'var(--color-cream-dark)',
+                    boxShadow:     '0 8px 32px rgba(26,20,16,0.10)',
+                    overflow:      'hidden',
+                  }} aria-label="Foto Bobby Stoker" />
+                  {/* Large landscape photo (Event/Stage) */}
+                  <div style={{
+                    flex:          1,
+                    borderRadius:  '12px',
+                    background:    'var(--color-cream-dark)',
+                    boxShadow:     '0 8px 32px rgba(26,20,16,0.10)',
+                    overflow:      'hidden',
+                  }} aria-label="Event-Foto" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* ══ Block 3: Gradient-Übergang + Scroll-Indicator ════════ */}
+        <div style={{
+          height:     '80px',
+          background: 'linear-gradient(to bottom, var(--color-cream) 0%, #ffffff 100%)',
+          position:   'relative',
+          zIndex:      1,
+          flexShrink:  0,
+        }}>
+          <ScrollIndicator />
+        </div>
+
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          Eventarten — Die richtige Band für Ihren Event
+      ═══════════════════════════════════════════════════════════ */}
+      <section
+        id="eventarten"
+        style={{ background: '#ffffff', paddingTop: '100px', paddingBottom: 0 }}
+        aria-labelledby="heading-eventarten"
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+
+          {/* Heading + gold divider */}
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2
+              id="heading-eventarten"
+              style={{
+                fontFamily:   'var(--font-display)',
+                fontSize:     'clamp(24px, 3.5vw, 36px)',
+                color:        'var(--color-ink)',
+                marginBottom: '20px',
+                lineHeight:   1.25,
+              }}
             >
-              Livemusik auf höchstem Niveau
-            </h1>
+              Die richtige Musik &amp; Band<br className="hidden sm:block" /> für Ihren Event finden
+            </h2>
+            <div style={{ width: '60px', height: '2px', background: 'var(--color-gold)', margin: '0 auto' }} />
+          </div>
 
-            <p className="text-lg leading-relaxed mb-8" style={{ color: 'var(--color-brown)' }}>
-              Buchen Sie Ihre Wunschband direkt –{' '}
-              ohne Umwege, ohne Aufpreis.
-            </p>
+          {/* 3-column grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
 
-            <div className="flex flex-col items-start gap-3 mb-8">
-              <a
-                href="#kontakt"
-                className="inline-block px-8 py-3.5 rounded-full text-white font-medium text-base transition-all duration-200 hover:brightness-110 hover:shadow-lg active:scale-95"
-                style={{ background: 'var(--color-gold)' }}
-              >
-                Jetzt anfragen
-              </a>
-              <p className="text-sm" style={{ color: 'var(--color-brown)' }}>
-                ✓ Direktkontakt · Seit{' '}
-                <CountUp target={20} />{' '}
-                Jahren · <CountUp target={10} /> Bands
+            {/* Card 1 – Hochzeiten */}
+            <div className="group">
+              <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', marginBottom: '20px' }}>
+                <div
+                  className="w-full h-full transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                  style={{ background: '#f5ede8' }}
+                />
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '10px' }}>
+                Hochzeitsbands
+              </h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'var(--color-brown)', lineHeight: 1.7, marginBottom: '16px' }}>
+                Von der romantischen Trauung bis zur ausgelassenen Tanzfläche –
+                wir finden die perfekte Band für Ihren großen Tag.
               </p>
+              <a
+                href="#easy-listening"
+                className="event-card-link"
+                style={{ color: 'var(--color-gold)', fontSize: '13px', fontWeight: 500, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+              >
+                Bands entdecken <span className="event-card-arrow">→</span>
+              </a>
             </div>
 
-            <div>
-              <p
-                className="text-xs font-medium uppercase tracking-wider mb-3"
-                style={{ color: 'var(--color-brown)' }}
-              >
-                Bereits gebucht von:
-              </p>
-              <div className="flex flex-wrap gap-2" aria-label="Referenzkunden">
-                {REFERENCE_CLIENTS.map((name) => (
-                  <span
-                    key={name}
-                    className="text-sm px-3.5 py-1 rounded-full font-medium border"
-                    style={{
-                      borderColor: 'var(--color-gold-light)',
-                      color:       'var(--color-gold)',
-                      background:  'var(--color-cream)',
-                    }}
-                  >
-                    {name}
-                  </span>
-                ))}
+            {/* Card 2 – Firmenevents & Galas */}
+            <div className="group">
+              <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', marginBottom: '20px' }}>
+                <div
+                  className="w-full h-full transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                  style={{ background: '#e8ede5' }}
+                />
               </div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '10px' }}>
+                Firmenevents &amp; Galas
+              </h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'var(--color-brown)', lineHeight: 1.7, marginBottom: '16px' }}>
+                Bereits gebucht von Audi, Daimler und der Deutschen Bank –
+                Entertainment auf höchstem Niveau für exklusive Anlässe.
+              </p>
+              <a
+                href="#partybands"
+                className="event-card-link"
+                style={{ color: 'var(--color-gold)', fontSize: '13px', fontWeight: 500, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+              >
+                Bands entdecken <span className="event-card-arrow">→</span>
+              </a>
+            </div>
+
+            {/* Card 3 – Stadtfeste & Festivals */}
+            <div className="group">
+              <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', marginBottom: '20px' }}>
+                <div
+                  className="w-full h-full transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                  style={{ background: '#e8eaf0' }}
+                />
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '10px' }}>
+                Stadtfeste &amp; Festivals
+              </h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'var(--color-brown)', lineHeight: 1.7, marginBottom: '16px' }}>
+                Tribute-Acts und Partybands für große Open-Air-Events –
+                europaweit gebucht, mit professioneller Bühnentechnik.
+              </p>
+              <a
+                href="#tribute-bands"
+                className="event-card-link"
+                style={{ color: 'var(--color-gold)', fontSize: '13px', fontWeight: 500, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+              >
+                Bands entdecken <span className="event-card-arrow">→</span>
+              </a>
             </div>
 
           </div>
         </div>
 
-        <ScrollIndicator />
+        {/* Gradient transition → cream for Easy Listening */}
+        <div style={{ height: '60px', background: 'linear-gradient(to bottom, #ffffff 0%, #f7f3ed 100%)', marginTop: '80px' }} />
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
@@ -254,12 +469,16 @@ export default function HomePage() {
         id="easy-listening"
         className="relative pb-[60px] lg:pb-[100px]"
         style={{
-          background:  '#ffffff',
-          zIndex:      5,
-          paddingTop:  '200px',
+          background: '#ffffff',
+          zIndex:     5,
+          paddingTop: '180px',
         }}
         aria-labelledby="heading-easy-listening"
       >
+        {/* Decorative note */}
+        <span aria-hidden="true" className="floating-note absolute pointer-events-none select-none hidden md:block"
+          style={{ top: '18%', right: '7%', fontSize: '26px', color: 'var(--color-gold)', opacity: 0, animation: 'floatUp 9s 0.5s ease-in-out infinite', willChange: 'transform, opacity' }}>♩</span>
+
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <SectionHeading
             id="heading-easy-listening"
@@ -274,18 +493,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Floating music notes – between EL and Partybands ── */}
-      <FloatingNotes />
-
       {/* ═══════════════════════════════════════════════════════════
           Partybands — cream bg
       ═══════════════════════════════════════════════════════════ */}
       <section
         id="partybands"
-        className="py-[60px] lg:py-[100px]"
+        className="relative py-[60px] lg:py-[100px]"
         style={{ background: 'var(--color-cream)' }}
         aria-labelledby="heading-partybands"
       >
+        {/* Decorative notes */}
+        <span aria-hidden="true" className="floating-note absolute pointer-events-none select-none hidden md:block"
+          style={{ top: '30%', left: '4%', fontSize: '20px', color: 'var(--color-gold)', opacity: 0, animation: 'floatUp 7s 2s ease-in-out infinite', willChange: 'transform, opacity' }}>♪</span>
+        <span aria-hidden="true" className="floating-note absolute pointer-events-none select-none hidden md:block"
+          style={{ bottom: '20%', right: '5%', fontSize: '30px', color: 'var(--color-gold)', opacity: 0, animation: 'floatUp 10s 0s ease-in-out infinite', willChange: 'transform, opacity' }}>♫</span>
+
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <SectionHeading
             id="heading-partybands"
@@ -305,9 +527,13 @@ export default function HomePage() {
       ═══════════════════════════════════════════════════════════ */}
       <section
         id="tribute-bands"
-        className="bg-white py-[60px] lg:py-[100px]"
+        className="relative bg-white py-[60px] lg:py-[100px]"
         aria-labelledby="heading-tribute"
       >
+        {/* Decorative note */}
+        <span aria-hidden="true" className="floating-note absolute pointer-events-none select-none hidden md:block"
+          style={{ top: '40%', right: '6%', fontSize: '22px', color: 'var(--color-gold)', opacity: 0, animation: 'floatUp 8s 3s ease-in-out infinite', willChange: 'transform, opacity' }}>♩</span>
+
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <SectionHeading
             id="heading-tribute"

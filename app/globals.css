@@ -120,6 +120,15 @@ video {
   100% { opacity: 0;   transform: translateY(-140px); }
 }
 
+/* ─── Eventarten card arrow ──────────────────────────────────── */
+.event-card-arrow {
+  display:    inline-block;
+  transition: transform 0.2s ease;
+}
+.event-card-link:hover .event-card-arrow {
+  transform: translateX(4px);
+}
+
 /* ─── Vinyl hero positioning ─────────────────────────────────── */
 .vinyl-hero {
   position:      absolute;
