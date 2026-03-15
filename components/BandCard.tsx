@@ -9,7 +9,7 @@ export default function BandCard({ name, genre, description, href }: BandCardPro
   return (
     <article
       className="band-card rounded-xl overflow-hidden bg-white"
-      style={{ border: '1px solid var(--color-cream-dark)' }}
+      style={{ border: '1px solid var(--color-cream-dark)', display: 'flex', flexDirection: 'column', height: '100%' }}
     >
       {/* Photo placeholder – replace with next/image */}
       <div
@@ -19,7 +19,7 @@ export default function BandCard({ name, genre, description, href }: BandCardPro
       />
 
       {/* Card body */}
-      <div style={{ padding: '20px' }}>
+      <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
         {/* Genre pill */}
         <span
           className="inline-block rounded-full mb-3"
@@ -56,7 +56,7 @@ export default function BandCard({ name, genre, description, href }: BandCardPro
         <a
           href={href}
           className="inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
-          style={{ color: 'var(--color-gold)' }}
+          style={{ color: 'var(--color-gold)', marginTop: 'auto' }}
         >
           Mehr erfahren
           <span aria-hidden="true">→</span>

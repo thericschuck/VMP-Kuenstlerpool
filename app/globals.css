@@ -120,6 +120,13 @@ video {
   100% { opacity: 0;   transform: translateY(-140px); }
 }
 
+/* ─── Band horizontal scroller ──────────────────────────────── */
+.band-scroller-track::-webkit-scrollbar { display: none; }
+
+.band-scroller-item              { flex-shrink: 0; width: 280px; scroll-snap-align: start; display: flex; }
+@media (min-width: 640px)  { .band-scroller-item { width: 320px; } }
+@media (min-width: 1024px) { .band-scroller-item { width: 340px; } }
+
 /* ─── Eventarten card arrow ──────────────────────────────────── */
 .event-card-arrow {
   display:    inline-block;
