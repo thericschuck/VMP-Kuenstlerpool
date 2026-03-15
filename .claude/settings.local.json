@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm config:*)",
+      "Bash(pnpm --version)",
+      "Bash(npm cache:*)",
+      "Read(//c/Users/eschu/AppData/Local/npm-cache/content-v2/**)"
+    ]
+  }
+}
