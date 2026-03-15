@@ -287,7 +287,7 @@ export default function Navbar() {
       {/* ── Mobile overlay ── */}
       <div
         id="mobile-menu"
-        className="fixed inset-0 z-40 flex flex-col items-center justify-center md:hidden transition-all duration-300"
+        className="fixed inset-0 z-40 flex flex-col items-center md:hidden transition-all duration-300"
         style={{
           background:    'var(--color-cream)',
           opacity:       menuOpen ? 1 : 0,
@@ -296,7 +296,7 @@ export default function Navbar() {
         }}
         aria-hidden={!menuOpen}
       >
-        <ul className="flex flex-col items-center gap-6 py-12" role="list">
+        <ul className="flex flex-col items-center gap-6 py-24 w-full my-auto" role="list">
           {NAV_LINKS.map(({ label, href, sectionId }) => {
             const isActive = isHome && activeSection === sectionId
             const items    = DROPDOWNS[sectionId] ?? []

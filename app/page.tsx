@@ -577,8 +577,34 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <SectionHeading id="heading-galerie" title="Eindrücke" />
 
-          {/* Masonry photo grid */}
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
+          {/* Mobile: horizontal scroll strip */}
+          <div
+            className="sm:hidden flex gap-3 pb-2"
+            style={{
+              overflowX:     'auto',
+              scrollSnapType: 'x mandatory',
+              scrollbarWidth: 'none',
+              WebkitOverflowScrolling: 'touch',
+            } as React.CSSProperties}
+          >
+            {GALLERY_PHOTOS.map((_photo, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 rounded-xl overflow-hidden"
+                style={{
+                  width:          '72vw',
+                  height:         '220px',
+                  scrollSnapAlign: 'start',
+                  background:     'var(--color-cream-dark)',
+                }}
+                role="img"
+                aria-label={`Galeriefoto ${i + 1} – folgt in Kürze`}
+              />
+            ))}
+          </div>
+
+          {/* Desktop: masonry grid */}
+          <div className="hidden sm:block columns-2 lg:columns-3 gap-4">
             {GALLERY_PHOTOS.map((photo, i) => (
               <div
                 key={i}
