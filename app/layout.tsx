@@ -5,6 +5,7 @@ import '@fontsource/dm-sans/400.css'
 import '@fontsource/dm-sans/500.css'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import ClickNote from '@/components/ClickNote'
 
 export const metadata: Metadata = {
   title: 'Vivid Music Productions – Livemusik im Rhein-Main-Gebiet',
@@ -29,6 +30,7 @@ export default function RootLayout({
     <html lang="de">
       <body>
         <Navbar />
+        <ClickNote />
         {children}
       </body>
     </html>

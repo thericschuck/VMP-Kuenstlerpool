@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import BandCard from '@/components/BandCard'
 import BandDescription from '@/components/BandDescription'
 import SiteFooter from '@/components/SiteFooter'
@@ -123,6 +124,17 @@ export default async function BandPage(
         }}
         aria-label={`${band.name} Hero`}
       >
+        {/* Band photo as hero background */}
+        {band.images[0] && (
+          <Image
+            src={band.images[0]}
+            alt={band.name}
+            fill
+            priority
+            style={{ objectFit: 'cover', opacity: 0.45 }}
+            sizes="100vw"
+          />
+        )}
         {/* Dark overlay */}
         <div style={{
           position: 'absolute',
@@ -272,7 +284,12 @@ export default async function BandPage(
                 borderRadius: '10px',
                 overflow: 'hidden',
                 background: 'var(--color-cream-dark)',
-              }} aria-label="Band-Foto 1" />
+                position: 'relative',
+              }} aria-label={`${band.name} – Foto`}>
+                {band.images[0] && (
+                  <Image src={band.images[0]} alt={band.name} fill style={{ objectFit: 'cover' }} sizes="(max-width: 1024px) 45vw, 20vw" />
+                )}
+              </div>
               <div style={{
                 borderRadius: '10px',
                 overflow: 'hidden',

@@ -5,7 +5,13 @@
       "Bash(npm config:*)",
       "Bash(pnpm --version)",
       "Bash(npm cache:*)",
-      "Read(//c/Users/eschu/AppData/Local/npm-cache/content-v2/**)"
+      "Read(//c/Users/eschu/AppData/Local/npm-cache/content-v2/**)",
+      "Bash(find c:/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP -name *.jpg -o -name *.jpeg -o -name *.png -o -name *.webp -o -name *.gif -o -name *.svg)",
+      "Bash(cmd /c \"dir /b \"\"C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\public\"\"\")",
+      "Bash(cmd /c \"dir /b \"\"C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\"\"\")",
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP'' | Select-Object Name, Mode\")",
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\assets'' | Select-Object Name\")",
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\public'' -ErrorAction SilentlyContinue | Select-Object Name\")"
     ]
   }
 }

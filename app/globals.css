@@ -120,6 +120,11 @@ video {
   100% { opacity: 0;   transform: translateY(-140px); }
 }
 
+@keyframes clickNoteFloat {
+  0%   { opacity: 0.6; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0;   transform: translate(-50%, -38px) scale(0.8); }
+}
+
 /* ─── Band horizontal scroller ──────────────────────────────── */
 .band-scroller-track::-webkit-scrollbar { display: none; }
 

@@ -47,7 +47,7 @@ Groove Control ist bundesweit buchbar und bringt auf Wunsch das komplette Bühne
     geeignetFuer: ['Hochzeiten', 'Firmenfeiern', 'Stadtfeste', 'Galas'],
     repertoire: ['Soul', 'Motown', 'Funk', 'Pop', 'Classic Rock', 'R&B', 'Disco', 'Aktuelle Hits'],
     region: 'Bundesweit',
-    images: [],
+    images: ['/images/groove-control.avif'],
     videos: [
       { url: '', title: 'Groove Control Live – Firmenfeier 2023' },
       { url: '', title: 'Stadtfest Frankfurt – Highlight-Reel' },
@@ -75,7 +75,7 @@ Unter dem Motto "The finest of Black Music" reicht das Repertoire von James Brow
     geeignetFuer: ['Stadtfest', 'Firmenevent', 'Gala', 'Hochzeit'],
     repertoire: ['James Brown', 'Soul Classics', 'R&B', 'Funk', 'Motown', 'Michael Jackson', 'Modern R&B'],
     region: 'Europaweit',
-    images: [],
+    images: ['/images/spirit-of-soul.avif'],
     videos: [
       { url: '', title: 'Spirit of Soul – Johannisnacht Mainz' },
       { url: '', title: 'Spirit of Soul – The finest of Black Music' },
@@ -97,7 +97,7 @@ Time Warp vereint viele musikalische Stilrichtungen, Geschmäcker und Showaspekt
     geeignetFuer: ['Jubiläum', 'Firmenevent', 'Stadtfest', 'Gala'],
     repertoire: ['50er Klassiker', '60er Rockabilly', '70er Disco', '80er New Wave', '90er Hits', 'Aktuelle Charts'],
     region: 'Bundesweit',
-    images: [],
+    images: ['/images/time-warp.avif'],
     videos: [
       { url: '', title: 'Time Warp – Live Jubiläumsfeier' },
       { url: '', title: 'Time Warp – Bandvideo' },
@@ -120,7 +120,7 @@ Die ideale, kompakte Band für alle die eine fetzige Party feiern wollen.`,
     geeignetFuer: ['Stadtfest', 'Hochzeit', 'Firmenevent', 'Party'],
     repertoire: ['ZZ-Top', 'Green Day', 'Blink 182', 'Rock Klassiker', '90er Rock', 'Aktuelle Rock-Charts'],
     region: 'Bundesweit',
-    images: [],
+    images: ['/images/bobbastic.avif'],
     videos: [
       { url: '', title: 'BOBbastic – Live Stadtfest' },
       { url: '', title: 'BOBbastic – Rock Showreel' },
@@ -145,7 +145,7 @@ Ein musikalischer Cocktail aus Akustikgitarren, Piano, Saxophon und gefühlvolle
     geeignetFuer: ['Hochzeit', 'Firmenevent', 'Restaurant', 'Gala'],
     repertoire: ['Jazz Standards', 'Acoustic Pop', 'Dinner Lounge', 'Soul', 'Hochzeitsklassiker', 'Charts Akustik'],
     region: 'Bundesweit',
-    images: [],
+    images: ['/images/bobby-and-friends.avif'],
     videos: [
       { url: '', title: 'Bobby & Friends – Live Wohnzimmerkonzert' },
       { url: '', title: 'Bobby & Friends – Sektempfang' },
@@ -168,7 +168,7 @@ Ein musikalisches Happening der besonderen Art. Mit Percussion, Kontrabass, Gita
     geeignetFuer: ['Walkact', 'Empfang', 'Stadtfest', 'Firmenevent'],
     repertoire: ['Jazz', 'Pop', 'Soul', 'Blues', 'Rock', 'Walkact'],
     region: 'Bundesweit',
-    images: [],
+    images: ['/images/marsch-mellows.avif'],
     videos: [
       { url: '', title: 'Marsch Mellows – Walkact Stadtfest' },
       { url: '', title: 'Marsch Mellows – Empfangsmusik' },
@@ -216,7 +216,7 @@ Durch die fantastische Stimme von Emmo Acar klingt die Band wie Whitesnake zu se
     geeignetFuer: ['Festival', 'Stadtfest', 'Rockveranstaltung', 'Club'],
     repertoire: ['Here I Go Again', 'Is This Love', 'Still of The Night', 'Fool For Your Loving', 'Give Me All Your Love'],
     region: 'Europaweit',
-    images: [],
+    images: ['/images/coversnake.avif'],
     videos: [
       { url: '', title: 'CoverSnake – Live Hüttenwerk Michelstadt' },
       { url: '', title: 'CoverSnake – Here I Go Again' },
@@ -239,7 +239,7 @@ Ein Live-Erlebnis das bei Stadtfesten, Partys und Firmenevents Euphorie und Erin
     geeignetFuer: ['Stadtfest', 'Firmenevent', 'Club', 'Open Air'],
     repertoire: ["Summer of '69", 'Run to You', 'Cuts Like a Knife', 'Heat of the Night', 'Cloud No. 9', 'Everything I Do', 'Unplugged-Set'],
     region: 'Bundesweit',
-    images: [],
+    images: ['/images/adams-family.avif'],
     videos: [
       { url: '', title: 'The Adams Family – 125 Jahre Flensburger Brauerei' },
       { url: '', title: 'The Adams Family – Silvesterpfad Wien' },
@@ -262,7 +262,7 @@ Schnell entwickelte sich Sir Williams zu einer der gefragtesten Robbie-Williams-
     geeignetFuer: ['Stadtfest', 'Festival', 'Club', 'Open Air'],
     repertoire: ['Angels', 'Feel', 'Rock DJ', 'Let Me Entertain You', 'Come Undone', 'Millennium', 'Sin Sin Sin'],
     region: 'D / A / CH / Liechtenstein',
-    images: [],
+    images: ['/images/sir-williams.avif'],
     videos: [
       { url: '', title: 'Sir Williams – Live Show Highlights' },
       { url: '', title: 'Sir Williams – Angels' },

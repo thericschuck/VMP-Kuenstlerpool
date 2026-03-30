@@ -1,26 +1,38 @@
+import Image from 'next/image'
+
 interface BandCardProps {
   name: string
   genre: string
   description: string
   href: string
+  image?: string
 }
 
-export default function BandCard({ name, genre, description, href }: BandCardProps) {
+export default function BandCard({ name, genre, description, href, image }: BandCardProps) {
   return (
     <article
       className="band-card rounded-xl overflow-hidden bg-white"
       style={{ border: '1px solid var(--color-cream-dark)', display: 'flex', flexDirection: 'column', height: '100%' }}
     >
-      {/* Photo placeholder – replace with next/image */}
+      {/* Photo */}
       <div
-        style={{ aspectRatio: '16 / 9', background: 'var(--color-cream-dark)' }}
+        style={{ aspectRatio: '16 / 9', background: 'var(--color-cream-dark)', position: 'relative', overflow: 'hidden' }}
         role="img"
-        aria-label={`Foto ${name} – folgt in Kürze`}
-      />
+        aria-label={`Foto ${name}`}
+      >
+        {image && (
+          <Image
+            src={image}
+            alt={name}
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 340px"
+          />
+        )}
+      </div>
 
       {/* Card body */}
       <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-        {/* Genre pill */}
         <span
           className="inline-block rounded-full mb-3"
           style={{

@@ -1,9 +1,11 @@
+import Image from 'next/image'
 import ScrollIndicator from '@/components/ScrollIndicator'
 import SiteFooter from '@/components/SiteFooter'
 import BandCard from '@/components/BandCard'
 import ContactForm from '@/components/ContactForm'
 import VinylRecord from '@/components/VinylRecord'
 import BandScroller from '@/components/BandScroller'
+import GalleryGrid from '@/components/GalleryGrid'
 
 // ── Static data ───────────────────────────────────────────────────
 
@@ -14,14 +16,16 @@ const EASY_LISTENING_BANDS = [
     genre: 'Jazz · Acoustic Pop',
     description: 'Elegante Loungemusik mit Jazz-Einflüssen – ideal für Empfänge, Firmenevents und private Feiern.',
     href: '/bobby-and-friends',
+    image: '/images/bobby-and-friends.avif',
   },
   {
     name: 'Marsch Mellows',
     genre: 'Walkact · Empfangsmusik',
     description: 'Mobiler Walkact für Empfänge und Events – überraschend, charmant und ganz ohne Bühne.',
     href: '/marsch-mellows',
+    image: '/images/marsch-mellows.avif',
   },
-] as const
+]
 
 const PARTY_BANDS = [
   {
@@ -29,26 +33,30 @@ const PARTY_BANDS = [
     genre: 'Soul · Pop · Rock',
     description: 'Die Allround-Partyband für Unternehmens-Events, Stadtfeste und Hochzeiten.',
     href: '/groove-control',
+    image: '/images/groove-control.avif',
   },
   {
     name: 'Spirit of Soul',
     genre: 'Black Music',
     description: 'Authentischer Soul, R&B und Funk – eine Bühnenshow, die niemanden auf dem Stuhl lässt.',
     href: '/spirit-of-soul',
+    image: '/images/spirit-of-soul.avif',
   },
   {
     name: 'Time Warp',
     genre: '5 Jahrzehnte Hits',
     description: 'Von den 60ern bis heute – eine musikalische Zeitreise durch die Geschichte der Popmusik.',
     href: '/time-warp',
+    image: '/images/time-warp.avif',
   },
   {
     name: 'BOBbastic',
     genre: 'Power Rock Trio',
     description: 'Drei Musiker, maximale Energie – klassischer Rock in konzentriertester Form.',
     href: '/bobbastic',
+    image: '/images/bobbastic.avif',
   },
-] as const
+]
 
 const TRIBUTE_BANDS = [
   {
@@ -56,35 +64,31 @@ const TRIBUTE_BANDS = [
     genre: 'Rock Tribute',
     description: "Deutschlands erfolgreichste Kiss-Tribute-Show – mit originalgetreuem Make-up, Kostümen und feuriger Pyroshow.",
     href: '/kiss-tribute',
+    image: '/images/KissTribute.avif',
   },
   {
     name: 'CoverSnake',
     genre: 'Rock Tribute',
     description: 'A Tribute to Whitesnake – Decades of the Snake. Six Profimusiker, authentischer Hard Rock der 80er.',
     href: '/coversnake',
+    image: '/images/coversnake.avif',
   },
   {
     name: 'The Adams Family',
     genre: 'Rock Tribute',
     description: "A Tribute to Bryan Adams – Summer of '69, Run to You und mehr, inklusive Unplugged-Set.",
     href: '/adams-family',
+    image: '/images/adams-family.avif',
   },
   {
     name: 'Sir Williams',
     genre: 'Pop Tribute',
     description: 'Angels, Feel, Let Me Entertain You – über zwei Stunden Robbie Williams Tribute Show.',
     href: '/sir-williams',
+    image: '/images/sir-williams.avif',
   },
-] as const
+]
 
-const GALLERY_PHOTOS = [
-  { ratio: '4 / 3' },
-  { ratio: '1 / 1' },
-  { ratio: '16 / 9' },
-  { ratio: '1 / 1' },
-  { ratio: '4 / 3' },
-  { ratio: '16 / 9' },
-] as const
 
 const NEWS_ITEMS = [
   {
@@ -219,7 +223,7 @@ export default function HomePage() {
             display: 'flex',
             alignItems: 'center',
             position: 'relative',
-            zIndex: 1,
+            zIndex: 12, /* above vinyl (z-index:10) so photos aren't covered */
           }}
         >
           <div className="w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-16">
@@ -294,26 +298,73 @@ export default function HomePage() {
                 </a>
               </div>
 
-              {/* Right column – 60% */}
-              <div className="w-full lg:w-[60%]" style={{ position: 'relative', zIndex: 1 }}>
-                <div style={{ display: 'flex', gap: '12px', height: 'clamp(220px, 28vw, 360px)' }}>
-                  {/* Small portrait photo (Bobby) */}
-                  <div style={{
-                    width: '35%',
-                    flexShrink: 0,
-                    borderRadius: '12px',
-                    background: 'var(--color-cream-dark)',
-                    boxShadow: '0 8px 32px rgba(26,20,16,0.10)',
-                    overflow: 'hidden',
-                  }} aria-label="Foto Bobby Stoker" />
-                  {/* Large landscape photo (Event/Stage) */}
-                  <div style={{
-                    flex: 1,
-                    borderRadius: '12px',
-                    background: 'var(--color-cream-dark)',
-                    boxShadow: '0 8px 32px rgba(26,20,16,0.10)',
-                    overflow: 'hidden',
-                  }} aria-label="Event-Foto" />
+              {/* Right column – event photo + Bobby portrait overlay */}
+              <div className="w-full lg:w-[55%]">
+                <div
+                  className="relative rounded-2xl overflow-hidden"
+                  style={{
+                    height: 'clamp(240px, 28vw, 400px)',
+                    boxShadow: '0 12px 48px rgba(26,20,16,0.15)',
+                  }}
+                >
+                  {/* Main event/atmosphere photo */}
+                  <Image
+                    src="/images/hero-event.avif"
+                    alt="VMP Live Event"
+                    fill
+                    priority
+                    style={{ objectFit: 'cover' }}
+                    sizes="(max-width: 1024px) 92vw, 55vw"
+                  />
+
+                  {/* Left-edge gradient for portrait badge readability */}
+                  <div
+                    className="absolute inset-0"
+                    style={{ background: 'linear-gradient(to right, rgba(26,20,16,0.55) 0%, transparent 52%)' }}
+                    aria-hidden="true"
+                  />
+
+                  {/* Bobby portrait + name badge */}
+                  <div className="absolute bottom-5 left-5 flex items-end gap-3">
+                    <div style={{
+                      width: '72px',
+                      height: '72px',
+                      borderRadius: '50%',
+                      overflow: 'hidden',
+                      border: '2px solid rgba(184,148,60,0.9)',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                      flexShrink: 0,
+                      position: 'relative',
+                    }}>
+                      <Image
+                        src="/images/bobby-profile.avif"
+                        alt="Bobby Stöcker"
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        sizes="72px"
+                      />
+                    </div>
+                    <div>
+                      <p style={{
+                        color: '#ffffff',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        lineHeight: 1.3,
+                        textShadow: '0 1px 6px rgba(0,0,0,0.7)',
+                      }}>
+                        Bobby Stöcker
+                      </p>
+                      <p style={{
+                        color: '#c8b88a',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '11px',
+                        textShadow: '0 1px 6px rgba(0,0,0,0.7)',
+                      }}>
+                        Gründer & Musikalischer Leiter
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -366,10 +417,14 @@ export default function HomePage() {
 
             {/* Card 1 – Hochzeiten */}
             <div className="group">
-              <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', marginBottom: '20px' }}>
-                <div
-                  className="w-full h-full transition-transform duration-300 ease-out group-hover:scale-[1.03]"
-                  style={{ background: '#f5ede8' }}
+              <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', marginBottom: '20px', position: 'relative' }}>
+                <Image
+                  src="/images/hochzeit.avif"
+                  alt="Hochzeitsband"
+                  fill
+                  className="transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 768px) 90vw, 30vw"
                 />
               </div>
               <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '10px' }}>
@@ -390,10 +445,14 @@ export default function HomePage() {
 
             {/* Card 2 – Firmenevents & Galas */}
             <div className="group">
-              <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', marginBottom: '20px' }}>
-                <div
-                  className="w-full h-full transition-transform duration-300 ease-out group-hover:scale-[1.03]"
-                  style={{ background: '#e8ede5' }}
+              <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', marginBottom: '20px', position: 'relative' }}>
+                <Image
+                  src="/images/firmenevents.avif"
+                  alt="Firmenevents & Galas"
+                  fill
+                  className="transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 768px) 90vw, 30vw"
                 />
               </div>
               <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '10px' }}>
@@ -414,10 +473,14 @@ export default function HomePage() {
 
             {/* Card 3 – Stadtfeste & Festivals */}
             <div className="group">
-              <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', marginBottom: '20px' }}>
-                <div
-                  className="w-full h-full transition-transform duration-300 ease-out group-hover:scale-[1.03]"
-                  style={{ background: '#e8eaf0' }}
+              <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', marginBottom: '20px', position: 'relative' }}>
+                <Image
+                  src="/images/stadtfeste.avif"
+                  alt="Stadtfeste & Festivals"
+                  fill
+                  className="transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 768px) 90vw, 30vw"
                 />
               </div>
               <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '10px' }}>
@@ -577,47 +640,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <SectionHeading id="heading-galerie" title="Eindrücke" />
 
-          {/* Mobile: horizontal scroll strip */}
-          <div
-            className="sm:hidden flex gap-3 pb-2"
-            style={{
-              overflowX:     'auto',
-              scrollSnapType: 'x mandatory',
-              scrollbarWidth: 'none',
-              WebkitOverflowScrolling: 'touch',
-            } as React.CSSProperties}
-          >
-            {GALLERY_PHOTOS.map((_photo, i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 rounded-xl overflow-hidden"
-                style={{
-                  width:          '72vw',
-                  height:         '220px',
-                  scrollSnapAlign: 'start',
-                  background:     'var(--color-cream-dark)',
-                }}
-                role="img"
-                aria-label={`Galeriefoto ${i + 1} – folgt in Kürze`}
-              />
-            ))}
-          </div>
-
-          {/* Desktop: masonry grid */}
-          <div className="hidden sm:block columns-2 lg:columns-3 gap-4">
-            {GALLERY_PHOTOS.map((photo, i) => (
-              <div
-                key={i}
-                className="break-inside-avoid mb-4 rounded-xl overflow-hidden"
-                style={{
-                  aspectRatio: photo.ratio,
-                  background: 'var(--color-cream-dark)',
-                }}
-                role="img"
-                aria-label={`Galeriefoto ${i + 1} – folgt in Kürze`}
-              />
-            ))}
-          </div>
+          <GalleryGrid />
 
           {/* Video placeholders */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
@@ -733,14 +756,16 @@ export default function HomePage() {
 
             {/* Left: photos */}
             <div>
-              {/* TODO: Echtes Foto einsetzen: Event/Bühne/Licht */}
-              <div style={{ aspectRatio: '4/3', borderRadius: '12px', background: '#c8b88a', marginBottom: '10px' }}
-                aria-label="Foto Veranstaltungsservice – folgt in Kürze" />
+              <div style={{ aspectRatio: '4/3', borderRadius: '12px', overflow: 'hidden', marginBottom: '10px', position: 'relative' }}>
+                <Image src="/images/veranstaltungsservice.avif" alt="Veranstaltungsservice" fill style={{ objectFit: 'cover' }} sizes="(max-width: 1024px) 90vw, 45vw" />
+              </div>
               <div style={{ display: 'flex', gap: '8px' }}>
-                {[0,1,2].map((i) => (
-                  <div key={i} style={{ flex: 1, aspectRatio: '1/1', borderRadius: '8px', background: 'rgba(61,47,26,0.3)' }}
-                    aria-label={`Event-Foto ${i+1} – folgt in Kürze`} />
+                {['/images/technik-1.avif', '/images/technik-2.avif'].map((src, i) => (
+                  <div key={i} style={{ flex: 1, aspectRatio: '1/1', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
+                    <Image src={src} alt={`Event-Foto ${i + 1}`} fill style={{ objectFit: 'cover' }} sizes="15vw" />
+                  </div>
                 ))}
+                <div style={{ flex: 1, aspectRatio: '1/1', borderRadius: '8px', background: 'rgba(61,47,26,0.3)' }} aria-label="Weiteres Foto – folgt in Kürze" />
               </div>
             </div>
 
@@ -837,12 +862,11 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Right: two photo placeholders */}
+              {/* Right: photo placeholders */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {/* TODO: Echtes Foto einsetzen: Goldalbum */}
-                <div style={{ aspectRatio: '4/3', borderRadius: '10px', background: 'rgba(200,184,138,0.2)' }}
-                  aria-label="Goldalbum-Foto – folgt in Kürze" />
-                {/* TODO: Echtes Foto einsetzen: Studio/Songwriting */}
+                <div style={{ aspectRatio: '4/3', borderRadius: '10px', overflow: 'hidden', position: 'relative' }}>
+                  <Image src="/images/melanie-thornton.avif" alt="Melanie Thornton – Ready To Fly" fill style={{ objectFit: 'cover' }} sizes="(max-width: 1024px) 90vw, 30vw" />
+                </div>
                 <div style={{ aspectRatio: '16/9', borderRadius: '10px', background: 'rgba(61,47,26,0.5)' }}
                   aria-label="Foto Songwriting – folgt in Kürze" />
               </div>
