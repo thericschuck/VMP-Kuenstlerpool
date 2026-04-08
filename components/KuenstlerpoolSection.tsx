@@ -38,7 +38,7 @@ export default function KuenstlerpoolSection() {
     <section
       id="kategorien"
       ref={ref}
-      className="w-full py-24 px-6"
+      className="w-full py-14 md:py-24 px-6"
       style={{ backgroundColor: 'var(--color-bg)' }}
     >
       <div className="max-w-5xl mx-auto">
@@ -67,7 +67,7 @@ export default function KuenstlerpoolSection() {
         </motion.div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {CATEGORIES.map((cat, i) => (
             <motion.div
               key={cat.title}
@@ -99,7 +99,7 @@ export default function KuenstlerpoolSection() {
                 {/* Title */}
                 <h3
                   className="font-display font-bold text-dark mb-4"
-                  style={{ fontSize: 22 }}
+                  style={{ fontSize: 'clamp(18px, 2.5vw, 22px)' }}
                 >
                   {cat.title}
                 </h3>

@@ -44,7 +44,7 @@ export default function UspSection() {
   return (
     <section
       id="ueber-uns"
-      className="w-full py-24 px-6"
+      className="w-full py-14 md:py-24 px-4 md:px-6"
       style={{ backgroundColor: 'var(--color-dark)' }}
     >
       <div className="max-w-5xl mx-auto">
@@ -59,7 +59,7 @@ export default function UspSection() {
           Warum direkt bei uns buchen?
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {FEATURES.map((feat, i) => (
             <motion.div
               key={feat.title}

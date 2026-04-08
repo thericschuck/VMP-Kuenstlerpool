@@ -53,7 +53,7 @@ export default function StatsBar() {
       className="w-full"
       style={{ backgroundColor: 'var(--color-dark)' }}
     >
-      <div className="max-w-5xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-0">
+      <div className="max-w-5xl mx-auto px-4 md:px-6 py-10 md:py-16 grid grid-cols-2 md:grid-cols-4 gap-0">
         {STATS.map((stat, i) => (
           <motion.div
             key={i}

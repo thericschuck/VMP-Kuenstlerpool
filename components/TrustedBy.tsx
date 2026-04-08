@@ -1,70 +1,243 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useCallback, useEffect } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 
 const LOGOS = ['AUDI', 'DAIMLER', 'DEUTSCHE BANK']
 const SIDEBAR_W = '26%'
 
-// Organic heights in px — short/medium/tall mix, never uniform
-const BAR_HEIGHTS = [
-  10, 20, 32, 16, 40, 24, 12, 36, 22, 44, 28, 14, 38, 20, 48,
-  26, 12, 42, 18, 36, 24, 10, 34, 22, 44, 16, 38, 28, 14, 32,
+const BAR_COUNT = 46
+
+// Static resting heights (shown when paused)
+const REST_HEIGHTS = [
+  8, 16, 28, 12, 36, 20, 10, 32, 18, 42, 26, 10, 36, 16, 46,
+  22, 10, 40, 14, 34, 20, 8, 30, 18, 44, 12, 36, 26, 10, 30,
+  14, 24, 38, 18, 44, 10, 32, 22, 8, 40, 16, 34, 12, 28, 20, 10,
 ]
 
-// Sine-wave stagger: delay = sin(i / bars * π) creates a flowing left→peak→right pattern
-const sineDelay = (i: number, total: number) =>
-  Math.sin((i / total) * Math.PI) * 0.4
-
-// Per-bar duration — pseudo-random but seeded by index
+const sineDelay  = (i: number) => Math.sin((i / BAR_COUNT) * Math.PI) * 0.4
 const barDuration = (i: number) => 3.5 + ((i * 7) % 13) / 6
-
-// Opacity: center bars more opaque, edges fade
-const barOpacity = (i: number, total: number) => {
-  const center = (total - 1) / 2
-  const dist = Math.abs(i - center) / center
-  return 0.75 - dist * 0.45
+const barOpacity  = (i: number) => {
+  const c = (BAR_COUNT - 1) / 2
+  return 0.75 - (Math.abs(i - c) / c) * 0.45
 }
 
-function Waveform() {
+// ── Combined waveform + audio player ──────────────────────────
+function AudioPlayer() {
+  const audioRef   = useRef<HTMLAudioElement>(null)
+  const ctxRef     = useRef<AudioContext | null>(null)
+  const analyserRef = useRef<AnalyserNode | null>(null)
+  const rafRef     = useRef<number>(0)
+  const barRefs    = useRef<(HTMLDivElement | null)[]>([])
+
+  const [playing,  setPlaying]  = useState(false)
+  const [progress, setProgress] = useState(0)
   const reduced = useReducedMotion()
-  const total = BAR_HEIGHTS.length
+
+  // --- animate loop: reads frequency data, writes directly to DOM ---
+  const animate = useCallback(() => {
+    const analyser = analyserRef.current
+    if (!analyser) return
+
+    const data = new Uint8Array(analyser.frequencyBinCount)
+    analyser.getByteFrequencyData(data)
+
+    barRefs.current.forEach((bar, i) => {
+      if (!bar) return
+      // Map bar index to lower-mid frequency range (bins 0–40% of spectrum)
+      const binIndex = Math.floor((i / BAR_COUNT) * analyser.frequencyBinCount * 0.55)
+      const raw = data[binIndex] / 255
+      // Apply a small floor so bars never fully collapse
+      const height = Math.max(3, raw * 46 + 2)
+      bar.style.height = `${height}px`
+    })
+
+    rafRef.current = requestAnimationFrame(animate)
+  }, [])
+
+  // --- init Web Audio on first play (browser requires user gesture) ---
+  const initAudio = useCallback(() => {
+    if (ctxRef.current) return
+    const ctx      = new AudioContext()
+    const analyser = ctx.createAnalyser()
+    analyser.fftSize      = 128   // 64 frequency bins — enough for 30 bars
+    analyser.smoothingTimeConstant = 0.75 // smooths rapid changes
+
+    const source = ctx.createMediaElementSource(audioRef.current!)
+    source.connect(analyser)
+    analyser.connect(ctx.destination)
+
+    ctxRef.current    = ctx
+    analyserRef.current = analyser
+  }, [])
+
+  const toggle = useCallback(() => {
+    const audio = audioRef.current
+    if (!audio) return
+    initAudio()
+    if (playing) {
+      audio.pause()
+      cancelAnimationFrame(rafRef.current)
+      setPlaying(false)
+    } else {
+      ctxRef.current?.resume()
+      audio.play()
+      rafRef.current = requestAnimationFrame(animate)
+      setPlaying(true)
+    }
+  }, [playing, initAudio, animate])
+
+  const onTimeUpdate = () => {
+    const a = audioRef.current
+    if (a && a.duration) setProgress(a.currentTime / a.duration)
+  }
+
+  const onEnded = () => {
+    cancelAnimationFrame(rafRef.current)
+    setPlaying(false)
+    setProgress(0)
+    // Reset bars to resting heights
+    barRefs.current.forEach((bar, i) => {
+      if (bar) bar.style.height = `${REST_HEIGHTS[i]}px`
+    })
+  }
+
+  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const a = audioRef.current
+    if (!a) return
+    const rect  = e.currentTarget.getBoundingClientRect()
+    const ratio = (e.clientX - rect.left) / rect.width
+    a.currentTime = ratio * a.duration
+    setProgress(ratio)
+  }
+
+  // Cleanup on unmount
+  useEffect(() => () => { cancelAnimationFrame(rafRef.current) }, [])
 
   return (
-    <div
-      className="flex items-center justify-center w-full"
-      style={{ height: 48, gap: 2 }}
-    >
-      {BAR_HEIGHTS.map((h, i) => (
-        <motion.div
-          key={i}
-          animate={reduced ? {} : {
-            scaleY: [1, 0.25, 0.75, 0.15, 0.6, 1],
-          }}
-          transition={reduced ? {} : {
-            duration: barDuration(i),
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: sineDelay(i, total),
-            repeatDelay: 0,
-          }}
-          style={{
-            width: 3,
-            height: h,
-            borderRadius: 999,
-            backgroundColor: '#E8653A',
-            opacity: barOpacity(i, total),
-            transformOrigin: 'center',
-            flexShrink: 0,
-          }}
+    <div className="flex flex-col gap-3">
+      {/* Waveform bars */}
+      <div
+        className="flex items-center justify-center w-full"
+        style={{ height: 48, gap: 2 }}
+      >
+        {REST_HEIGHTS.map((h, i) => (
+          playing && !reduced ? (
+            // Live mode: plain div, height driven by Web Audio via ref
+            <div
+              key={i}
+              ref={el => { barRefs.current[i] = el }}
+              style={{
+                width: 3,
+                height: h,
+                borderRadius: 999,
+                backgroundColor: '#E8653A',
+                opacity: barOpacity(i),
+                transformOrigin: 'center',
+                transition: 'height 0.05s linear',
+                flexShrink: 0,
+              }}
+            />
+          ) : (
+            // Idle mode: Framer Motion slow sine animation
+            <motion.div
+              key={i}
+              ref={el => { barRefs.current[i] = el as HTMLDivElement | null }}
+              animate={reduced ? {} : {
+                scaleY: [1, 0.25, 0.75, 0.15, 0.6, 1],
+              }}
+              transition={reduced ? {} : {
+                duration: barDuration(i),
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: sineDelay(i),
+              }}
+              style={{
+                width: 3,
+                height: h,
+                borderRadius: 999,
+                backgroundColor: '#E8653A',
+                opacity: barOpacity(i),
+                transformOrigin: 'center',
+                flexShrink: 0,
+              }}
+            />
+          )
+        ))}
+      </div>
+
+      {/* Player tile */}
+      <div
+        className="rounded-xl overflow-hidden"
+        style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+      >
+        <audio
+          ref={audioRef}
+          src="/Song1.mp3"
+          onTimeUpdate={onTimeUpdate}
+          onEnded={onEnded}
+          preload="metadata"
         />
-      ))}
+
+        {/* Controls row */}
+        <div className="flex items-center gap-3 px-4 pt-4 pb-3">
+          <button
+            onClick={toggle}
+            className="flex items-center justify-center rounded-full flex-shrink-0"
+            style={{
+              width: 34, height: 34,
+              backgroundColor: playing ? 'var(--color-orange)' : 'rgba(234,88,12,0.2)',
+              border: '1px solid rgba(234,88,12,0.4)',
+              cursor: 'pointer',
+              color: playing ? '#fff' : 'var(--color-orange)',
+              transition: 'background-color 0.2s',
+            }}
+          >
+            {playing ? (
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                <rect x="1.5" y="1" width="3" height="10" rx="1"/>
+                <rect x="7.5" y="1" width="3" height="10" rx="1"/>
+              </svg>
+            ) : (
+              <svg width="11" height="12" viewBox="0 0 11 12" fill="currentColor">
+                <path d="M1 1.5L10 6L1 10.5V1.5Z"/>
+              </svg>
+            )}
+          </button>
+
+          <div className="flex-1 min-w-0">
+            <p className="font-body font-semibold text-white truncate" style={{ fontSize: 12 }}>
+              Mal reinhören
+            </p>
+            <p className="font-body" style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 1 }}>
+              Groove Control · Live-Demo
+            </p>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div
+          className="mx-4 mb-4 rounded-full cursor-pointer"
+          style={{ height: 3, backgroundColor: 'rgba(255,255,255,0.1)' }}
+          onClick={seek}
+        >
+          <div
+            className="h-full rounded-full"
+            style={{
+              width: `${progress * 100}%`,
+              backgroundColor: 'var(--color-orange)',
+              transition: 'width 0.1s linear',
+            }}
+          />
+        </div>
+      </div>
     </div>
   )
 }
 
+// ── TrustedBy section ─────────────────────────────────────────
 export default function TrustedBy() {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref    = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
   return (
@@ -107,17 +280,7 @@ export default function TrustedBy() {
           padding: '18px 20px',
         }}
       >
-        <Waveform />
-
-        <a
-          href="#bands"
-          className="font-body font-semibold transition-all text-center w-full block"
-          style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textDecoration: 'none', letterSpacing: '0.04em' }}
-          onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-orange)')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
-        >
-          Mal reinhören →
-        </a>
+        <AudioPlayer />
       </div>
     </motion.section>
   )

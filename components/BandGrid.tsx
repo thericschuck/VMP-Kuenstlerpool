@@ -81,7 +81,7 @@ export default function BandGrid() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="bands" className="w-full py-24 px-6 bg-white">
+    <section id="bands" className="w-full py-14 md:py-24 px-4 md:px-6 bg-white">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.h2
@@ -109,7 +109,7 @@ export default function BandGrid() {
               {/* Image */}
               <div
                 className="relative w-full"
-                style={{ height: 240, backgroundColor: band.bgColor, flexShrink: 0 }}
+                style={{ height: 200, backgroundColor: band.bgColor, flexShrink: 0 }}
               >
                 {/* Genre pill on image */}
                 <div className="absolute bottom-3 left-3 z-10">

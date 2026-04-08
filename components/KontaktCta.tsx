@@ -16,7 +16,7 @@ export default function KontaktCta() {
   return (
     <section
       id="kontakt"
-      className="w-full py-28 px-6"
+      className="w-full py-16 md:py-28 px-6"
       style={{ backgroundColor: 'var(--color-bg)' }}
     >
       <div className="max-w-2xl mx-auto flex flex-col items-center text-center">
@@ -56,10 +56,10 @@ export default function KontaktCta() {
         >
           <a
             href="mailto:info@v-m-p.de"
-            className="inline-flex items-center px-8 py-4 rounded-full font-body font-semibold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
+            className="inline-flex items-center px-6 py-3 md:px-8 md:py-4 rounded-full font-body font-semibold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
             style={{
               backgroundColor: 'var(--color-orange)',
-              fontSize: 16,
+              fontSize: 15,
               boxShadow: '0 4px 24px rgba(234,88,12,0.3)',
               transition: 'opacity 0.2s, transform 0.2s',
             }}
@@ -68,11 +68,11 @@ export default function KontaktCta() {
           </a>
           <a
             href="tel:+4969000000"
-            className="inline-flex items-center px-8 py-4 rounded-full font-body font-semibold transition-all hover:-translate-y-0.5"
+            className="inline-flex items-center px-6 py-3 md:px-8 md:py-4 rounded-full font-body font-semibold transition-all hover:-translate-y-0.5"
             style={{
               border: '1.5px solid var(--color-border)',
               color: 'var(--color-dark)',
-              fontSize: 16,
+              fontSize: 15,
               transition: 'opacity 0.2s, transform 0.2s',
             }}
           >
@@ -85,7 +85,7 @@ export default function KontaktCta() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.35, duration: 0.5 }}
-          className="flex flex-wrap justify-center gap-6"
+          className="flex flex-wrap justify-center gap-4 md:gap-6"
         >
           {TRUST_ITEMS.map((item) => (
             <div key={item} className="flex items-center gap-2">

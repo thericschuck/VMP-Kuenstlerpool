@@ -14,8 +14,8 @@ export default function VmpFooter() {
       className="w-full"
       style={{ backgroundColor: 'var(--color-dark)' }}
     >
-      <div className="max-w-5xl mx-auto px-6 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+      <div className="max-w-5xl mx-auto px-6 py-10 md:py-14">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mb-10">
           {/* Brand */}
           <div>
             <p
@@ -33,7 +33,7 @@ export default function VmpFooter() {
           </div>
 
           {/* Nav */}
-          <div className="flex flex-wrap gap-6 md:justify-center">
+          <div className="flex flex-wrap gap-4 md:gap-6 md:justify-center">
             {NAV_LINKS.map((l) => (
               <a
                 key={l.href}
@@ -67,7 +67,7 @@ export default function VmpFooter() {
 
         {/* Bottom bar */}
         <div
-          className="flex flex-wrap items-center justify-between gap-4 pt-6"
+          className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6"
           style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
         >
           <p

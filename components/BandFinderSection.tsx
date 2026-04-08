@@ -78,10 +78,10 @@ export default function BandFinderSection() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section className="w-full flex" ref={ref} style={{ minHeight: 600 }}>
+    <section className="w-full flex" ref={ref} style={{ minHeight: 'auto' }}>
 
       {/* ── Left 2/3 — main content, white ──────────────── */}
-      <div className="flex-1 flex flex-col items-center justify-center py-24 px-10 bg-white">
+      <div className="flex-1 flex flex-col items-center justify-center py-14 md:py-24 px-5 md:px-10 bg-white">
         <div className="w-full">
 
           {/* Heading */}
@@ -93,7 +93,7 @@ export default function BandFinderSection() {
           >
             <h2
               className="font-display font-bold text-dark"
-              style={{ fontSize: 'clamp(26px, 3.5vw, 44px)', lineHeight: 1.2 }}
+              style={{ fontSize: 'clamp(22px, 4vw, 44px)', lineHeight: 1.2 }}
             >
               Die richtige Musik &amp; Band<br />für Ihren Event finden
             </h2>
@@ -103,7 +103,7 @@ export default function BandFinderSection() {
           </motion.div>
 
           {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12 px-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12 px-0 md:px-8 lg:px-16">
             {CATEGORIES.map((cat, i) => (
               <motion.div
                 key={cat.title}

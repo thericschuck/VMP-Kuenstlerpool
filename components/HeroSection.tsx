@@ -248,7 +248,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="relative flex flex-col items-center pt-12 pb-6 px-6"
+          className="relative flex flex-col items-center pt-8 md:pt-12 pb-4 md:pb-6 px-4 md:px-6"
           style={{ zIndex: 1 }}
         >
           <a href="#">
@@ -270,7 +270,7 @@ export default function HeroSection() {
           className="w-full flex items-center justify-center gap-10 px-8 md:px-12 relative"
           style={{ backgroundColor: 'var(--color-dark)', height: 56 }}
         >
-          <a href="#" className="absolute left-8 hidden md:block">
+          <a href="#" className="absolute left-4 md:left-8 block">
             <Image src="/images/logo_light_transparent.png" alt="Vivid Music Productions" width={80} height={28} style={{ height: 28, width: 'auto' }} />
           </a>
           {NAV_LINKS.map(l => (
@@ -287,10 +287,10 @@ export default function HeroSection() {
         </motion.nav>
 
         {/* ── Two-column Hero ───────────────────────────── */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-[5fr_7fr] min-h-[680px]" style={{ zIndex: 1 }}>
+        <div className="relative grid grid-cols-1 lg:grid-cols-[5fr_7fr] lg:min-h-[680px]" style={{ zIndex: 1 }}>
 
           {/* Left — Text */}
-          <div className="flex flex-col justify-center px-10 md:px-16 py-16 lg:py-20">
+          <div className="flex flex-col justify-center px-5 md:px-10 lg:px-16 py-10 lg:py-20">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -378,7 +378,7 @@ export default function HeroSection() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.7 }}
             className="relative overflow-hidden"
-            style={{ minHeight: 700 }}
+            style={{ minHeight: 'clamp(320px, 50vw, 700px)' }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
           >
