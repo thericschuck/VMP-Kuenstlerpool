@@ -1,11 +1,5 @@
 import type { Metadata } from 'next'
-import '@fontsource/playfair-display/400.css'
-import '@fontsource/playfair-display/700.css'
-import '@fontsource/dm-sans/400.css'
-import '@fontsource/dm-sans/500.css'
 import './globals.css'
-import Navbar from '@/components/Navbar'
-import ClickNote from '@/components/ClickNote'
 
 export const metadata: Metadata = {
   title: 'Vivid Music Productions – Livemusik im Rhein-Main-Gebiet',
@@ -28,9 +22,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="de">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>
-        <Navbar />
-        <ClickNote />
         {children}
       </body>
     </html>

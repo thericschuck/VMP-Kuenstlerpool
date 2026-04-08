@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 
 // ── Band sub-menus ────────────────────────────────────────────────
 
@@ -42,6 +43,7 @@ export default function Navbar() {
   const isHome   = pathname === '/'
 
   const [scrolled,      setScrolled]      = useState(false)
+  const [atTop,         setAtTop]         = useState(true)
   const [menuOpen,      setMenuOpen]      = useState(false)
   const [activeSection, setActiveSection] = useState('')
   const [indicator,     setIndicator]     = useState<IndicatorState>({ left: 0, width: 0, opacity: 0 })
@@ -51,12 +53,14 @@ export default function Navbar() {
   const linkRefs        = useRef<Record<string, HTMLAnchorElement | null>>({})
   const closeTimer      = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const darkHero  = !isHome
-  const lightMode = darkHero && !scrolled
+  // Nav is always on dark background
 
   // ── Scroll ───────────────────────────────────────────────────
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24)
+      setAtTop(window.scrollY < 80)
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -121,36 +125,46 @@ export default function Navbar() {
     closeTimer.current = setTimeout(() => setOpenDropdown(null), 120)
   }
 
-  const inkColor       = lightMode ? 'rgba(255,255,255,0.85)' : 'var(--color-ink)'
-  const hamburgerColor = lightMode ? 'rgba(255,255,255,0.9)'  : 'var(--color-ink)'
-  const headerBg       = scrolled
-    ? 'var(--color-cream)'
-    : lightMode ? 'rgba(26,20,16,0.55)' : 'transparent'
+  const inkColor       = (isHome && atTop) ? 'rgba(255,255,255,0.88)' : 'var(--text-primary)'
+  const hamburgerColor = (isHome && atTop) ? '#ffffff' : 'var(--text-primary)'
+  const headerBg       = '#ffffff'
 
   return (
     <>
       {/* ── Main header ── */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'shadow-sm' : ''}`}
-        style={{ background: headerBg, backdropFilter: lightMode && !scrolled ? 'blur(4px)' : undefined }}
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        style={{
+          background:     (isHome && atTop) ? 'transparent' : headerBg,
+          boxShadow:      (isHome && atTop) ? 'none' : scrolled ? '0 2px 16px rgba(13,13,26,0.08)' : '0 1px 0 #E5E7EF',
+          backdropFilter: scrolled && !(isHome && atTop) ? 'blur(8px)' : undefined,
+        }}
       >
         <nav
-          className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between"
+          className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between"
+          style={{ minHeight: '80px' }}
           aria-label="Hauptnavigation"
         >
           {/* Logo */}
           <a
             href="/"
             aria-label="Vivid Music Productions – zur Startseite"
-            className="text-2xl font-bold tracking-widest select-none"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--color-gold)' }}
+            className="select-none flex-shrink-0"
           >
-            VMP
+            <Image
+              src="/images/Logo.gif"
+              alt="Vivid Music Productions"
+              width={140}
+              height={44}
+              unoptimized
+              priority
+              style={{ height: '40px', width: 'auto', display: 'block' }}
+            />
           </a>
 
           {/* ── Desktop links ── */}
           <div ref={navContainerRef} className="relative hidden md:block">
-            <ul className="flex items-center gap-6 lg:gap-8" role="list">
+            <ul className="flex items-center gap-7 lg:gap-9" role="list">
               {NAV_LINKS.map(({ label, href, sectionId }) => {
                 const isActive  = isHome && activeSection === sectionId
                 const hasDropdown = Boolean(DROPDOWNS[sectionId])
@@ -167,7 +181,7 @@ export default function Navbar() {
                     <a
                       ref={(el) => { if (sectionId) linkRefs.current[sectionId] = el }}
                       href={href}
-                      className="text-sm font-medium transition-colors duration-200 block py-1"
+                      className="text-[15px] font-medium transition-colors duration-200 block py-1"
                       style={{
                         color: isActive ? 'var(--color-gold)' : inkColor,
                         display: 'flex',
@@ -205,13 +219,12 @@ export default function Navbar() {
                           top:          'calc(100% + 8px)',
                           left:         '50%',
                           transform:    'translateX(-50%)',
-                          background:   scrolled || !lightMode ? 'var(--color-cream)' : 'rgba(30,22,14,0.92)',
-                          backdropFilter: 'blur(8px)',
-                          border:       `1px solid ${scrolled || !lightMode ? 'var(--color-cream-dark)' : 'rgba(139,105,20,0.3)'}`,
+                          background:   '#ffffff',
+                          border:       '1px solid #E5E7EF',
                           borderRadius: '10px',
                           padding:      '8px 0',
                           minWidth:     '200px',
-                          boxShadow:    '0 8px 24px rgba(0,0,0,0.12)',
+                          boxShadow:    '0 8px 24px rgba(13,13,26,0.1)',
                           zIndex:       60,
                           opacity:      isOpen ? 1 : 0,
                           pointerEvents: isOpen ? 'auto' : 'none',
@@ -228,17 +241,17 @@ export default function Navbar() {
                               padding:        '9px 18px',
                               fontSize:       '13px',
                               fontFamily:     'var(--font-body)',
-                              color:          scrolled || !lightMode ? 'var(--color-ink)' : '#e8dfc8',
+                              color:          'var(--text-primary)',
                               textDecoration: 'none',
                               transition:     'color 0.15s, background 0.15s',
                               whiteSpace:     'nowrap',
                             }}
                             onMouseEnter={(e) => {
-                              (e.currentTarget as HTMLElement).style.color = 'var(--color-gold)'
-                              ;(e.currentTarget as HTMLElement).style.background = scrolled || !lightMode ? 'rgba(139,105,20,0.06)' : 'rgba(139,105,20,0.15)'
+                              (e.currentTarget as HTMLElement).style.color = 'var(--blue)'
+                              ;(e.currentTarget as HTMLElement).style.background = 'rgba(0,71,255,0.06)'
                             }}
                             onMouseLeave={(e) => {
-                              (e.currentTarget as HTMLElement).style.color = scrolled || !lightMode ? 'var(--color-ink)' : '#e8dfc8'
+                              (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'
                               ;(e.currentTarget as HTMLElement).style.background = 'transparent'
                             }}
                           >
@@ -257,7 +270,7 @@ export default function Navbar() {
               className="nav-indicator absolute pointer-events-none rounded-sm"
               style={{
                 bottom: '-2px', height: '2px',
-                background: 'var(--color-gold)',
+                background: (isHome && atTop) ? 'rgba(255,255,255,0.8)' : 'var(--blue)',
                 left:    `${indicator.left}px`,
                 width:   `${indicator.width}px`,
                 opacity: indicator.opacity,
@@ -265,6 +278,27 @@ export default function Navbar() {
               aria-hidden="true"
             />
           </div>
+
+          {/* ── Nav CTA ── */}
+          <a
+            href="#kontakt"
+            className="hidden md:inline-block transition-all duration-200 hover:brightness-90 active:scale-95"
+            style={{
+              padding:        '8px 20px',
+              borderRadius:   '8px',
+              background:     (isHome && atTop) ? 'rgba(255,255,255,0.12)' : 'var(--red)',
+              color:          '#ffffff',
+              fontFamily:     'var(--font-body)',
+              fontSize:       '14px',
+              fontWeight:     600,
+              textDecoration: 'none',
+              flexShrink:     0,
+              letterSpacing:  '0.01em',
+              border:         (isHome && atTop) ? '1px solid rgba(255,255,255,0.28)' : 'none',
+            }}
+          >
+            Jetzt anfragen
+          </a>
 
           {/* ── Hamburger ── */}
           <button
@@ -289,7 +323,7 @@ export default function Navbar() {
         id="mobile-menu"
         className="fixed inset-0 z-40 flex flex-col items-center md:hidden transition-all duration-300"
         style={{
-          background:    'var(--color-cream)',
+          background:    '#ffffff',
           opacity:       menuOpen ? 1 : 0,
           pointerEvents: menuOpen ? 'auto' : 'none',
           overflowY:     'auto',
@@ -307,7 +341,7 @@ export default function Navbar() {
                   className="text-2xl font-medium transition-colors duration-200"
                   style={{
                     fontFamily: 'var(--font-display)',
-                    color: isActive ? 'var(--color-gold)' : 'var(--color-ink)',
+                    color: isActive ? 'var(--blue)' : 'var(--text-primary)',
                   }}
                   onClick={closeMenu}
                   tabIndex={menuOpen ? 0 : -1}
@@ -324,7 +358,7 @@ export default function Navbar() {
                           style={{
                             fontFamily:     'var(--font-body)',
                             fontSize:       '14px',
-                            color:          'var(--color-brown)',
+                            color:          'var(--text-muted)',
                             textDecoration: 'none',
                           }}
                           onClick={closeMenu}

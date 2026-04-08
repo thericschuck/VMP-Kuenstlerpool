@@ -11,7 +11,19 @@
       "Bash(cmd /c \"dir /b \"\"C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\"\"\")",
       "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP'' | Select-Object Name, Mode\")",
       "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\assets'' | Select-Object Name\")",
-      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\public'' -ErrorAction SilentlyContinue | Select-Object Name\")"
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\public'' -ErrorAction SilentlyContinue | Select-Object Name\")",
+      "Bash(powershell -Command \"Get-ChildItem -Recurse ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP'' -Include ''*.gif'',''*.svg'',''*.png'' | Where-Object { $_.FullName -notlike ''*node_modules*'' -and $_.FullName -notlike ''*.next*'' } | Select-Object FullName, Length\")",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Read(//c/Users/eschu/.claude/**)",
+      "Read(//tmp/ui-ux-pro-max-skill/.claude/**)",
+      "Bash(grep -v \"^$\")",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\eschu\\.claude",
+      "\\tmp"
     ]
   }
 }

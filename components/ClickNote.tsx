@@ -13,7 +13,7 @@ export default function ClickNote() {
         `left:${e.clientX}px`,
         `top:${e.clientY}px`,
         'font-size:17px',
-        'color:rgba(139,105,20,0.6)',
+        'color:rgba(0,71,255,0.55)',
         'pointer-events:none',
         'user-select:none',
         'z-index:9999',

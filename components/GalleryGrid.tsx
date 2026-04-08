@@ -211,7 +211,7 @@ export default function GalleryGrid() {
                     borderRadius: '5px',
                     overflow: 'hidden',
                     position: 'relative',
-                    border: i === active ? '2px solid #8b6914' : '2px solid rgba(255,255,255,0.15)',
+                    border: i === active ? '2px solid var(--blue)' : '2px solid rgba(255,255,255,0.15)',
                     cursor: 'pointer',
                     flexShrink: 0,
                     opacity: i === active ? 1 : 0.55,
