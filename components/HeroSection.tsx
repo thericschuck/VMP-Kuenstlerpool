@@ -4,13 +4,150 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 
-const NAV_LINKS = [
-  { label: 'Bands', href: '#bands' },
-  { label: 'Kategorien', href: '#kategorien' },
-  { label: 'Events', href: '#events' },
-  { label: 'Über uns', href: '#ueber-uns' },
-  { label: 'Kontakt', href: '#kontakt' },
+const NAV_ITEMS = [
+  { label: 'Home',                href: '#',           dropdown: false },
+  { label: 'Bands',               href: '#bands',      dropdown: true  },
+  { label: 'Galerie',             href: '/galerie',    dropdown: false },
+  { label: 'Technik & Tonstudio', href: '/technik',    dropdown: false },
+  { label: 'Über uns',            href: '/ueber-uns',  dropdown: false },
+  { label: 'Social Media',        href: '#social',     dropdown: false },
+  { label: 'Kontakt',             href: '#kontakt',    dropdown: false },
 ]
+
+const BANDS_MENU = [
+  {
+    category: 'Partybands', href: '#partybands',
+    bands: [
+      { name: 'Groove Control',  href: '/groove-control' },
+      { name: 'Spirit of Soul',  href: '/spirit-of-soul' },
+      { name: 'Time Warp',       href: '/time-warp'      },
+      { name: 'BOBbastic',       href: '/bobbastic'      },
+    ],
+  },
+  {
+    category: 'Tribute Bands', href: '#tribute',
+    bands: [
+      { name: 'The Kiss Tribute Band', href: '/kiss-tribute'  },
+      { name: 'CoverSnake',            href: '/coversnake'    },
+      { name: 'The Adams Family',      href: '/adams-family'  },
+      { name: 'Sir Williams',          href: '/sir-williams'  },
+    ],
+  },
+  {
+    category: 'Easy Listening', href: '#easy-listening',
+    bands: [
+      { name: 'Bobby & Friends', href: '/bobby-and-friends' },
+      { name: 'Marsch Mellows',  href: '/marsch-mellows'   },
+    ],
+  },
+]
+
+// ── Bands mega-dropdown ───────────────────────────────────────────
+function BandsMegaMenu({ open }: { open: boolean }) {
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          key="bands-menu"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.16 }}
+          className="absolute top-full mt-2 rounded-2xl overflow-hidden"
+          style={{
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: '#1C1917',
+            border: '1px solid rgba(255,255,255,0.08)',
+            boxShadow: '0 24px 64px rgba(0,0,0,0.55)',
+            minWidth: 500,
+            zIndex: 300,
+          }}
+        >
+          <div className="grid grid-cols-3 p-6 gap-6">
+            {BANDS_MENU.map(cat => (
+              <div key={cat.category}>
+                <a
+                  href={cat.href}
+                  className="font-body font-semibold uppercase block mb-3 transition-opacity hover:opacity-70"
+                  style={{ fontSize: 10, color: 'var(--color-orange)', letterSpacing: '0.15em', textDecoration: 'none' }}
+                >
+                  {cat.category}
+                </a>
+                <div className="flex flex-col gap-2.5">
+                  {cat.bands.map(band => (
+                    <a
+                      key={band.name}
+                      href={band.href}
+                      className="font-body transition-colors"
+                      style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', textDecoration: 'none' }}
+                      onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                      onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')}
+                    >
+                      {band.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', padding: '10px 24px' }}>
+            <a
+              href="#bands"
+              className="font-body font-semibold block text-center w-full transition-opacity hover:opacity-70"
+              style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}
+            >
+              Alle 10 Bands ansehen →
+            </a>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+// ── Shared nav links (used in both inline + sticky nav) ───────────
+function NavLinks({ color = 'rgba(255,255,255,0.55)' }: { color?: string }) {
+  const [bandsOpen, setBandsOpen] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const open  = () => { if (timerRef.current) clearTimeout(timerRef.current); setBandsOpen(true)  }
+  const close = () => { timerRef.current = setTimeout(() => setBandsOpen(false), 140) }
+
+  return (
+    <>
+      {NAV_ITEMS.map(item =>
+        item.dropdown ? (
+          <div key="bands-trigger" className="relative hidden md:block" onMouseEnter={open} onMouseLeave={close}>
+            <button
+              className="flex items-center gap-1 font-body text-sm font-medium bg-transparent border-none cursor-pointer"
+              style={{ color, padding: 0, transition: 'color 0.15s' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+              onMouseLeave={e => (e.currentTarget.style.color = color)}
+            >
+              {item.label}
+              <svg width="9" height="6" viewBox="0 0 9 6" fill="none"
+                style={{ transform: bandsOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', marginTop: 1, opacity: 0.6 }}>
+                <path d="M1 1l3.5 3.5L8 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            <BandsMegaMenu open={bandsOpen} />
+          </div>
+        ) : (
+          <a
+            key={item.href}
+            href={item.href}
+            className="font-body text-sm font-medium hidden md:block"
+            style={{ color, textDecoration: 'none', transition: 'color 0.15s' }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+            onMouseLeave={e => (e.currentTarget.style.color = color)}
+          >
+            {item.label}
+          </a>
+        )
+      )}
+    </>
+  )
+}
 
 const SLIDES = [
   { src: '/images/hero/hero-event.avif',     label: 'Live auf der Bühne' },
@@ -191,13 +328,7 @@ export default function HeroSection() {
               <Image src="/images/logo_light_transparent.png" alt="Vivid Music Productions" width={100} height={36} style={{ height: 36, width: 'auto' }} />
             </a>
             <nav className="hidden md:flex items-center gap-7">
-              {NAV_LINKS.map(l => (
-                <a key={l.href} href={l.href} className="font-body text-sm font-medium transition-colors"
-                  style={{ color: 'rgba(255,255,255,0.6)' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
-                >{l.label}</a>
-              ))}
+              <NavLinks color="rgba(255,255,255,0.6)" />
             </nav>
             <a href="#kontakt" className="hidden md:inline-flex items-center px-4 py-1.5 rounded-full font-body font-semibold text-white text-sm"
               style={{ backgroundColor: 'var(--color-orange)' }}>
@@ -209,37 +340,51 @@ export default function HeroSection() {
 
       <section id="hero" className="relative" style={{ backgroundColor: 'var(--color-bg)' }}>
 
-        {/* ── Grain texture overlay ─────────────────────── */}
-        {/* Fine grain */}
+        {/* ── Texture layers ────────────────────────────── */}
+
+        {/* 1 · Diagonal hairline grid — the main character */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             zIndex: 0,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E")`,
+            backgroundImage: `
+              repeating-linear-gradient(
+                -52deg,
+                rgba(28,25,23,0.028) 0px,
+                rgba(28,25,23,0.028) 1px,
+                transparent 1px,
+                transparent 22px
+              ),
+              repeating-linear-gradient(
+                38deg,
+                rgba(28,25,23,0.016) 0px,
+                rgba(28,25,23,0.016) 1px,
+                transparent 1px,
+                transparent 44px
+              )
+            `,
+          }}
+        />
+
+        {/* 2 · Fine noise grain for warmth */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            zIndex: 0,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E")`,
             backgroundRepeat: 'repeat',
-            backgroundSize: '180px 180px',
-            opacity: 0.04,
+            backgroundSize: '200px 200px',
+            opacity: 0.045,
             mixBlendMode: 'multiply',
           }}
         />
-        {/* Coarser grain layer for depth */}
+
+        {/* 3 · Soft radial vignette at edges */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             zIndex: 0,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='g2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23g2)' opacity='1'/%3E%3C/svg%3E")`,
-            backgroundRepeat: 'repeat',
-            backgroundSize: '320px 320px',
-            opacity: 0.025,
-            mixBlendMode: 'multiply',
-          }}
-        />
-        {/* Subtle edge vignette */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            zIndex: 0,
-            background: 'radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(28,25,23,0.06) 100%)',
+            background: 'radial-gradient(ellipse at 50% 40%, transparent 50%, rgba(28,25,23,0.07) 100%)',
           }}
         />
 
@@ -273,13 +418,7 @@ export default function HeroSection() {
           <a href="#" className="absolute left-4 md:left-8 block">
             <Image src="/images/logo_light_transparent.png" alt="Vivid Music Productions" width={80} height={28} style={{ height: 28, width: 'auto' }} />
           </a>
-          {NAV_LINKS.map(l => (
-            <a key={l.href} href={l.href} className="font-body text-sm font-medium transition-colors hidden md:block"
-              style={{ color: 'rgba(255,255,255,0.55)' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.55)')}
-            >{l.label}</a>
-          ))}
+          <NavLinks color="rgba(255,255,255,0.55)" />
           <a href="#kontakt" className="inline-flex items-center px-5 py-2 rounded-full font-body font-semibold text-white text-sm"
             style={{ backgroundColor: 'var(--color-orange)' }}>
             Anfragen
@@ -414,30 +553,68 @@ export default function HeroSection() {
               {hovered && (
                 <>
                   <motion.button key="bar-left"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    initial={{ opacity: 0, x: -44 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -44 }}
+                    transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    whileHover="hovered"
                     onClick={prev}
                     className="absolute left-0 top-0 h-full z-20 flex items-center justify-center"
-                    style={{ width: 44, backgroundColor: 'rgba(28,25,23,0.55)', backdropFilter: 'blur(4px)', border: 'none', cursor: 'pointer', color: '#fff' }}
-                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(234,88,12,0.75)')}
-                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(28,25,23,0.55)')}
+                    style={{
+                      width: 44, border: 'none', cursor: 'pointer', color: '#fff',
+                      backgroundColor: 'rgba(28,25,23,0.55)', backdropFilter: 'blur(4px)',
+                      transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor = 'rgba(234,88,12,0.88)'
+                      e.currentTarget.style.boxShadow = 'inset 3px 0 18px rgba(234,88,12,0.35), 4px 0 24px rgba(234,88,12,0.25)'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = 'rgba(28,25,23,0.55)'
+                      e.currentTarget.style.boxShadow = 'none'
+                    }}
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="15 18 9 12 15 6" />
-                    </svg>
+                    <motion.span
+                      variants={{ hovered: { x: -4, scale: 1.2 } }}
+                      transition={{ duration: 0.22, ease: 'easeOut' }}
+                      style={{ display: 'flex' }}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="15 18 9 12 15 6" />
+                      </svg>
+                    </motion.span>
                   </motion.button>
                   <motion.button key="bar-right"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    initial={{ opacity: 0, x: 44 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 44 }}
+                    transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    whileHover="hovered"
                     onClick={next}
                     className="absolute right-0 top-0 h-full z-20 flex items-center justify-center"
-                    style={{ width: 44, backgroundColor: 'rgba(28,25,23,0.55)', backdropFilter: 'blur(4px)', border: 'none', cursor: 'pointer', color: '#fff' }}
-                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(234,88,12,0.75)')}
-                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(28,25,23,0.55)')}
+                    style={{
+                      width: 44, border: 'none', cursor: 'pointer', color: '#fff',
+                      backgroundColor: 'rgba(28,25,23,0.55)', backdropFilter: 'blur(4px)',
+                      transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor = 'rgba(234,88,12,0.88)'
+                      e.currentTarget.style.boxShadow = 'inset -3px 0 18px rgba(234,88,12,0.35), -4px 0 24px rgba(234,88,12,0.25)'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = 'rgba(28,25,23,0.55)'
+                      e.currentTarget.style.boxShadow = 'none'
+                    }}
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="9 18 15 12 9 6" />
-                    </svg>
+                    <motion.span
+                      variants={{ hovered: { x: 4, scale: 1.2 } }}
+                      transition={{ duration: 0.22, ease: 'easeOut' }}
+                      style={{ display: 'flex' }}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </motion.span>
                   </motion.button>
                 </>
               )}

@@ -3,16 +3,31 @@
 import { useRef, useState, useCallback, useEffect } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 
-const LOGOS = ['AUDI', 'DAIMLER', 'DEUTSCHE BANK']
+const LOGOS: { name: string; prominent: boolean }[] = [
+  { name: 'AUDI',           prominent: true  },
+  { name: 'PORSCHE',        prominent: true  },
+  { name: 'VOLKSWAGEN',     prominent: true  },
+  { name: 'DEUTSCHE BANK',  prominent: true  },
+  { name: 'SAMSUNG',        prominent: true  },
+  { name: 'REWE',           prominent: false },
+  { name: 'DEUTSCHE POST',  prominent: false },
+  { name: 'DVAG',           prominent: false },
+  { name: 'DEBEKA',         prominent: false },
+  { name: 'STIHL',          prominent: false },
+  { name: 'BRIDGESTONE',    prominent: false },
+  { name: 'WACKER CHEMIE',  prominent: false },
+  { name: 'SONY ERICSSON',  prominent: false },
+  { name: 'GRUNER & JAHR',  prominent: false },
+]
 const SIDEBAR_W = '26%'
 
 const BAR_COUNT = 46
 
-// Static resting heights (shown when paused)
+// Static resting heights (shown when paused) — minimum 14px to avoid dot artefacts
 const REST_HEIGHTS = [
-  8, 16, 28, 12, 36, 20, 10, 32, 18, 42, 26, 10, 36, 16, 46,
-  22, 10, 40, 14, 34, 20, 8, 30, 18, 44, 12, 36, 26, 10, 30,
-  14, 24, 38, 18, 44, 10, 32, 22, 8, 40, 16, 34, 12, 28, 20, 10,
+  14, 18, 28, 14, 36, 20, 14, 32, 18, 42, 26, 14, 36, 16, 46,
+  22, 14, 40, 16, 34, 20, 14, 30, 18, 44, 14, 36, 26, 14, 30,
+  16, 24, 38, 18, 44, 14, 32, 22, 14, 40, 16, 34, 14, 28, 20, 14,
 ]
 
 const sineDelay  = (i: number) => Math.sin((i / BAR_COUNT) * Math.PI) * 0.4
@@ -47,8 +62,8 @@ function AudioPlayer() {
       // Map bar index to lower-mid frequency range (bins 0–40% of spectrum)
       const binIndex = Math.floor((i / BAR_COUNT) * analyser.frequencyBinCount * 0.55)
       const raw = data[binIndex] / 255
-      // Apply a small floor so bars never fully collapse
-      const height = Math.max(3, raw * 46 + 2)
+      // Apply a floor so bars never collapse into dots
+      const height = Math.max(7, raw * 46 + 2)
       bar.style.height = `${height}px`
     })
 
@@ -249,24 +264,45 @@ export default function TrustedBy() {
       className="w-full flex"
     >
       {/* White left portion */}
-      <div className="flex-1 bg-white py-7 px-8 flex items-center gap-8">
-        <span
-          className="font-body font-semibold uppercase tracking-widest flex-shrink-0"
-          style={{ fontSize: 10, color: 'var(--color-subtle)', letterSpacing: '0.15em' }}
-        >
-          Gebucht von
-        </span>
-        <div className="h-6 w-px flex-shrink-0" style={{ backgroundColor: 'var(--color-border)' }} />
-        <div className="flex items-center gap-10 flex-wrap">
-          {LOGOS.map((name) => (
+      <div className="flex-1 bg-white py-6 px-8 flex flex-col justify-center gap-4">
+        <div className="flex items-center gap-6">
+          <span
+            className="font-body font-semibold uppercase tracking-widest flex-shrink-0"
+            style={{ fontSize: 10, color: 'var(--color-subtle)', letterSpacing: '0.15em' }}
+          >
+            Gebucht von
+          </span>
+          <div className="h-4 w-px flex-shrink-0" style={{ backgroundColor: 'var(--color-border)' }} />
+          {/* Prominent logos */}
+          <div className="flex items-center gap-8 flex-wrap">
+            {LOGOS.filter(l => l.prominent).map(({ name }) => (
+              <span
+                key={name}
+                className="font-body font-bold uppercase tracking-widest"
+                style={{ fontSize: 13, color: '#9C948C', letterSpacing: '0.12em' }}
+              >
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+        {/* Secondary logos — subtler */}
+        <div className="flex items-center gap-6 flex-wrap pl-0">
+          {LOGOS.filter(l => !l.prominent).map(({ name }) => (
             <span
               key={name}
-              className="font-body font-bold uppercase tracking-widest"
-              style={{ fontSize: 13, color: '#C4BDB6', letterSpacing: '0.12em' }}
+              className="font-body font-medium uppercase tracking-widest"
+              style={{ fontSize: 10, color: '#C8C2BB', letterSpacing: '0.1em' }}
             >
               {name}
             </span>
           ))}
+          <span
+            className="font-body font-medium"
+            style={{ fontSize: 10, color: '#C8C2BB', letterSpacing: '0.04em' }}
+          >
+            u.v.m.
+          </span>
         </div>
       </div>
 

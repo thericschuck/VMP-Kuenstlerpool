@@ -2,8 +2,7 @@ import HeroSection from '@/components/HeroSection'
 import BandFinderSection from '@/components/BandFinderSection'
 import StatsBar from '@/components/StatsBar'
 import TrustedBy from '@/components/TrustedBy'
-import KuenstlerpoolSection from '@/components/KuenstlerpoolSection'
-import BandGrid from '@/components/BandGrid'
+import BandShowcase from '@/components/BandShowcase'
 import UspSection from '@/components/UspSection'
 import KontaktCta from '@/components/KontaktCta'
 import VmpFooter from '@/components/VmpFooter'
@@ -23,11 +22,8 @@ export default function HomePage() {
       {/* 4 — Band Finder */}
       <BandFinderSection />
 
-      {/* 5 — Künstlerpool / Kategorien */}
-      <KuenstlerpoolSection />
-
-      {/* 5 — Band Grid */}
-      <BandGrid />
+      {/* 5 — Band Showcase */}
+      <BandShowcase />
 
       {/* 6 — USP Section */}
       <UspSection />
