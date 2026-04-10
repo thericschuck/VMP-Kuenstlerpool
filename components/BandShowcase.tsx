@@ -393,24 +393,33 @@ export default function BandShowcase() {
             inView={partyInView}
             light
           />
-          {/* Row 1: two featured wide + tall */}
-          <div className="grid grid-cols-2 gap-3 mb-3">
-            {PARTY_BANDS.filter(b => b.featured).map((band, i) => (
-              <BandCard key={band.name} band={band} index={i} inView={partyInView} height={340} />
+          {/* Mobile: horizontal scroll */}
+          <div className="flex md:hidden gap-3 pb-3 -mx-4 px-4"
+            style={{ overflowX: 'auto', scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}>
+            {PARTY_BANDS.map((band, i) => (
+              <div key={band.name} style={{ width: '72vw', flexShrink: 0, scrollSnapAlign: 'start' }}>
+                <BandCard band={band} index={i} inView={partyInView} height={280} />
+              </div>
             ))}
           </div>
-          {/* Row 2: two compact */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {PARTY_BANDS.filter(b => !b.featured).map((band, i) => (
-              <BandCard key={band.name} band={band} index={i + 2} inView={partyInView} height={220} />
-            ))}
-            {/* Filler CTA tile */}
-            <div className="hidden md:flex col-span-2 items-center justify-center rounded-xl"
-              style={{ height: 220, border: '1px dashed rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.02)' }}>
-              <a href="#kontakt" className="font-body font-semibold transition-colors hover:text-white"
-                style={{ fontSize: 14, color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>
-                Partyband anfragen →
-              </a>
+          {/* Desktop: grid */}
+          <div className="hidden md:block">
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              {PARTY_BANDS.filter(b => b.featured).map((band, i) => (
+                <BandCard key={band.name} band={band} index={i} inView={partyInView} height={340} />
+              ))}
+            </div>
+            <div className="grid grid-cols-4 gap-3">
+              {PARTY_BANDS.filter(b => !b.featured).map((band, i) => (
+                <BandCard key={band.name} band={band} index={i + 2} inView={partyInView} height={220} />
+              ))}
+              <div className="col-span-2 flex items-center justify-center rounded-xl"
+                style={{ height: 220, border: '1px dashed rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.02)' }}>
+                <a href="#kontakt" className="font-body font-semibold transition-colors hover:text-white"
+                  style={{ fontSize: 14, color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>
+                  Partyband anfragen →
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -433,7 +442,17 @@ export default function BandShowcase() {
             inView={tributeInView}
             light
           />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {/* Mobile: horizontal scroll */}
+          <div className="flex md:hidden gap-3 pb-3 -mx-4 px-4"
+            style={{ overflowX: 'auto', scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}>
+            {TRIBUTE_BANDS.map((band, i) => (
+              <div key={band.name} style={{ width: '72vw', flexShrink: 0, scrollSnapAlign: 'start' }}>
+                <BandCard band={band} index={i} inView={tributeInView} height={280} />
+              </div>
+            ))}
+          </div>
+          {/* Desktop: grid */}
+          <div className="hidden md:grid grid-cols-4 gap-3">
             {TRIBUTE_BANDS.map((band, i) => (
               <BandCard key={band.name} band={band} index={i} inView={tributeInView} height={300} />
             ))}
@@ -456,12 +475,22 @@ export default function BandShowcase() {
             inView={easyInView}
             light={false}
           />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {/* Mobile: horizontal scroll */}
+          <div className="flex md:hidden gap-3 pb-3 -mx-4 px-4"
+            style={{ overflowX: 'auto', scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}>
+            {EASY_BANDS.map((band, i) => (
+              <div key={band.name} style={{ width: '72vw', flexShrink: 0, scrollSnapAlign: 'start' }}>
+                <BandCard band={band} index={i} inView={easyInView} height={280} />
+              </div>
+            ))}
+          </div>
+          {/* Desktop: grid */}
+          <div className="hidden md:grid grid-cols-4 gap-3">
             {EASY_BANDS.map((band, i) => (
               <BandCard key={band.name} band={band} index={i} inView={easyInView} height={300} />
             ))}
             {/* Spacer CTA */}
-            <div className="hidden md:flex col-span-2 items-center justify-center rounded-xl"
+            <div className="col-span-2 flex items-center justify-center rounded-xl"
               style={{ height: 300, border: '1.5px dashed var(--color-border)', backgroundColor: 'rgba(28,25,23,0.03)' }}>
               <a href="#kontakt" className="font-body font-semibold transition-colors"
                 style={{ fontSize: 14, color: 'var(--color-subtle)', textDecoration: 'none' }}

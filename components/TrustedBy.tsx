@@ -264,30 +264,33 @@ export default function TrustedBy() {
       className="w-full flex"
     >
       {/* White left portion */}
-      <div className="flex-1 bg-white py-6 px-8 flex flex-col justify-center gap-4">
-        <div className="flex items-center gap-6">
+      <div className="flex-1 bg-white py-4 md:py-6 px-5 md:px-8 flex flex-col justify-center gap-3">
+        {/* Row 1: label + prominent logos (scrollable on mobile) */}
+        <div className="flex items-center gap-3 md:gap-6">
           <span
-            className="font-body font-semibold uppercase tracking-widest flex-shrink-0"
-            style={{ fontSize: 10, color: 'var(--color-subtle)', letterSpacing: '0.15em' }}
+            className="font-body font-semibold uppercase flex-shrink-0"
+            style={{ fontSize: 9, color: 'var(--color-subtle)', letterSpacing: '0.15em' }}
           >
             Gebucht von
           </span>
-          <div className="h-4 w-px flex-shrink-0" style={{ backgroundColor: 'var(--color-border)' }} />
-          {/* Prominent logos */}
-          <div className="flex items-center gap-8 flex-wrap">
+          <div className="hidden md:block h-4 w-px flex-shrink-0" style={{ backgroundColor: 'var(--color-border)' }} />
+          <div
+            className="flex items-center gap-5 md:gap-8 md:flex-wrap"
+            style={{ overflowX: 'auto', scrollbarWidth: 'none', flexShrink: 1 }}
+          >
             {LOGOS.filter(l => l.prominent).map(({ name }) => (
               <span
                 key={name}
-                className="font-body font-bold uppercase tracking-widest"
-                style={{ fontSize: 13, color: '#9C948C', letterSpacing: '0.12em' }}
+                className="font-body font-bold uppercase tracking-widest flex-shrink-0"
+                style={{ fontSize: 12, color: '#9C948C', letterSpacing: '0.12em' }}
               >
                 {name}
               </span>
             ))}
           </div>
         </div>
-        {/* Secondary logos — subtler */}
-        <div className="flex items-center gap-6 flex-wrap pl-0">
+        {/* Row 2: secondary logos — hidden on mobile */}
+        <div className="hidden md:flex items-center gap-6 flex-wrap">
           {LOGOS.filter(l => !l.prominent).map(({ name }) => (
             <span
               key={name}
@@ -297,10 +300,7 @@ export default function TrustedBy() {
               {name}
             </span>
           ))}
-          <span
-            className="font-body font-medium"
-            style={{ fontSize: 10, color: '#C8C2BB', letterSpacing: '0.04em' }}
-          >
+          <span className="font-body font-medium" style={{ fontSize: 10, color: '#C8C2BB', letterSpacing: '0.04em' }}>
             u.v.m.
           </span>
         </div>

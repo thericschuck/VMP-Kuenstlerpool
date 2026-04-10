@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { NavLinks } from './Navbar'
+import { NavLinks, MobileMenuDrawer } from './Navbar'
 
 const SLIDES = [
   { src: '/images/hero/hero-event.avif',     label: 'Live auf der Bühne' },
@@ -26,7 +26,9 @@ export default function HeroSection() {
   const [hovered, setHovered]         = useState(false)
   const [lightbox, setLightbox]       = useState<number | null>(null)
   const [direction, setDirection]     = useState(1) // 1 = forward, -1 = backward
-  const pauseRef = useRef(false)
+  const [mobileOpen, setMobileOpen]   = useState(false)
+  const pauseRef  = useRef(false)
+  const touchStartX = useRef<number | null>(null)
 
   // Auto-advance — pauses on hover or when lightbox is open
   useEffect(() => {
@@ -77,6 +79,8 @@ export default function HeroSection() {
 
   return (
     <>
+      <MobileMenuDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
+
       {/* ── Lightbox ─────────────────────────────────────── */}
       <AnimatePresence>
         {lightbox !== null && (
@@ -222,7 +226,7 @@ export default function HeroSection() {
             <Image src="/images/logo_dark_transparent.png" alt="Vivid Music Productions" width={280} height={100}
               style={{ height: 'clamp(70px, 10vw, 110px)', width: 'auto' }} />
           </a>
-          <p className="mt-2 font-body uppercase tracking-widest text-subtle" style={{ fontSize: 11, letterSpacing: '0.18em' }}>
+          <p className="mt-2 font-body uppercase tracking-widest text-subtle text-center" style={{ fontSize: 11, letterSpacing: '0.18em' }}>
             <span style={{ color: 'var(--color-orange)', fontWeight: 700 }}>V</span>IVID{' '}
             <span style={{ color: 'var(--color-orange)', fontWeight: 700 }}>M</span>USIC{' '}
             <span style={{ color: 'var(--color-orange)', fontWeight: 700 }}>P</span>RODUCTIONS · FRANKFURT AM MAIN
@@ -234,17 +238,42 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
-          className="w-full flex items-center justify-center gap-10 px-8 md:px-12 relative"
+          className="w-full flex items-center justify-between px-4 md:px-8 relative"
           style={{ backgroundColor: 'var(--color-dark)', height: 56 }}
         >
-          <a href="#" className="absolute left-4 md:left-8 block">
+          <a href="#">
             <Image src="/images/logo_light_transparent.png" alt="Vivid Music Productions" width={80} height={28} style={{ height: 28, width: 'auto' }} />
           </a>
-          <NavLinks color="rgba(255,255,255,0.55)" />
-          <a href="#kontakt" className="inline-flex items-center px-5 py-2 rounded-full font-body font-semibold text-white text-sm"
-            style={{ backgroundColor: 'var(--color-orange)' }}>
-            Anfragen
-          </a>
+          {/* Desktop links — centered */}
+          <div className="hidden md:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
+            <NavLinks color="rgba(255,255,255,0.55)" />
+          </div>
+          {/* Right side */}
+          <div className="flex items-center gap-2">
+            <a href="#kontakt"
+              className="md:hidden inline-flex items-center px-3 py-1.5 rounded-full font-body font-semibold text-white"
+              style={{ backgroundColor: 'var(--color-orange)', fontSize: 12 }}>
+              Anfragen
+            </a>
+            <button
+              className="md:hidden flex items-center justify-center"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Menü öffnen"
+              style={{ width: 36, height: 36, background: 'none', border: 'none',
+                cursor: 'pointer', color: 'rgba(255,255,255,0.8)' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2.5" strokeLinecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            </button>
+            <a href="#kontakt"
+              className="hidden md:inline-flex items-center px-5 py-2 rounded-full font-body font-semibold text-white text-sm"
+              style={{ backgroundColor: 'var(--color-orange)' }}>
+              Anfragen
+            </a>
+          </div>
         </motion.nav>
 
         {/* ── Two-column Hero ───────────────────────────── */}
@@ -342,6 +371,13 @@ export default function HeroSection() {
             style={{ minHeight: 'clamp(320px, 50vw, 700px)' }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
+            onTouchStart={e => { touchStartX.current = e.touches[0].clientX }}
+            onTouchEnd={e => {
+              if (touchStartX.current === null) return
+              const diff = touchStartX.current - e.changedTouches[0].clientX
+              if (Math.abs(diff) > 40) { if (diff > 0) next(); else prev() }
+              touchStartX.current = null
+            }}
           >
             {/* Slides */}
             <AnimatePresence custom={direction} mode="wait">
