@@ -8,9 +8,16 @@ A summary of all changes made to ensure correct rendering and behaviour in Safar
 
 ### Overflow fix (iOS)
 ```css
+html { overflow-x: hidden; }
 body { overflow-x: hidden; }
 ```
 `overflow-x: hidden` on `<html>` alone is not honoured by iOS Safari — must be set on `<body>` as well.
+
+### Text size adjust
+```css
+html { -webkit-text-size-adjust: 100%; }
+```
+Prevents iOS Safari from auto-scaling text when orientation changes.
 
 ### Tap-highlight removal
 ```css
@@ -39,6 +46,14 @@ Safari adds its own padding, border-radius, and styling to form controls by defa
 ```
 Enables rubber-band / inertia scrolling inside any overflow container on iOS.
 
+### Reduced motion
+```css
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+```
+Respects the iOS Accessibility "Reduce Motion" setting by collapsing all animations.
+
 ---
 
 ## 2. `app/layout.tsx`
@@ -66,15 +81,13 @@ When added to the home screen, the app launches in full-screen mode with a trans
 
 ## 3. `-webkit-backdrop-filter` prefix
 
-Safari < 15 requires the `-webkit-` vendor prefix for `backdrop-filter`. Added `WebkitBackdropFilter` alongside every `backdropFilter` in inline styles.
+Safari < 15 requires the `-webkit-` vendor prefix for `backdrop-filter`. `WebkitBackdropFilter` is added alongside every `backdropFilter` in inline styles across all active components.
 
-| File | Occurrences fixed |
-|------|------------------|
-| `components/HeroSection.tsx` | 5 (lightbox caption, left/right arrow bars, slide label, fullscreen hint) |
-| `components/GalleryGrid.tsx` | 4 (lightbox overlay, close button, prev/next arrows) |
-| `components/BandGrid.tsx` | 1 (genre tag pill) |
-| `components/HeroSlider.tsx` | 2 (prev/next arrow buttons) |
-| `components/Navbar.tsx` | 1 (scrolled header blur) |
+| File | Occurrences | Where |
+|------|-------------|-------|
+| `components/HeroSection.tsx` | 5 | Lightbox caption, left/right arrow bars, slide label, fullscreen hint |
+| `components/GalleryPageClient.tsx` | 5 | Lightbox overlay, close button, prev/next arrows, thumbnail expand icon |
+| `components/BandPageClient.tsx` | 4 | Lightbox overlay, close button, prev/next arrows |
 
 Example pattern applied everywhere:
 ```tsx
@@ -102,14 +115,26 @@ WebkitAppearance: 'none' as const,
 
 ---
 
+## 5. New subpages — Safari status
+
+| Page | Component | `backdrop-filter` | `appearance` | `aspect-ratio` | Notes |
+|------|-----------|-------------------|--------------|----------------|-------|
+| `/galerie` | `GalleryPageClient.tsx` | ✓ prefixed | n/a | Safari 15+ ✓ | |
+| `/technik` | `TechnikPageClient.tsx` | none used | n/a | Safari 15+ ✓ | |
+| `/ueber-uns` | `UeberUnsPageClient.tsx` | none used | n/a | Safari 15+ ✓ | |
+| `/[slug]` | `BandPageClient.tsx` | ✓ prefixed | n/a | Safari 15+ ✓ | |
+
+---
+
 ## TODO — Manual Testing Checklist
 
 - [ ] Open site on real iPhone (iOS 16+) in Safari — check no horizontal scroll
 - [ ] Tap nav links, buttons — confirm no blue tap flash
-- [ ] Check blurred glass panels (nav, slide arrows, gallery lightbox) render with blur on iOS Safari
+- [ ] Check blurred glass panels (gallery lightbox, band page lightbox, hero arrows) render with blur on iOS Safari
 - [ ] Open contact form on iPhone — confirm `<select>` renders without Safari native chrome arrow
 - [ ] Add to home screen on iPhone — verify standalone launch and status bar style
-- [ ] Test on Safari desktop (macOS) — confirm `backdrop-filter` blur on Navbar while scrolled
+- [ ] Test on Safari desktop (macOS) — confirm `backdrop-filter` blur on all lightboxes while open
 - [ ] Test with "Reduce Motion" enabled in iOS Accessibility settings — animations should be instant
-- [ ] Rotate iPhone to landscape — check no layout breakage
+- [ ] Rotate iPhone to landscape — check no layout breakage on all pages (/galerie, /technik, /ueber-uns, band subpages)
 - [ ] Swipe through HeroSection slides on touch device — confirm smooth swipe-to-change works
+- [ ] Test masonry gallery columns on iPhone — confirm proper column layout in Safari
