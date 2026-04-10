@@ -1,3 +1,4 @@
+import Navbar from '@/components/Navbar'
 import HeroSection from '@/components/HeroSection'
 import BandFinderSection from '@/components/BandFinderSection'
 import StatsBar from '@/components/StatsBar'
@@ -10,7 +11,10 @@ import VmpFooter from '@/components/VmpFooter'
 export default function HomePage() {
   return (
     <main>
-      {/* 1 — Hero (Logo + Nav + Content + Image Strip) */}
+      {/* 1 — Navbar */}
+      <Navbar />
+
+      {/* 2 — Hero (Logo + Nav + Content + Image Strip) */}
       <HeroSection />
 
       {/* 2 — Stats Bar */}

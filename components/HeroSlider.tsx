@@ -135,6 +135,7 @@ export default function HeroSlider() {
           justifyContent:'center',
           cursor:        'pointer',
           backdropFilter:'blur(6px)',
+          WebkitBackdropFilter:'blur(6px)',
           transition:    'background 0.2s',
         }}
         onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.22)')}
@@ -169,6 +170,7 @@ export default function HeroSlider() {
           justifyContent:'center',
           cursor:        'pointer',
           backdropFilter:'blur(6px)',
+          WebkitBackdropFilter:'blur(6px)',
           transition:    'background 0.2s',
         }}
         onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.22)')}

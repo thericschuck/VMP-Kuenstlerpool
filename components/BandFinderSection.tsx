@@ -247,7 +247,7 @@ export default function BandFinderSection() {
             150.000 Alben · #3 DE Charts
           </p>
           <a
-            href="#bands"
+            href="/technik#songwriting"
             className="font-body font-semibold transition-colors"
             style={{ fontSize: 12, color: 'var(--color-orange)', textDecoration: 'none' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}

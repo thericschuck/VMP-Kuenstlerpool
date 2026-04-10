@@ -1,5 +1,12 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
+
+// Safari/iOS: viewport-fit=cover enables content behind the notch safe area
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+}
 
 export const metadata: Metadata = {
   title: 'Vivid Music Productions – Livemusik im Rhein-Main-Gebiet',
@@ -12,6 +19,11 @@ export const metadata: Metadata = {
       'Livemusik auf höchstem Niveau – seit 20 Jahren Ihr Partner für unvergessliche Events.',
     type: 'website',
     locale: 'de_DE',
+  },
+  // iOS home-screen bookmark: standalone mode + translucent status bar
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
   },
 }
 

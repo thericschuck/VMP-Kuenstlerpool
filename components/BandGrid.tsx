@@ -119,6 +119,7 @@ export default function BandGrid() {
                       fontSize: 11,
                       backgroundColor: 'rgba(28,25,23,0.7)',
                       backdropFilter: 'blur(6px)',
+                      WebkitBackdropFilter: 'blur(6px)',
                     }}
                   >
                     {band.genre}

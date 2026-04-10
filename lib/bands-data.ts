@@ -1,5 +1,13 @@
 // ── Band type ──────────────────────────────────────────────────────
 
+export interface Review {
+  name: string
+  rating: number   // 1–5
+  text: string
+  date: string
+  platform: 'Google' | 'Facebook' | 'Direkt'
+}
+
 export interface Band {
   slug: string
   name: string
@@ -14,6 +22,8 @@ export interface Band {
   images: string[]
   videos: { url: string; title: string }[]
   news: { date: string; headline: string }[]
+  reviews?: Review[]
+  facebookUrl?: string
 }
 
 // ── Category helpers ───────────────────────────────────────────────
@@ -58,6 +68,12 @@ Groove Control ist bundesweit buchbar und bringt auf Wunsch das komplette Bühne
       { date: '03. Jan 2025', headline: 'Neues Programm: Jetzt auch mit Akustik-Set buchbar' },
       { date: '10. Nov 2024', headline: 'Ausverkaufte Firmenfeier-Saison – Termine 2025 jetzt buchen' },
     ],
+    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    reviews: [
+      { name: 'Sandra M.', rating: 5, text: 'Groove Control hat unsere Firmenfeier zum absoluten Highlight gemacht. Die Tanzfläche war vom ersten bis zum letzten Song voll – einfach unglaublich professionell.', date: 'Nov 2024', platform: 'Google' },
+      { name: 'Thomas R.', rating: 5, text: 'Für unsere Hochzeit haben wir lange gesucht und mit Groove Control die perfekte Wahl getroffen. Bobby und sein Team waren unkompliziert in der Buchung und auf der Bühne einfach grandios.', date: 'Sep 2024', platform: 'Google' },
+      { name: 'Event GmbH Frankfurt', rating: 5, text: 'Wir buchen Groove Control nun seit Jahren für unsere Kundenevents. Immer pünktlich, immer professionell, immer eine tolle Show. Absolute Buchungsempfehlung.', date: 'Okt 2024', platform: 'Direkt' },
+    ],
   },
 
   {
@@ -82,6 +98,11 @@ Unter dem Motto "The finest of Black Music" reicht das Repertoire von James Brow
       { url: '', title: 'Spirit of Soul – Uptown Funk Live' },
     ],
     news: [],
+    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    reviews: [
+      { name: 'Kai W.', rating: 5, text: 'Spirit of Soul ist eine absolute Klasse-Band. Die Energie auf der Bühne ist kaum zu beschreiben – wir hatten ein Stadtfest mit über 5.000 Gästen, und alle waren begeistert.', date: 'Jun 2024', platform: 'Facebook' },
+      { name: 'Martina S.', rating: 5, text: 'Bereits zweimal gebucht – einmal für ein Firmenevent, einmal für eine Gala. Beide Male phänomenal. Das Niveau ist wirklich europäisch.', date: 'Mär 2024', platform: 'Google' },
+    ],
   },
 
   {
@@ -103,6 +124,10 @@ Time Warp vereint viele musikalische Stilrichtungen, Geschmäcker und Showaspekt
       { url: '', title: 'Time Warp – Bandvideo' },
     ],
     news: [],
+    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    reviews: [
+      { name: 'Frank B.', rating: 5, text: 'Eine musikalische Zeitreise wie aus dem Bilderbuch. Das Kostüm-Konzept ist einmalig – unsere Gäste im Alter von 30 bis 80 waren gleichzeitig begeistert.', date: 'Mai 2024', platform: 'Direkt' },
+    ],
   },
 
   {
@@ -126,6 +151,10 @@ Die ideale, kompakte Band für alle die eine fetzige Party feiern wollen.`,
       { url: '', title: 'BOBbastic – Rock Showreel' },
     ],
     news: [],
+    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    reviews: [
+      { name: 'Julia K.', rating: 5, text: 'BOBbastic hat unsere Hochzeit gerockt! Drei Musiker, aber die Power von sechs – absolut mitreißend. Alle Gäste waren auf der Tanzfläche.', date: 'Aug 2024', platform: 'Google' },
+    ],
   },
 
   // ── EASY LISTENING ──────────────────────────────────────────────
@@ -152,6 +181,11 @@ Ein musikalischer Cocktail aus Akustikgitarren, Piano, Saxophon und gefühlvolle
     ],
     news: [
       { date: '2025', headline: 'Neue Termine für Wohnzimmerkonzerte verfügbar' },
+    ],
+    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    reviews: [
+      { name: 'Lisa H.', rating: 5, text: 'Bobby & Friends haben unseren Sektempfang in etwas ganz Besonderes verwandelt. Dezent, elegant und trotzdem mitreißend – genau das, was wir gesucht haben.', date: 'Dez 2024', platform: 'Direkt' },
+      { name: 'Stefan V.', rating: 5, text: 'Für unser Firmendinner die absolut richtige Wahl. Die Atmosphäre war sofort entspannt und festlich zugleich. Sehr professionell und auf unsere Wünsche eingegangen.', date: 'Nov 2024', platform: 'Google' },
     ],
   },
 

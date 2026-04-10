@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
 
@@ -132,99 +132,82 @@ const EASY_BANDS = [
   },
 ]
 
-// ─── Reusable card ────────────────────────────────────────────────
+// ─── Compact overlay card ─────────────────────────────────────────
 
 function BandCard({
-  band, index, inView, size = 'normal',
+  band, index, inView, height = 280,
 }: {
   band: Omit<typeof PARTY_BANDS[0], 'featured'>
   index: number
   inView: boolean
-  size?: 'featured' | 'normal' | 'wide'
+  height?: number
 }) {
-  const imgH = size === 'featured' ? 320 : size === 'wide' ? 260 : 220
+  const [hovered, setHovered] = useState(false)
 
   return (
     <motion.a
       href={band.href}
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="group flex flex-col rounded-2xl overflow-hidden"
+      transition={{ duration: 0.45, delay: index * 0.06 }}
+      whileHover={{ y: -4, boxShadow: '0 18px 48px rgba(0,0,0,0.5)' }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="group relative overflow-hidden rounded-xl block"
       style={{
-        border: '1px solid rgba(255,255,255,0.07)',
+        height,
         textDecoration: 'none',
-        transition: 'transform 0.25s, box-shadow 0.25s',
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.transform = 'translateY(-4px)'
-        e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.35)'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.transform = 'translateY(0)'
-        e.currentTarget.style.boxShadow = 'none'
+        border: '1px solid rgba(255,255,255,0.06)',
+        backgroundColor: band.bg,
+        flexShrink: 0,
       }}
     >
-      {/* Image area */}
-      <div className="relative overflow-hidden" style={{ height: imgH, backgroundColor: band.bg }}>
-        <Image
-          src={band.image}
-          alt={band.name}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-        />
-        {/* Tag pill */}
-        <div className="absolute top-4 left-4 z-10">
-          <span
-            className="font-body font-semibold px-3 py-1 rounded-full"
-            style={{
-              fontSize: 11,
-              backgroundColor: 'var(--color-orange)',
-              color: '#fff',
-            }}
-          >
-            {band.tag}
-          </span>
-        </div>
-        {/* Genre pill bottom */}
-        <div className="absolute bottom-4 left-4 z-10">
-          <span
-            className="font-body font-semibold px-3 py-1 rounded-full text-white"
-            style={{ fontSize: 11, backgroundColor: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(6px)' }}
-          >
-            {band.genre}
-          </span>
-        </div>
-        {/* Base gradient for legibility */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)' }}
-        />
-        {/* Hover overlay */}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{ background: 'linear-gradient(to top, rgba(234,88,12,0.25), transparent)' }}
-        />
+      <Image
+        src={band.image}
+        alt={band.name}
+        fill
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+      />
+      {/* Gradient */}
+      <div className="absolute inset-0"
+        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 55%, transparent 100%)' }} />
+      {/* Orange hover tint */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{ background: 'linear-gradient(to top, rgba(234,88,12,0.3) 0%, transparent 65%)' }} />
+
+      {/* Tag */}
+      <div className="absolute top-3 left-3 z-10">
+        <span className="font-body font-semibold px-2.5 py-1 rounded-full"
+          style={{ fontSize: 10, backgroundColor: 'var(--color-orange)', color: '#fff' }}>
+          {band.tag}
+        </span>
       </div>
 
-      {/* Text */}
-      <div
-        className="p-5 flex flex-col gap-2 flex-1"
-        style={{ backgroundColor: '#161412' }}
-      >
-        <h3 className="font-display font-bold text-white" style={{ fontSize: size === 'featured' ? 20 : 17, lineHeight: 1.3 }}>
+      {/* Name + genre + description */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+        <h3 className="font-display font-bold text-white" style={{ fontSize: 18, lineHeight: 1.2, marginBottom: 3 }}>
           {band.name}
         </h3>
-        <p className="font-body" style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', lineHeight: 1.65 }}>
+        <p className="font-body" style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>
+          {band.genre}
+        </p>
+        {/* Description — fades + slides up on hover */}
+        <p
+          className="font-body overflow-hidden"
+          style={{
+            fontSize: 12,
+            color: 'rgba(255,255,255,0.72)',
+            lineHeight: 1.55,
+            marginTop: hovered ? 8 : 0,
+            maxHeight: hovered ? 80 : 0,
+            opacity: hovered ? 1 : 0,
+            transform: hovered ? 'translateY(0)' : 'translateY(6px)',
+            transition: 'max-height 0.35s ease, opacity 0.28s ease, transform 0.28s ease, margin-top 0.28s ease',
+          }}
+        >
           {band.description}
         </p>
-        <span
-          className="font-body font-semibold mt-auto pt-1 transition-colors"
-          style={{ fontSize: 13, color: 'var(--color-orange)' }}
-        >
-          Mehr erfahren →
-        </span>
       </div>
     </motion.a>
   )
@@ -340,12 +323,12 @@ export default function BandShowcase() {
       {/* ── Intro strip ──────────────────────────────────── */}
       <section
         ref={introRef}
-        className="relative overflow-hidden w-full py-20 px-6"
+        className="relative overflow-hidden w-full py-20 px-6 md:px-10"
         style={{ backgroundColor: 'var(--color-dark)' }}
       >
         <Glow x="12%" y="50%" color="rgba(234,88,12,0.09)" size={700} />
         <Glow x="88%" y="30%" color="rgba(234,130,12,0.05)" size={500} />
-        <div className="relative z-10 max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+        <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={introInView ? { opacity: 1, y: 0 } : {}}
@@ -397,12 +380,12 @@ export default function BandShowcase() {
       <section
         ref={partyRef}
         id="partybands"
-        className="relative overflow-hidden w-full py-20 px-4 md:px-6"
+        className="relative overflow-hidden w-full py-20 px-4 md:px-10"
         style={{ backgroundColor: '#111010' }}
       >
         <Glow x="80%" y="25%" color="rgba(234,88,12,0.07)" size={800} />
         <Glow x="5%"  y="75%" color="rgba(234,120,12,0.04)" size={500} />
-        <div className="relative z-10 max-w-5xl mx-auto">
+        <div className="relative z-10 max-w-7xl mx-auto">
           <SectionHeader
             eyebrow="Kategorie 01"
             title="Partybands"
@@ -410,17 +393,25 @@ export default function BandShowcase() {
             inView={partyInView}
             light
           />
-
-          {/* Featured 2 big + 2 normal */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          {/* Row 1: two featured wide + tall */}
+          <div className="grid grid-cols-2 gap-3 mb-3">
             {PARTY_BANDS.filter(b => b.featured).map((band, i) => (
-              <BandCard key={band.name} band={band} index={i} inView={partyInView} size="featured" />
+              <BandCard key={band.name} band={band} index={i} inView={partyInView} height={340} />
             ))}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Row 2: two compact */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {PARTY_BANDS.filter(b => !b.featured).map((band, i) => (
-              <BandCard key={band.name} band={band} index={i + 2} inView={partyInView} size="normal" />
+              <BandCard key={band.name} band={band} index={i + 2} inView={partyInView} height={220} />
             ))}
+            {/* Filler CTA tile */}
+            <div className="hidden md:flex col-span-2 items-center justify-center rounded-xl"
+              style={{ height: 220, border: '1px dashed rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.02)' }}>
+              <a href="#kontakt" className="font-body font-semibold transition-colors hover:text-white"
+                style={{ fontSize: 14, color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>
+                Partyband anfragen →
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -429,12 +420,12 @@ export default function BandShowcase() {
       <section
         ref={tributeRef}
         id="tribute"
-        className="relative overflow-hidden w-full py-20 px-4 md:px-6"
+        className="relative overflow-hidden w-full py-20 px-4 md:px-10"
         style={{ backgroundColor: '#0D0C0B' }}
       >
         <Glow x="50%" y="10%" color="rgba(234,88,12,0.06)" size={900} />
         <Glow x="15%" y="80%" color="rgba(180,60,0,0.04)"  size={400} />
-        <div className="relative z-10 max-w-5xl mx-auto">
+        <div className="relative z-10 max-w-7xl mx-auto">
           <SectionHeader
             eyebrow="Kategorie 02"
             title="Tribute Bands"
@@ -442,9 +433,9 @@ export default function BandShowcase() {
             inView={tributeInView}
             light
           />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {TRIBUTE_BANDS.map((band, i) => (
-              <BandCard key={band.name} band={band} index={i} inView={tributeInView} size="normal" />
+              <BandCard key={band.name} band={band} index={i} inView={tributeInView} height={300} />
             ))}
           </div>
         </div>
@@ -454,10 +445,10 @@ export default function BandShowcase() {
       <section
         ref={easyRef}
         id="easy-listening"
-        className="w-full py-20 px-4 md:px-6"
+        className="w-full py-20 px-4 md:px-10"
         style={{ backgroundColor: 'var(--color-bg)' }}
       >
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <SectionHeader
             eyebrow="Kategorie 03"
             title="Easy Listening"
@@ -465,10 +456,20 @@ export default function BandShowcase() {
             inView={easyInView}
             light={false}
           />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {EASY_BANDS.map((band, i) => (
-              <BandCard key={band.name} band={band} index={i} inView={easyInView} size="wide" />
+              <BandCard key={band.name} band={band} index={i} inView={easyInView} height={300} />
             ))}
+            {/* Spacer CTA */}
+            <div className="hidden md:flex col-span-2 items-center justify-center rounded-xl"
+              style={{ height: 300, border: '1.5px dashed var(--color-border)', backgroundColor: 'rgba(28,25,23,0.03)' }}>
+              <a href="#kontakt" className="font-body font-semibold transition-colors"
+                style={{ fontSize: 14, color: 'var(--color-subtle)', textDecoration: 'none' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-dark)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-subtle)')}>
+                Easy Listening anfragen →
+              </a>
+            </div>
           </div>
         </div>
       </section>

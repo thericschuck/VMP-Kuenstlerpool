@@ -27,8 +27,10 @@
 }
 
 html {
+  /* scroll-behavior: smooth is Safari desktop ≥15.4 only; not supported on iOS.
+     Kept because it enhances anchor navigation on desktop without breaking iOS. */
   scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%; /* prevents Safari from auto-scaling text */
   overflow-x: hidden;
 }
 
@@ -40,6 +42,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  /* iOS Safari: overflow-x:hidden on html alone is not enough */
+  overflow-x: hidden;
 }
 
 :focus-visible {
@@ -53,6 +57,49 @@ video {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* ─── iOS / Safari Fixes ─────────────────────────────────────────── */
+
+/* Remove iOS tap highlight flash on all interactive elements */
+a,
+button,
+input,
+select,
+textarea,
+[role='button'],
+[tabindex] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent 300ms double-tap zoom delay on iOS ≤12 */
+a,
+button,
+[role='button'] {
+  touch-action: manipulation;
+}
+
+/* Reset Safari's opinionated input/button styling */
+input,
+textarea,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0; /* Safari adds border-radius on some inputs */
+}
+button {
+  /* Safari on iOS adds padding/border-radius to <button> by default */
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Momentum scrolling on iOS for any overflow containers */
+[style*='overflow-y: auto'],
+[style*='overflow-y:auto'],
+[style*='overflow: auto'],
+[style*='overflow:auto'] {
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ─── Band card hover ─────────────────────────────────────────── */

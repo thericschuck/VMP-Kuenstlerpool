@@ -87,7 +87,7 @@ export default function GalleryGrid() {
           aria-modal="true"
           aria-label="Bildansicht"
           className="fixed inset-0 flex items-center justify-center"
-          style={{ background: 'rgba(10,8,6,0.93)', zIndex: 2000, backdropFilter: 'blur(6px)' }}
+          style={{ background: 'rgba(10,8,6,0.93)', zIndex: 2000, backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
           onClick={close}
         >
           {/* Image container – stops click propagation so clicking image doesn't close */}
@@ -127,6 +127,7 @@ export default function GalleryGrid() {
               alignItems: 'center',
               justifyContent: 'center',
               backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
               transition: 'background 150ms',
             }}
             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.22)')}
@@ -156,6 +157,7 @@ export default function GalleryGrid() {
               alignItems: 'center',
               justifyContent: 'center',
               backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
               transition: 'background 150ms',
             }}
             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.22)')}
@@ -185,6 +187,7 @@ export default function GalleryGrid() {
               alignItems: 'center',
               justifyContent: 'center',
               backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
               transition: 'background 150ms',
             }}
             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.22)')}

@@ -258,6 +258,7 @@ export default function KontaktCta() {
                   ...inputStyle,
                   border: borderFor('anlass'),
                   appearance: 'none',
+                  WebkitAppearance: 'none' as const,
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239C948C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'right 14px center',
