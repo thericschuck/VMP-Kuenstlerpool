@@ -126,7 +126,7 @@ export default function TechnikPageClient() {
 
   const fadeUp = (delay = 0) => ({
     initial: { opacity: 0, y: 24 },
-    transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as number[] },
+    transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   })
 
   return (
@@ -407,7 +407,7 @@ export default function TechnikPageClient() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={cta.inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] as number[] }}
+            transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 4vw, 48px)', color: '#fff', fontWeight: 700, lineHeight: 1.1, marginBottom: 16 }}
           >
             Interesse an einem Komplettpaket?
