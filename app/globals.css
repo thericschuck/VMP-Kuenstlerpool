@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────────────────── */
+:root {
+  /* Hintergründe */
+  --color-bg:           #FAF6EE;   /* Page Background, Hero */
+  --color-bg-alt:       #FDF9F2;   /* Abwechselnde Sections */
+  --color-card:         #F8E8D0;   /* Cards, Tags, Badges */
+
+  /* Primärfarbe — Weinrot */
+  --color-orange:       #8B1A1A;   /* Buttons, CTA, Nav-Akzent */
+  --color-orange-hover: #A52020;   /* Hover-State */
+  --color-orange-light: #F5E0E0;   /* Subtle Highlights, Tags */
+  --color-orange-text:  #6B1414;   /* Links, Akzent-Text */
+
+  /* Text */
+  --color-dark:         #1A1A1A;   /* Headlines, Haupttext */
+  --color-muted:        #555555;   /* Fließtext, Beschreibung */
+  --color-subtle:       #888888;   /* Meta, Datum, Labels */
+
+  /* Dunkle Sections — sichtbares Dunkelrot (wie eventpeppers-Stil) */
+  --color-bg-dark:      #6B1414;   /* StatsBar, Navbar, Footer, Showcase-Sections */
+  --color-on-dark:      #ffffff;   /* Text auf dunklen Hintergründen */
+
+  /* Borders */
+  --color-border:       #E8D8C8;   /* Cards, Sections */
+  --color-border-strong:#D4C4B0;   /* Hover, Fokus */
+
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+}
+
+
+
+/* ─── Reset ─────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* scroll-behavior: smooth is Safari desktop ≥15.4 only; not supported on iOS.
+     Kept because it enhances anchor navigation on desktop without breaking iOS. */
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%; /* prevents Safari from auto-scaling text */
+  overflow-x: hidden;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────── */
+body {
+  background: var(--color-bg);
+  color: var(--color-dark);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  /* iOS Safari: overflow-x:hidden on html alone is not enough */
+  overflow-x: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─── iOS / Safari Fixes ─────────────────────────────────────────── */
+
+/* Remove iOS tap highlight flash on all interactive elements */
+a,
+button,
+input,
+select,
+textarea,
+[role='button'],
+[tabindex] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent 300ms double-tap zoom delay on iOS ≤12 */
+a,
+button,
+[role='button'] {
+  touch-action: manipulation;
+}
+
+/* Reset Safari's opinionated input/button styling */
+input,
+textarea,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0; /* Safari adds border-radius on some inputs */
+}
+button {
+  /* Safari on iOS adds padding/border-radius to <button> by default */
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Momentum scrolling on iOS for any overflow containers */
+[style*='overflow-y: auto'],
+[style*='overflow-y:auto'],
+[style*='overflow: auto'],
+[style*='overflow:auto'] {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── Band card hover ─────────────────────────────────────────── */
+.band-card {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.25s;
+}
+.band-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-orange) !important;
+  box-shadow: 0 12px 32px rgba(139, 26, 26, 0.14);
+}
+
+/* ─── Image strip hover ──────────────────────────────────────── */
+.image-strip-item img,
+.image-strip-item .placeholder {
+  transition: transform 0.4s ease;
+}
+.image-strip-item:hover img,
+.image-strip-item:hover .placeholder {
+  transform: scale(1.03);
+}
+
+/* ─── Prefers reduced motion ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm config:*)",
+      "Bash(pnpm --version)",
+      "Bash(npm cache:*)",
+      "Read(//c/Users/eschu/AppData/Local/npm-cache/content-v2/**)",
+      "Bash(find c:/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP -name *.jpg -o -name *.jpeg -o -name *.png -o -name *.webp -o -name *.gif -o -name *.svg)",
+      "Bash(cmd /c \"dir /b \"\"C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\public\"\"\")",
+      "Bash(cmd /c \"dir /b \"\"C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\"\"\")",
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP'' | Select-Object Name, Mode\")",
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\assets'' | Select-Object Name\")",
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\public'' -ErrorAction SilentlyContinue | Select-Object Name\")",
+      "Bash(powershell -Command \"Get-ChildItem -Recurse ''C:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\06-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP'' -Include ''*.gif'',''*.svg'',''*.png'' | Where-Object { $_.FullName -notlike ''*node_modules*'' -and $_.FullName -notlike ''*.next*'' } | Select-Object FullName, Length\")",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Read(//c/Users/eschu/.claude/**)",
+      "Read(//tmp/ui-ux-pro-max-skill/.claude/**)",
+      "Bash(grep -v \"^$\")",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "Bash(ls /c/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP/components/*.tsx)",
+      "Bash(grep -l \"SiteFooter\" /c/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP/components/*.tsx)",
+      "Bash(grep -l \"FloatingNotes\\\\|ClickNote\\\\|ScrollEffects\\\\|ScrollIndicator\" /c/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP/components/*.tsx)",
+      "Bash(echo \"=== COMPONENTS THAT ARE IMPORTED/USED ===\" echo \"From app pages:\" grep -h \"from '@/components\" /c/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP/app/*.tsx /c/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP/app/*/*.tsx)",
+      "Bash(xargs basename:*)",
+      "Bash(echo \"=== COMPONENTS DIRECTLY USED IN APP PAGES ===\" grep -h \"from '@/components\" /c/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP/app/*.tsx /c/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP/app/*/*.tsx)",
+      "Bash(grep -r \"^ const.*=\" /c/Users/eschu/Desktop/Unternehmensstruktur/06-Projekte/Schuck-Webdesign/Bobby_Stoker/VMP/components/*.tsx)",
+      "Bash(rm BandCard.tsx BandDescription.tsx BandGrid.tsx BandScroller.tsx ClickNote.tsx ContactForm.tsx FloatingNotes.tsx GalleryGrid.tsx HeroSlider.tsx KuenstlerpoolSection.tsx RevealCards.tsx ScrollEffects.tsx ScrollIndicator.tsx SiteFooter.tsx SoundwaveBackground.tsx VinylRecord.tsx CountUp.tsx)",
+      "Bash(ls *.tsx)",
+      "Bash(grep -E \"\\\\.tsx$\")",
+      "Bash(gh auth:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\eschu\\.claude",
+      "\\tmp",
+      "c:\\Users\\eschu\\Desktop\\Unternehmensstruktur\\06-Projekte\\Schuck-Webdesign\\Bobby_Stoker\\VMP\\app\\admin\\bands"
+    ]
+  }
+}
