@@ -49,7 +49,7 @@ const SOCIALS = [
 
 export default function VmpFooter() {
   return (
-    <footer className="w-full" style={{ backgroundColor: 'var(--color-bg-dark)' }}>
+    <footer className="w-full" style={{ backgroundColor: '#2C1810' }}>
       <div className="max-w-5xl mx-auto px-6 pt-12 pb-8 md:pt-16 md:pb-10">
 
         {/* ── Main grid ── */}

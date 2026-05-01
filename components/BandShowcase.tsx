@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
+import { NavLinks, MobileMenuDrawer, VmpBadge } from './Navbar'
 
 // ─── Ambient glow helper ─────────────────────────────────────────
 
@@ -317,6 +318,8 @@ function TickerStrip() {
 // ─── Main component ───────────────────────────────────────────────
 
 export default function BandShowcase() {
+  const [mobileOpen, setMobileOpen] = useState(false)
+
   const introRef   = useRef<HTMLDivElement>(null)
   const partyRef   = useRef<HTMLDivElement>(null)
   const tributeRef = useRef<HTMLDivElement>(null)
@@ -328,16 +331,19 @@ export default function BandShowcase() {
   const easyInView    = useInView(easyRef,    { once: true, margin: '-60px' })
 
   return (
+    <>
+    <MobileMenuDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
     <div id="bands">
 
       {/* ── Intro strip ──────────────────────────────────── */}
       <section
         ref={introRef}
         className="relative overflow-hidden w-full py-20 px-6 md:px-10"
-        style={{ backgroundColor: 'var(--color-bg-dark)' }}
+        style={{ backgroundColor: 'var(--color-bg)' }}
       >
-        <Glow x="12%" y="50%" color="rgba(139,26,26,0.2)" size={700} />
-        <Glow x="88%" y="30%" color="rgba(139,26,26,0.1)" size={500} />
+        {/* Diagonal hairline grid texture */}
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0, backgroundImage: `repeating-linear-gradient(-52deg, rgba(28,25,23,0.028) 0px, rgba(28,25,23,0.028) 1px, transparent 1px, transparent 22px), repeating-linear-gradient(38deg, rgba(28,25,23,0.016) 0px, rgba(28,25,23,0.016) 1px, transparent 1px, transparent 44px)` }} />
+
         <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -346,16 +352,16 @@ export default function BandShowcase() {
           >
             <p
               className="font-body font-semibold uppercase tracking-widest mb-3"
-              style={{ fontSize: 11, color: 'var(--color-on-dark)', letterSpacing: '0.18em' }}
+              style={{ fontSize: 11, color: 'var(--color-orange)', letterSpacing: '0.18em' }}
             >
               Das komplette Line-up
             </p>
             <h2
-              className="font-display font-bold text-white"
-              style={{ fontSize: 'clamp(30px, 5vw, 52px)', lineHeight: 1.1 }}
+              className="font-display font-bold"
+              style={{ fontSize: 'clamp(30px, 5vw, 52px)', lineHeight: 1.1, color: 'var(--color-dark)' }}
             >
               10 Bands.<br />
-              <span style={{ color: 'var(--color-on-dark)' }}>Eine Adresse.</span>
+              <span style={{ color: 'var(--color-orange)' }}>Eine Adresse.</span>
             </h2>
           </motion.div>
 
@@ -371,10 +377,10 @@ export default function BandShowcase() {
               { num: '2', label: 'Easy Listening' },
             ].map((s) => (
               <div key={s.label} className="flex items-baseline gap-3 md:flex-row-reverse">
-                <span className="font-display font-bold" style={{ fontSize: 32, color: 'var(--color-on-dark)', lineHeight: 1 }}>
+                <span className="font-display font-bold" style={{ fontSize: 32, color: 'var(--color-dark)', lineHeight: 1 }}>
                   {s.num}
                 </span>
-                <span className="font-body" style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>
+                <span className="font-body" style={{ fontSize: 13, color: 'var(--color-muted)' }}>
                   {s.label}
                 </span>
               </div>
@@ -382,6 +388,51 @@ export default function BandShowcase() {
           </motion.div>
         </div>
       </section>
+
+      {/* ── Inline navbar ─────────────────────────────────── */}
+      <nav
+        id="inline-nav"
+        className="w-full flex items-center justify-between relative"
+        style={{ backgroundColor: 'var(--color-bg-dark)', height: 64, paddingLeft: 168, paddingRight: 24, overflow: 'visible', zIndex: 30 }}
+      >
+        <a href="/" style={{
+          textDecoration: 'none',
+          position: 'absolute',
+          left: 40,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 40,
+        }}>
+          <VmpBadge size={110} />
+        </a>
+        <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          <NavLinks color="#ffffff" />
+        </div>
+        <div className="flex items-center gap-2">
+          <a href="/#kontakt"
+            className="md:hidden inline-flex items-center px-3 py-1.5 rounded-full font-body font-semibold text-white"
+            style={{ backgroundColor: 'var(--color-orange)', fontSize: 12 }}>
+            Anfragen
+          </a>
+          <button
+            className="md:hidden flex items-center justify-center"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Menü öffnen"
+            style={{ width: 36, height: 36, background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.8)' }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <a href="/#kontakt"
+            className="hidden md:inline-flex items-center px-5 py-2 rounded-full font-body font-semibold text-white text-sm"
+            style={{ backgroundColor: 'var(--color-orange)' }}>
+            Anfragen
+          </a>
+        </div>
+      </nav>
 
       {/* Ticker */}
       <TickerStrip />
@@ -514,5 +565,6 @@ export default function BandShowcase() {
       </section>
 
     </div>
+    </>
   )
 }

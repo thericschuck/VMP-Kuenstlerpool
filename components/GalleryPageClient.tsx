@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import Image from 'next/image'
+import InlineNavBar from './InlineNavBar'
 
 // ─── Data ─────────────────────────────────────────────────────────────
 
@@ -354,6 +355,8 @@ export default function GalleryPageClient() {
           </motion.p>
         </div>
       </section>
+
+      <InlineNavBar />
 
       {/* ── Masonry grid ──────────────────────────────────────────── */}
       <div style={{ background: 'var(--color-bg)', minHeight: '60vh', position: 'relative' }}>

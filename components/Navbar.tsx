@@ -38,8 +38,8 @@ export function VmpBadge({ size = 48, shadow = true, borderWidth = 4 }: { size?:
 // ── Nav data ──────────────────────────────────────────────────────────
 
 export const NAV_ITEMS = [
-  { label: 'Home',                href: '/#hero',       dropdown: false },
-  { label: 'Bands',               href: '/#bands',      dropdown: true  },
+  { label: 'Home',                href: '/',            dropdown: false },
+  { label: 'Bands',               href: '/bands',       dropdown: true  },
   { label: 'Galerie',             href: '/galerie',     dropdown: false },
   { label: 'Technik & Tonstudio', href: '/technik',     dropdown: false },
   { label: 'Über uns',            href: '/ueber-uns',   dropdown: false },
@@ -49,7 +49,7 @@ export const NAV_ITEMS = [
 
 const BANDS_MENU = [
   {
-    category: 'Partybands', href: '/#partybands',
+    category: 'Partybands', href: '/bands#partybands',
     bands: [
       { name: 'Groove Control',  href: '/groove-control' },
       { name: 'Spirit of Soul',  href: '/spirit-of-soul' },
@@ -58,7 +58,7 @@ const BANDS_MENU = [
     ],
   },
   {
-    category: 'Tribute Bands', href: '/#tribute-bands',
+    category: 'Tribute Bands', href: '/bands#tribute',
     bands: [
       { name: 'The Kiss Tribute Band', href: '/kiss-tribute'  },
       { name: 'CoverSnake',            href: '/coversnake'    },
@@ -67,7 +67,7 @@ const BANDS_MENU = [
     ],
   },
   {
-    category: 'Easy Listening', href: '/#easy-listening',
+    category: 'Easy Listening', href: '/bands#easy-listening',
     bands: [
       { name: 'Bobby & Friends', href: '/bobby-and-friends' },
       { name: 'Marsch Mellows',  href: '/marsch-mellows'   },
@@ -289,9 +289,10 @@ export function NavLinks({ color = '#fff' }: { color?: string }) {
       {NAV_ITEMS.map(item =>
         item.dropdown ? (
           <div key="bands-trigger" className="relative hidden md:block" onMouseEnter={open} onMouseLeave={close}>
-            <button
-              className="flex items-center gap-1.5 font-display bg-transparent border-none cursor-pointer"
-              style={{ color, fontSize: 19, letterSpacing: '0.08em', padding: 0, transition: 'opacity 0.15s' }}
+            <a
+              href={item.href}
+              className="flex items-center gap-1.5 font-display"
+              style={{ color, fontSize: 19, letterSpacing: '0.08em', textDecoration: 'none', transition: 'opacity 0.15s' }}
               onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             >
@@ -301,7 +302,7 @@ export function NavLinks({ color = '#fff' }: { color?: string }) {
                   transition: 'transform 0.2s', marginTop: 1, opacity: 0.7 }}>
                 <path d="M1 1l3.5 3.5L8 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-            </button>
+            </a>
             <BandsMegaMenu open={bandsOpen} />
           </div>
         ) : (
@@ -327,13 +328,23 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const inlineNav = document.getElementById('inline-nav')
+    if (inlineNav) {
+      const observer = new IntersectionObserver(
+        ([entry]) => setScrolled(!entry.isIntersecting),
+        { threshold: 0 }
+      )
+      observer.observe(inlineNav)
+      return () => observer.disconnect()
+    } else {
+      const onScroll = () => setScrolled(window.scrollY > 80)
+      onScroll()
+      window.addEventListener('scroll', onScroll, { passive: true })
+      return () => window.removeEventListener('scroll', onScroll)
+    }
   }, [])
 
-  const visible = !isHome || scrolled
+  const visible = scrolled
 
   return (
     <>

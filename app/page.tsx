@@ -1,8 +1,7 @@
 import Navbar from '@/components/Navbar'
 import HeroSection from '@/components/HeroSection'
-import BandFinderSection from '@/components/BandFinderSection'
 import StatsBar from '@/components/StatsBar'
-import BandShowcase from '@/components/BandShowcase'
+import BandFinderSection from '@/components/BandFinderSection'
 import UspSection from '@/components/UspSection'
 import KontaktCta from '@/components/KontaktCta'
 import VmpFooter from '@/components/VmpFooter'
@@ -13,25 +12,22 @@ export default function HomePage() {
       {/* 1 — Navbar */}
       <Navbar />
 
-      {/* 2 — Hero (Logo + Nav + Content + Image Strip) */}
+      {/* 2 — Hero */}
       <HeroSection />
 
-      {/* 3 — Stats Bar */}
+      {/* 3 — Stats Bar (Gebucht von + Kategorie-Chips) */}
       <StatsBar />
 
-      {/* 4 — Band Finder */}
+      {/* 4 — Band Finder + Band der Woche */}
       <BandFinderSection />
 
-      {/* 5 — Band Showcase */}
-      <BandShowcase />
-
-      {/* 6 — USP Section */}
+      {/* 5 — Social Media */}
       <UspSection />
 
-      {/* 7 — Kontakt CTA */}
+      {/* 6 — Kontakt */}
       <KontaktCta />
 
-      {/* 8 — Footer */}
+      {/* 7 — Footer */}
       <VmpFooter />
     </main>
   )

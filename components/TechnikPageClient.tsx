@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
+import InlineNavBar from './InlineNavBar'
 
 // ─── Helpers ──────────────────────────────────────────────────────────
 
@@ -184,6 +185,8 @@ export default function TechnikPageClient() {
           </motion.p>
         </div>
       </section>
+
+      <InlineNavBar />
 
       {/* ── Section 1: Veranstaltungsservice ─────────────────────── */}
       <section style={{ background: 'var(--color-bg)', padding: '80px 0', position: 'relative' }}>

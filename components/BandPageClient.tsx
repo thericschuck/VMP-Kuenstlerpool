@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import type { Band, Review } from '@/lib/bands-data'
+import InlineNavBar from './InlineNavBar'
 
 // ─── Stars ────────────────────────────────────────────────────────────
 
@@ -389,7 +390,6 @@ export default function BandPageClient({
         height: 560,
         backgroundColor: 'var(--color-dark)',
         overflow: 'hidden',
-        marginTop: 56,
       }}>
         {band.images[0] && (
           <motion.div
@@ -507,6 +507,8 @@ export default function BandPageClient({
           </motion.a>
         </motion.div>
       </section>
+
+      <InlineNavBar />
 
       {/* ── Info bar ─────────────────────────────────────────── */}
       <div style={{ backgroundColor: '#161412' }}>

@@ -7,9 +7,9 @@ const PROMINENT = ['AUDI', 'PORSCHE', 'VOLKSWAGEN', 'DEUTSCHE BANK', 'SAMSUNG']
 const SECONDARY = ['REWE', 'DEUTSCHE POST', 'DVAG', 'DEBEKA', 'STIHL', 'BRIDGESTONE', 'WACKER CHEMIE', 'SONY ERICSSON', 'GRUNER & JAHR']
 
 const CATEGORIES = [
-  { label: 'Partybands',    href: '/#partybands',    icon: '🎸' },
-  { label: 'Tribute Bands', href: '/#tribute-bands', icon: '🎤' },
-  { label: 'Easy Listening', href: '/#easy-listening', icon: '🎻' },
+  { label: 'Partybands',     href: '/bands#partybands'    },
+  { label: 'Tribute Bands',  href: '/bands#tribute'       },
+  { label: 'Easy Listening', href: '/bands#easy-listening'},
 ]
 
 export default function StatsBar() {
