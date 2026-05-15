@@ -16,7 +16,7 @@ const CATEGORIES = [
     image: '/images/stadtfeste.avif',
   },
   {
-    title: 'Hochzeitsbands',
+    title: 'Hochzeiten und Privatveranstaltungen',
     description: 'Von der romantischen Trauung bis zur ausgelassenen Tanzfläche – wir finden die perfekte Band für Ihren großen Tag.',
     image: '/images/hochzeit.avif',
   },

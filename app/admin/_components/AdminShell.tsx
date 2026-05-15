@@ -13,8 +13,6 @@ const NAV = [
   { href: '/admin/seiten',  label: 'Seiten',        icon: PageIcon },
 ]
 
-// ── Tiny SVG icon components ──────────────────────────────────
-
 function GridIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -61,8 +59,6 @@ function PageIcon() {
   )
 }
 
-// ── Shell ────────────────────────────────────────────────────
-
 export function AdminShell({
   children,
   email,
@@ -81,25 +77,24 @@ export function AdminShell({
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#0f0e0d', color: '#fff', fontFamily: 'var(--font-body)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#FAF6EE', fontFamily: 'var(--font-body)' }}>
 
       {/* ── Sidebar ─────────────────────────────────── */}
       <aside style={{
         width: 232, flexShrink: 0,
-        backgroundColor: '#141210',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
+        backgroundColor: '#6B1414',
         display: 'flex', flexDirection: 'column',
         position: 'sticky', top: 0, height: '100vh', overflowY: 'auto',
       }}>
         {/* Logo */}
-        <div style={{ padding: '22px 20px 18px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ padding: '22px 20px 18px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <Image
             src="/images/logo_light_transparent.png"
             alt="VMP"
             width={120} height={40}
             style={{ height: 30, width: 'auto' }}
           />
-          <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', marginTop: 7, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+          <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 7, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
             Admin Bereich
           </p>
         </div>
@@ -118,21 +113,21 @@ export function AdminShell({
                   display: 'flex', alignItems: 'center', gap: 10,
                   padding: '9px 12px', borderRadius: 7, marginBottom: 1,
                   fontSize: 13, fontWeight: active ? 600 : 400,
-                  color: active ? '#fff' : 'rgba(255,255,255,0.4)',
-                  backgroundColor: active ? 'rgba(234,88,12,0.14)' : 'transparent',
-                  borderLeft: `2px solid ${active ? '#ea580c' : 'transparent'}`,
+                  color: active ? '#fff' : 'rgba(255,255,255,0.55)',
+                  backgroundColor: active ? 'rgba(255,255,255,0.13)' : 'transparent',
+                  borderLeft: `2px solid ${active ? 'rgba(255,255,255,0.7)' : 'transparent'}`,
                   textDecoration: 'none',
                   transition: 'all 0.15s',
                 }}
                 onMouseEnter={e => {
                   if (!active) {
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.75)'
-                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)'
+                    e.currentTarget.style.color = '#fff'
+                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'
                   }
                 }}
                 onMouseLeave={e => {
                   if (!active) {
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.4)'
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.55)'
                     e.currentTarget.style.backgroundColor = 'transparent'
                   }
                 }}
@@ -145,9 +140,9 @@ export function AdminShell({
         </nav>
 
         {/* User + Logout */}
-        <div style={{ padding: '14px 16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ padding: '14px 16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <p style={{
-            fontSize: 11, color: 'rgba(255,255,255,0.28)', marginBottom: 10,
+            fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 10,
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
           }}>
             {email}
@@ -156,13 +151,13 @@ export function AdminShell({
             onClick={logout}
             style={{
               width: '100%', padding: '7px 10px', borderRadius: 6,
-              border: '1px solid rgba(255,255,255,0.09)',
-              background: 'none', color: 'rgba(255,255,255,0.4)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'none', color: 'rgba(255,255,255,0.55)',
               fontSize: 12, cursor: 'pointer', textAlign: 'left',
               transition: 'all 0.15s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)' }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.55)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)' }}
           >
             Abmelden →
           </button>
@@ -177,16 +172,14 @@ export function AdminShell({
   )
 }
 
-// ── Page header helper ────────────────────────────────────────
-
 export function PageHeader({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
-    <div style={{ marginBottom: 36 }}>
-      <h1 style={{ fontSize: 26, fontWeight: 700, fontFamily: 'var(--font-display)', color: '#fff', marginBottom: 4 }}>
+    <div style={{ marginBottom: 32 }}>
+      <h1 style={{ fontSize: 32, fontFamily: 'var(--font-display)', color: '#1A1A1A', marginBottom: 4, letterSpacing: '0.02em' }}>
         {title}
       </h1>
       {subtitle && (
-        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.38)' }}>
+        <p style={{ fontSize: 14, color: '#555555', fontFamily: 'var(--font-body)' }}>
           {subtitle}
         </p>
       )}

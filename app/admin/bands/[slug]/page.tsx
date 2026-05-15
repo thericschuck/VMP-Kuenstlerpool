@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import { ImageManager } from '../../_components/ImageManager'
 import { ReviewManager } from '../../_components/ReviewManager'
 import { PageHeader } from '../../_components/AdminShell'
+import { ContextBanner } from '../../_components/ContextBanner'
+import { AdminBackLink } from '../../_components/AdminBackLink'
 
 const BANDS: Record<string, { name: string; category: string }> = {
   'groove-control':    { name: 'Groove Control',        category: 'Partyband'      },
@@ -33,32 +35,79 @@ export default async function BandAdminPage({ params }: { params: Promise<{ slug
 
   return (
     <div>
-      {/* Back link */}
-      <a
-        href="/admin/bands"
-        style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-body)', textDecoration: 'none', display: 'inline-block', marginBottom: 20 }}
-        onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-        onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}
-      >
-        ← Alle Bands
-      </a>
+      <AdminBackLink href="/admin/bands" label="← Alle Bands" />
 
       <PageHeader
         title={band.name}
         subtitle={band.category}
       />
 
-      {/* Images */}
+      {/* ── Showcase-Bild ──────────────────────────────────── */}
+      <ContextBanner
+        location={`Bands → ${band.name} — Karte auf /bands`}
+        url="/bands"
+        dimensions="mind. 800 × 600 px (4:3)"
+        note="Dieses Bild erscheint als Vorschaukarte auf der Bands-Übersichtsseite. Nur 1 Bild möglich — zeigt die Band am besten von vorne."
+        preview="band-showcase"
+      />
+
       <ImageManager
         table="band_images"
         folder={`bands/${slug}`}
         filter={{ column: 'band_slug', value: slug }}
-        insertExtra={{ band_slug: slug }}
-        title="Band-Bilder"
-        description="Fotos der Band — Bühnenauftritte, Promofotos, Behind the Scenes."
+        extraFilters={[{ column: 'role', value: 'showcase' }]}
+        insertExtra={{ band_slug: slug, role: 'showcase' }}
+        maxImages={1}
+        title="Showcase-Bild"
+        description="Erscheint als Karten-Bild auf der Bands-Übersichtsseite (/bands)."
       />
 
-      {/* Reviews */}
+      <div style={{ borderTop: '1px solid #E8D8C8', margin: '8px 0 40px' }} />
+
+      {/* ── Hintergrundbild ────────────────────────────────── */}
+      <ContextBanner
+        location={`/${slug} — Hero-Hintergrund`}
+        url={`/${slug}`}
+        dimensions="mind. 1920 × 1080 px (16:9)"
+        note="Vollflächiger Hintergrund der Band-Detailseite. Wird mit dunklem Overlay überlagert — ein stimmungsvolles Bühnenfoto funktioniert am besten."
+        preview="band-hero"
+      />
+
+      <ImageManager
+        table="band_images"
+        folder={`bands/${slug}`}
+        filter={{ column: 'band_slug', value: slug }}
+        extraFilters={[{ column: 'role', value: 'hero' }]}
+        insertExtra={{ band_slug: slug, role: 'hero' }}
+        maxImages={1}
+        title="Hintergrundbild"
+        description="Hero-Hintergrund der Band-Detailseite (/${slug})."
+      />
+
+      <div style={{ borderTop: '1px solid #E8D8C8', margin: '8px 0 40px' }} />
+
+      {/* ── Galerie ────────────────────────────────────────── */}
+      <ContextBanner
+        location={`/${slug} — Bildergalerie`}
+        url={`/${slug}`}
+        dimensions="mind. 1200 × 800 px (Querformat empfohlen)"
+        note="Erscheinen als Foto-Grid auf der Band-Detailseite. Erstes Bild wird als Hauptbild groß dargestellt, weitere folgen im Grid und als Lightbox."
+        preview="band-gallery"
+      />
+
+      <ImageManager
+        table="band_images"
+        folder={`bands/${slug}`}
+        filter={{ column: 'band_slug', value: slug }}
+        extraFilters={[{ column: 'role', value: 'gallery' }]}
+        insertExtra={{ band_slug: slug, role: 'gallery' }}
+        title="Galerie-Bilder"
+        description="Foto-Grid + Lightbox auf der Band-Detailseite. Reihenfolge per Drag & Drop."
+      />
+
+      <div style={{ borderTop: '1px solid #E8D8C8', margin: '8px 0 40px' }} />
+
+      {/* ── Bewertungen ────────────────────────────────────── */}
       <ReviewManager bandSlug={slug} />
     </div>
   )

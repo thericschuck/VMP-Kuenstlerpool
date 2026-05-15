@@ -59,16 +59,15 @@ Groove Control ist bundesweit buchbar und bringt auf Wunsch das komplette Bühne
     region: 'Bundesweit',
     images: ['/images/groove-control.avif'],
     videos: [
-      { url: '', title: 'Groove Control Live – Firmenfeier 2023' },
-      { url: '', title: 'Stadtfest Frankfurt – Highlight-Reel' },
-      { url: '', title: 'Hochzeit Wiesbaden – First Dance' },
+      { url: 'https://www.youtube.com/watch?v=HJSyFnVuF40', title: 'Groove Control Live' },
+      { url: 'https://www.youtube.com/watch?v=fXYPmgsvMxk', title: 'Groove Control – Showreel' },
     ],
     news: [
       { date: '15. Feb 2025', headline: 'Groove Control spielt auf dem Wiesbadener Stadtfest 2025' },
       { date: '03. Jan 2025', headline: 'Neues Programm: Jetzt auch mit Akustik-Set buchbar' },
       { date: '10. Nov 2024', headline: 'Ausverkaufte Firmenfeier-Saison – Termine 2025 jetzt buchen' },
     ],
-    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    facebookUrl: 'https://www.facebook.com/partybanddeluxe/',
     reviews: [
       { name: 'Sandra M.', rating: 5, text: 'Groove Control hat unsere Firmenfeier zum absoluten Highlight gemacht. Die Tanzfläche war vom ersten bis zum letzten Song voll – einfach unglaublich professionell.', date: 'Nov 2024', platform: 'Google' },
       { name: 'Thomas R.', rating: 5, text: 'Für unsere Hochzeit haben wir lange gesucht und mit Groove Control die perfekte Wahl getroffen. Bobby und sein Team waren unkompliziert in der Buchung und auf der Bühne einfach grandios.', date: 'Sep 2024', platform: 'Google' },
@@ -93,12 +92,13 @@ Unter dem Motto "The finest of Black Music" reicht das Repertoire von James Brow
     region: 'Europaweit',
     images: ['/images/spirit-of-soul.avif'],
     videos: [
-      { url: '', title: 'Spirit of Soul – Johannisnacht Mainz' },
-      { url: '', title: 'Spirit of Soul – The finest of Black Music' },
-      { url: '', title: 'Spirit of Soul – Uptown Funk Live' },
+      { url: 'https://www.youtube.com/watch?v=ndpeOeVYXiw', title: 'Spirit of Soul – Johannisnacht Mainz' },
+      { url: 'https://www.youtube.com/watch?v=8X4Pe2HNEjY', title: 'Spirit of Soul – The finest of Black Music' },
+      { url: 'https://www.youtube.com/watch?v=MRjRdrT3IYc', title: 'Spirit of Soul – Live Show' },
+      { url: 'https://www.youtube.com/watch?v=2afQhcUkdIc', title: 'Spirit of Soul – Uptown Funk' },
     ],
     news: [],
-    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    facebookUrl: 'https://www.facebook.com/spiritofsoulband/',
     reviews: [
       { name: 'Kai W.', rating: 5, text: 'Spirit of Soul ist eine absolute Klasse-Band. Die Energie auf der Bühne ist kaum zu beschreiben – wir hatten ein Stadtfest mit über 5.000 Gästen, und alle waren begeistert.', date: 'Jun 2024', platform: 'Facebook' },
       { name: 'Martina S.', rating: 5, text: 'Bereits zweimal gebucht – einmal für ein Firmenevent, einmal für eine Gala. Beide Male phänomenal. Das Niveau ist wirklich europäisch.', date: 'Mär 2024', platform: 'Google' },
@@ -120,11 +120,10 @@ Time Warp vereint viele musikalische Stilrichtungen, Geschmäcker und Showaspekt
     region: 'Bundesweit',
     images: ['/images/time-warp.avif'],
     videos: [
-      { url: '', title: 'Time Warp – Live Jubiläumsfeier' },
-      { url: '', title: 'Time Warp – Bandvideo' },
+      { url: 'https://www.youtube.com/watch?v=bEddNGTafWA', title: 'Time Warp – Live' },
     ],
     news: [],
-    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    facebookUrl: 'https://www.facebook.com/people/Time-Warp-Showband/100068200021858/',
     reviews: [
       { name: 'Frank B.', rating: 5, text: 'Eine musikalische Zeitreise wie aus dem Bilderbuch. Das Kostüm-Konzept ist einmalig – unsere Gäste im Alter von 30 bis 80 waren gleichzeitig begeistert.', date: 'Mai 2024', platform: 'Direkt' },
     ],
@@ -147,11 +146,12 @@ Die ideale, kompakte Band für alle die eine fetzige Party feiern wollen.`,
     region: 'Bundesweit',
     images: ['/images/bobbastic.avif'],
     videos: [
-      { url: '', title: 'BOBbastic – Live Stadtfest' },
-      { url: '', title: 'BOBbastic – Rock Showreel' },
+      { url: 'https://www.youtube.com/watch?v=QcwOlWI9QMA', title: 'BOBbastic Live' },
+      { url: 'https://www.youtube.com/watch?v=BQUoNe12ruc', title: 'BOBbastic – Rock Show' },
+      { url: 'https://www.youtube.com/watch?v=_C8NXwLBNog', title: 'BOBbastic – Showreel' },
     ],
     news: [],
-    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    facebookUrl: 'https://www.facebook.com/BOBbasticRock/',
     reviews: [
       { name: 'Julia K.', rating: 5, text: 'BOBbastic hat unsere Hochzeit gerockt! Drei Musiker, aber die Power von sechs – absolut mitreißend. Alle Gäste waren auf der Tanzfläche.', date: 'Aug 2024', platform: 'Google' },
     ],
@@ -176,13 +176,12 @@ Ein musikalischer Cocktail aus Akustikgitarren, Piano, Saxophon und gefühlvolle
     region: 'Bundesweit',
     images: ['/images/bobby-and-friends.avif'],
     videos: [
-      { url: '', title: 'Bobby & Friends – Live Wohnzimmerkonzert' },
-      { url: '', title: 'Bobby & Friends – Sektempfang' },
+      { url: 'https://www.youtube.com/watch?v=Q5tCG7d15FE', title: 'Bobby & Friends Live' },
     ],
     news: [
       { date: '2025', headline: 'Neue Termine für Wohnzimmerkonzerte verfügbar' },
     ],
-    facebookUrl: 'https://www.facebook.com/vividmusicproductions',
+    facebookUrl: 'https://www.facebook.com/bobbyandfriendsband/',
     reviews: [
       { name: 'Lisa H.', rating: 5, text: 'Bobby & Friends haben unseren Sektempfang in etwas ganz Besonderes verwandelt. Dezent, elegant und trotzdem mitreißend – genau das, was wir gesucht haben.', date: 'Dez 2024', platform: 'Direkt' },
       { name: 'Stefan V.', rating: 5, text: 'Für unser Firmendinner die absolut richtige Wahl. Die Atmosphäre war sofort entspannt und festlich zugleich. Sehr professionell und auf unsere Wünsche eingegangen.', date: 'Nov 2024', platform: 'Google' },
@@ -252,10 +251,12 @@ Durch die fantastische Stimme von Emmo Acar klingt die Band wie Whitesnake zu se
     region: 'Europaweit',
     images: ['/images/coversnake.avif'],
     videos: [
-      { url: '', title: 'CoverSnake – Live Hüttenwerk Michelstadt' },
-      { url: '', title: 'CoverSnake – Here I Go Again' },
+      { url: 'https://www.youtube.com/watch?v=MmmC-Swcnmg', title: 'CoverSnake – Live Hüttenwerk Michelstadt' },
+      { url: 'https://www.youtube.com/watch?v=hht8W7tK1tw', title: 'CoverSnake – Here I Go Again' },
+      { url: 'https://www.youtube.com/watch?v=TVBisV0Zy4c', title: 'CoverSnake – Showreel' },
     ],
     news: [],
+    facebookUrl: 'https://www.facebook.com/CoverSnakeBand/',
   },
 
   {
@@ -275,10 +276,10 @@ Ein Live-Erlebnis das bei Stadtfesten, Partys und Firmenevents Euphorie und Erin
     region: 'Bundesweit',
     images: ['/images/adams-family.avif'],
     videos: [
-      { url: '', title: 'The Adams Family – 125 Jahre Flensburger Brauerei' },
-      { url: '', title: 'The Adams Family – Silvesterpfad Wien' },
+      { url: 'https://www.youtube.com/watch?v=mS_hF0z69wM', title: 'The Adams Family Live' },
     ],
     news: [],
+    facebookUrl: 'https://www.facebook.com/thinlizzyband',
   },
 
   {
@@ -298,10 +299,12 @@ Schnell entwickelte sich Sir Williams zu einer der gefragtesten Robbie-Williams-
     region: 'D / A / CH / Liechtenstein',
     images: ['/images/sir-williams.avif'],
     videos: [
-      { url: '', title: 'Sir Williams – Live Show Highlights' },
-      { url: '', title: 'Sir Williams – Angels' },
+      { url: 'https://www.youtube.com/watch?v=qiN3nXtgCDk', title: 'Sir Williams – Live Show' },
+      { url: 'https://www.youtube.com/watch?v=CF7Nq83lzdA', title: 'Sir Williams – Feel' },
+      { url: 'https://www.youtube.com/watch?v=mtjWFp7f8ps', title: 'Sir Williams – Angels' },
     ],
     news: [],
+    facebookUrl: 'https://www.facebook.com/sirwilliamsband',
   },
 
 ]

@@ -4,17 +4,24 @@ import { AdminShell } from './_components/AdminShell'
 export const metadata = { title: 'Admin — VMP' }
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createServerSupabaseClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  let email = ''
 
-  // Login page renders without the sidebar shell.
-  // Middleware handles all redirects — no redirect here to avoid loops.
-  if (!user) {
+  try {
+    const supabase = await createServerSupabaseClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return <>{children}</>
+    }
+
+    email = user.email ?? ''
+  } catch {
+    // Supabase unreachable — middleware handles auth redirect, render children as-is
     return <>{children}</>
   }
 
   return (
-    <AdminShell email={user.email ?? ''}>
+    <AdminShell email={email}>
       {children}
     </AdminShell>
   )

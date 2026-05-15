@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ImageManager } from '../_components/ImageManager'
 import { PageHeader } from '../_components/AdminShell'
+import { ContextBanner } from '../_components/ContextBanner'
 
 const CATEGORIES = [
   { id: 'firmenevents', label: 'Firmenevents' },
@@ -19,11 +20,18 @@ export default function EventsAdminPage() {
     <div>
       <PageHeader
         title="Event-Bilder"
-        subtitle="Hintergrund- und Kategoriebilder für die verschiedenen Veranstaltungsarten."
+        subtitle="Hintergrundbilder für die verschiedenen Veranstaltungskategorien."
+      />
+      <ContextBanner
+        location="Startseite & Veranstaltungen → Kategorie-Karten"
+        url="/veranstaltungen"
+        dimensions="1920 × 1080 px (16:9)"
+        note="Bilder werden als Vollbild-Hintergrund hinter den Kategorie-Karten eingesetzt. Motiv sollte mittig und gut erkennbar sein — Ränder werden abgeschnitten."
+        preview="events"
       />
 
       {/* Category tabs */}
-      <div style={{ display: 'flex', gap: 4, marginBottom: 32, borderBottom: '1px solid rgba(255,255,255,0.07)', paddingBottom: 0 }}>
+      <div style={{ display: 'flex', gap: 4, marginBottom: 32, borderBottom: '1px solid #E8D8C8', paddingBottom: 0 }}>
         {CATEGORIES.map(c => (
           <button
             key={c.id}
@@ -33,8 +41,8 @@ export default function EventsAdminPage() {
               background: 'none', border: 'none',
               cursor: 'pointer',
               fontSize: 13, fontFamily: 'var(--font-body)', fontWeight: active === c.id ? 600 : 400,
-              color: active === c.id ? '#fff' : 'rgba(255,255,255,0.38)',
-              borderBottom: `2px solid ${active === c.id ? '#ea580c' : 'transparent'}`,
+              color: active === c.id ? '#1A1A1A' : '#888888',
+              borderBottom: `2px solid ${active === c.id ? '#8B1A1A' : 'transparent'}`,
               marginBottom: -1,
               transition: 'all 0.15s',
             }}

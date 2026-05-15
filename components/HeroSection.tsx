@@ -9,7 +9,7 @@ const SLIDES = [
   { src: '/images/hero/hero-event.avif',     label: 'Live auf der Bühne' },
   { src: '/images/hero/firmenevents.avif',   label: 'Firmenevents & Galas' },
   { src: '/images/hero/stadtfeste.avif',     label: 'Stadtfeste & Festivals' },
-  { src: '/images/hero/hochzeit.avif',       label: 'Hochzeitsbands' },
+  { src: '/images/hero/hochzeit.avif',       label: 'Hochzeiten & Privatveranstaltungen' },
   { src: '/images/hero/empfaenge.avif',      label: 'Empfänge & Dinner' },
   { src: '/images/hero/gallery-1.avif',      label: 'Bühnenshow' },
   { src: '/images/hero/gallery-2.avif',      label: 'Livemusik' },
@@ -315,24 +315,8 @@ export default function HeroSection() {
             <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.05, duration: 0.5 }}
               className="font-body text-muted mt-6 mb-8" style={{ fontSize: 16, maxWidth: 460, lineHeight: 1.75 }}>
-              10 Profi-Bands für Firmenevents, Hochzeiten und Festivals — direkt buchbar, ohne Aufpreis, mit 20 Jahren Erfahrung im Rhein-Main-Gebiet.
+              Top Livemusik aus Frankfurt am Main für Ihren Event, Ihre Firmenfeier, Ihre Hochzeit oder Ihr Stadtfest. Im VMP-Künstlerpool organisieren sich Profimusiker in Eigenregie.
             </motion.p>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.15, duration: 0.5 }} className="flex flex-wrap gap-3 mb-10">
-              <a href="#bands" className="inline-flex items-center px-7 py-3.5 rounded-full font-body font-semibold text-white"
-                style={{ backgroundColor: 'var(--color-orange)', fontSize: 15, boxShadow: '0 4px 20px rgba(139,26,26,0.3)', transition: 'opacity 0.2s, transform 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-                onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)' }}>
-                Jetzt Band finden
-              </a>
-              <a href="#kategorien" className="inline-flex items-center px-7 py-3.5 rounded-full font-body font-semibold"
-                style={{ border: '1.5px solid var(--color-dark)', color: 'var(--color-dark)', fontSize: 15, transition: 'opacity 0.2s, transform 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)' }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}>
-                Alle Kategorien
-              </a>
-            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 10 }}

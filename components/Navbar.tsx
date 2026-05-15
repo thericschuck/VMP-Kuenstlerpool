@@ -8,29 +8,53 @@ import Image from 'next/image'
 // ── VMP Kreis-Logo ────────────────────────────────────────────────────
 
 export function VmpBadge({ size = 48, shadow = true, borderWidth = 4 }: { size?: number; shadow?: boolean; borderWidth?: number }) {
+  const showSub = size >= 70
+
   return (
     <div style={{
       width: size, height: size,
       borderRadius: '50%',
-      background: 'linear-gradient(145deg, #C8963C 0%, #9A7020 100%)',
+      background: 'linear-gradient(145deg, #E2BF58 0%, #C49220 38%, #8C6210 68%, #BF9928 100%)',
       border: `${borderWidth}px solid var(--color-bg-dark)`,
-      boxShadow: shadow ? '0 2px 10px rgba(0,0,0,0.35)' : 'none',
+      boxShadow: shadow
+        ? '0 4px 18px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.14), inset 0 2px 0 rgba(255,255,255,0.22)'
+        : 'inset 0 0 0 1px rgba(255,255,255,0.12), inset 0 1px 0 rgba(255,255,255,0.18)',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
+      gap: showSub ? 4 : 0,
       flexShrink: 0,
     }}>
       <span style={{
         fontFamily: 'var(--font-display)',
         fontWeight: 700,
         color: '#fff',
-        fontSize: Math.round(size * 0.37),
-        letterSpacing: '0.05em',
+        fontSize: Math.round(size * (showSub ? 0.28 : 0.37)),
+        letterSpacing: '0.12em',
         lineHeight: 1,
         userSelect: 'none',
+        textShadow: '0 1px 4px rgba(0,0,0,0.45)',
       }}>
         VMP
       </span>
+      {showSub && (
+        <>
+          <div style={{ width: '52%', height: 1, backgroundColor: 'rgba(255,255,255,0.3)' }} />
+          <span style={{
+            fontFamily: 'var(--font-body)',
+            fontWeight: 400,
+            color: 'rgba(255,255,255,0.78)',
+            fontSize: Math.round(size * 0.068),
+            letterSpacing: '0.1em',
+            lineHeight: 1,
+            userSelect: 'none',
+            textTransform: 'uppercase',
+          }}>
+            Künstlerpool
+          </span>
+        </>
+      )}
     </div>
   )
 }
@@ -264,9 +288,9 @@ function BandsMegaMenu({ open }: { open: boolean }) {
             ))}
           </div>
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', padding: '10px 24px' }}>
-            <a href="/#bands"
+            <a href="/bands"
               className="font-body font-semibold block text-center w-full transition-opacity hover:opacity-70"
-              style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>
+              style={{ fontSize: 12, color: '#ffffff', textDecoration: 'none' }}>
               Alle 10 Bands ansehen →
             </a>
           </div>

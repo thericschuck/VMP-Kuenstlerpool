@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
-import { compressToWebP, formatBytes } from '@/lib/image-compress'
+import { compressToWebP } from '@/lib/image-compress'
 
 const BUCKET = 'vmp-images'
 
@@ -15,16 +15,13 @@ type ImageRecord = {
 }
 
 export interface ImageManagerProps {
-  /** Supabase table name */
   table: string
-  /** Storage subfolder, e.g. 'hero' or 'bands/groove-control' */
   folder: string
-  /** Extra columns to include in every INSERT row */
   insertExtra?: Record<string, string>
-  /** Row-level filter when fetching, e.g. { column: 'band_slug', value: 'groove-control' } */
   filter?: { column: string; value: string }
-  /** Show an editable label underneath each image */
+  extraFilters?: Array<{ column: string; value: string }>
   hasLabel?: boolean
+  maxImages?: number
   title: string
   description?: string
 }
@@ -33,14 +30,10 @@ function getPublicUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`
 }
 
-// ── Upload progress item ──────────────────────────────────────
-
 type UploadItem = { name: string; progress: 'compressing' | 'uploading' | 'done' | 'error' }
 
-// ── Main component ────────────────────────────────────────────
-
 export function ImageManager({
-  table, folder, filter, insertExtra, hasLabel, title, description,
+  table, folder, filter, extraFilters, insertExtra, hasLabel, maxImages, title, description,
 }: ImageManagerProps) {
   const [images, setImages]         = useState<ImageRecord[]>([])
   const [loading, setLoading]       = useState(true)
@@ -52,28 +45,31 @@ export function ImageManager({
   const [overIdx, setOverIdx]       = useState<number | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // ── Fetch ─────────────────────────────────────────────────
+  const extraFiltersKey = extraFilters?.map(f => `${f.column}:${f.value}`).join(',') ?? ''
 
   const fetchImages = useCallback(async () => {
     const sb = createClient()
+    const columns = hasLabel ? 'id, path, label, sort_order' : 'id, path, sort_order'
     let q = sb
       .from(table)
-      .select('id, path, label, sort_order')
+      .select(columns)
       .order('sort_order', { ascending: true })
     if (filter) q = q.eq(filter.column, filter.value)
+    extraFilters?.forEach(f => { q = q.eq(f.column, f.value) })
     const { data } = await q
-    setImages(data ?? [])
+    setImages((data ?? []) as unknown as ImageRecord[])
     setLoading(false)
-  }, [table, filter])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [table, filter?.column, filter?.value, hasLabel, extraFiltersKey])
 
   useEffect(() => { fetchImages() }, [fetchImages])
 
-  // ── Upload ─────────────────────────────────────────────────
-
   const handleFiles = async (files: FileList | null) => {
     if (!files?.length) return
+    if (maxImages !== undefined && images.length >= maxImages) return
     const sb = createClient()
-    const fileArr = Array.from(files).filter(f => f.type.startsWith('image/'))
+    const remaining = maxImages !== undefined ? maxImages - images.length : Infinity
+    const fileArr = Array.from(files).filter(f => f.type.startsWith('image/')).slice(0, remaining)
     if (!fileArr.length) return
 
     setQueue(fileArr.map(f => ({ name: f.name, progress: 'compressing' })))
@@ -81,11 +77,9 @@ export function ImageManager({
     for (let i = 0; i < fileArr.length; i++) {
       const file = fileArr[i]
       try {
-        // 1. Compress
         setQueue(q => q.map((item, idx) => idx === i ? { ...item, progress: 'compressing' } : item))
         const blob = await compressToWebP(file, 1920, 0.82)
 
-        // 2. Upload
         setQueue(q => q.map((item, idx) => idx === i ? { ...item, progress: 'uploading' } : item))
         const filename    = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}.webp`
         const storagePath = `${folder}/${filename}`
@@ -94,7 +88,6 @@ export function ImageManager({
           .upload(storagePath, blob, { contentType: 'image/webp', upsert: false })
         if (upErr) throw upErr
 
-        // 3. Insert DB row
         const row: Record<string, unknown> = {
           path: storagePath,
           sort_order: images.length + i,
@@ -115,8 +108,6 @@ export function ImageManager({
     setTimeout(() => setQueue([]), 1800)
   }
 
-  // ── Delete ────────────────────────────────────────────────
-
   const handleDelete = async (img: ImageRecord) => {
     if (!confirm(`Bild wirklich löschen?`)) return
     const sb = createClient()
@@ -126,8 +117,6 @@ export function ImageManager({
     setImages(prev => prev.filter(i => i.id !== img.id))
     setDeleteId(null)
   }
-
-  // ── Reorder (drag-and-drop) ───────────────────────────────
 
   const handleDrop = async (dropIndex: number) => {
     if (dragIdx === null || dragIdx === dropIndex) {
@@ -147,27 +136,24 @@ export function ImageManager({
     )
   }
 
-  // ── Label update ──────────────────────────────────────────
-
   const updateLabel = async (id: string, label: string) => {
     const sb = createClient()
     await sb.from(table).update({ label }).eq('id', id)
     setImages(prev => prev.map(img => img.id === id ? { ...img, label } : img))
   }
 
-  // ── Render ────────────────────────────────────────────────
-
   const isUploading = queue.some(q => q.progress === 'compressing' || q.progress === 'uploading')
+  const limitReached = maxImages !== undefined && images.length >= maxImages
 
   return (
     <div style={{ marginBottom: 52 }}>
       {/* Header */}
-      <div style={{ marginBottom: 20 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, fontFamily: 'var(--font-display)', color: '#fff', marginBottom: 4 }}>
+      <div style={{ marginBottom: 16 }}>
+        <h2 style={{ fontSize: 22, fontFamily: 'var(--font-display)', color: '#1A1A1A', marginBottom: 4, letterSpacing: '0.02em' }}>
           {title}
         </h2>
         {description && (
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-body)' }}>
+          <p style={{ fontSize: 13, color: '#888888', fontFamily: 'var(--font-body)' }}>
             {description}
           </p>
         )}
@@ -175,21 +161,21 @@ export function ImageManager({
 
       {/* Dropzone */}
       <div
-        onClick={() => !isUploading && inputRef.current?.click()}
-        onDragOver={e => { e.preventDefault(); setDropActive(true) }}
+        onClick={() => !isUploading && !limitReached && inputRef.current?.click()}
+        onDragOver={e => { e.preventDefault(); if (!limitReached) setDropActive(true) }}
         onDragLeave={() => setDropActive(false)}
         onDrop={e => {
           e.preventDefault()
           setDropActive(false)
-          if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files)
+          if (!limitReached && e.dataTransfer.files.length) handleFiles(e.dataTransfer.files)
         }}
         style={{
-          border: `2px dashed ${dropActive ? '#ea580c' : 'rgba(255,255,255,0.1)'}`,
+          border: `2px dashed ${limitReached ? '#E8D8C8' : dropActive ? '#8B1A1A' : '#D4C4B0'}`,
           borderRadius: 10,
-          padding: '28px 20px',
+          padding: '22px 20px',
           textAlign: 'center',
-          cursor: isUploading ? 'default' : 'pointer',
-          backgroundColor: dropActive ? 'rgba(234,88,12,0.06)' : 'rgba(255,255,255,0.015)',
+          cursor: isUploading || limitReached ? 'default' : 'pointer',
+          backgroundColor: limitReached ? '#F8F4EE' : dropActive ? 'rgba(139,26,26,0.04)' : '#FDF9F2',
           transition: 'border-color 0.2s, background-color 0.2s',
           marginBottom: 20,
         }}
@@ -198,7 +184,7 @@ export function ImageManager({
           ref={inputRef}
           type="file"
           accept="image/*"
-          multiple
+          multiple={!maxImages || maxImages > 1}
           style={{ display: 'none' }}
           onChange={e => handleFiles(e.target.files)}
         />
@@ -207,21 +193,32 @@ export function ImageManager({
           <div>
             {queue.map((item, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 6 }}>
-                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-body)' }}>
+                <span style={{ fontSize: 12, color: '#555555', fontFamily: 'var(--font-body)' }}>
                   {item.name}
                 </span>
                 <StatusBadge status={item.progress} />
               </div>
             ))}
           </div>
+        ) : limitReached ? (
+          <>
+            <div style={{ fontSize: 18, marginBottom: 6, color: '#8B1A1A', opacity: 0.5 }}>✓</div>
+            <p style={{ fontSize: 13, color: '#8B1A1A', fontFamily: 'var(--font-body)', fontWeight: 600, marginBottom: 3 }}>
+              {maxImages === 1 ? 'Bild hochgeladen' : `${maxImages} Bilder hochgeladen`}
+            </p>
+            <p style={{ fontSize: 11, color: '#888888', fontFamily: 'var(--font-body)' }}>
+              Zum Ersetzen bitte zuerst löschen
+            </p>
+          </>
         ) : (
           <>
-            <div style={{ fontSize: 28, marginBottom: 8, opacity: 0.5 }}>↑</div>
-            <p style={{ fontSize: 14, color: '#fff', fontFamily: 'var(--font-body)', fontWeight: 600, marginBottom: 4 }}>
-              Bilder ablegen oder klicken zum Auswählen
+            <div style={{ fontSize: 26, marginBottom: 8, color: '#8B1A1A', opacity: 0.7 }}>↑</div>
+            <p style={{ fontSize: 14, color: '#1A1A1A', fontFamily: 'var(--font-body)', fontWeight: 600, marginBottom: 4 }}>
+              {maxImages === 1 ? 'Bild ablegen oder klicken' : 'Bilder ablegen oder klicken zum Auswählen'}
             </p>
-            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-body)' }}>
+            <p style={{ fontSize: 12, color: '#888888', fontFamily: 'var(--font-body)' }}>
               JPG · PNG · WebP · AVIF — wird automatisch auf max. 1920 px komprimiert &amp; als WebP gespeichert
+              {maxImages && maxImages > 1 ? ` · max. ${maxImages} Bilder` : ''}
             </p>
           </>
         )}
@@ -229,16 +226,12 @@ export function ImageManager({
 
       {/* Image grid */}
       {loading ? (
-        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-body)' }}>
+        <p style={{ fontSize: 13, color: '#888888', fontFamily: 'var(--font-body)' }}>
           Wird geladen…
         </p>
-      ) : images.length === 0 ? (
-        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-body)' }}>
-          Noch keine Bilder — oben ablegen oder klicken.
-        </p>
-      ) : (
+      ) : images.length === 0 ? null : (
         <>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.22)', fontFamily: 'var(--font-body)', marginBottom: 12 }}>
+          <p style={{ fontSize: 11, color: '#888888', fontFamily: 'var(--font-body)', marginBottom: 12 }}>
             {images.length} Bild{images.length !== 1 ? 'er' : ''} · Zum Umsortieren ziehen
           </p>
           <div style={{
@@ -259,10 +252,10 @@ export function ImageManager({
                 style={{
                   borderRadius: 8,
                   overflow: 'hidden',
-                  border: `2px solid ${overIdx === i && dragIdx !== i ? '#ea580c' : 'rgba(255,255,255,0.04)'}`,
+                  border: `2px solid ${overIdx === i && dragIdx !== i ? '#8B1A1A' : '#E8D8C8'}`,
                   opacity: dragIdx === i ? 0.35 : 1,
                   cursor: 'grab',
-                  backgroundColor: '#1a1816',
+                  backgroundColor: '#fff',
                   transition: 'border-color 0.15s, opacity 0.15s',
                   userSelect: 'none',
                 }}
@@ -281,9 +274,9 @@ export function ImageManager({
                   {/* Sort badge */}
                   <div style={{
                     position: 'absolute', top: 5, left: 5,
-                    backgroundColor: 'rgba(0,0,0,0.65)',
+                    backgroundColor: 'rgba(0,0,0,0.55)',
                     borderRadius: 4, padding: '2px 6px',
-                    fontSize: 10, color: 'rgba(255,255,255,0.5)',
+                    fontSize: 10, color: 'rgba(255,255,255,0.8)',
                     fontFamily: 'var(--font-body)',
                   }}>
                     {i + 1}
@@ -294,14 +287,14 @@ export function ImageManager({
                     <div style={{
                       position: 'absolute', inset: 0,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      backgroundColor: 'rgba(0,0,0,0.55)',
+                      backgroundColor: 'rgba(0,0,0,0.45)',
                     }}>
                       <button
                         onClick={e => { e.stopPropagation(); handleDelete(img) }}
                         disabled={deleteId === img.id}
                         style={{
                           padding: '5px 14px', borderRadius: 5,
-                          backgroundColor: '#ef4444', border: 'none',
+                          backgroundColor: '#B91C1C', border: 'none',
                           color: '#fff', fontSize: 12, fontFamily: 'var(--font-body)',
                           fontWeight: 600, cursor: 'pointer',
                         }}
@@ -320,10 +313,10 @@ export function ImageManager({
                     onBlur={e => updateLabel(img.id, e.target.value)}
                     onClick={e => e.stopPropagation()}
                     style={{
-                      display: 'block', width: '100%', padding: '5px 8px',
-                      backgroundColor: '#1a1816',
-                      border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)',
-                      color: 'rgba(255,255,255,0.6)',
+                      display: 'block', width: '100%', padding: '6px 8px',
+                      backgroundColor: '#FAF6EE',
+                      border: 'none', borderTop: '1px solid #E8D8C8',
+                      color: '#555555',
                       fontSize: 11, fontFamily: 'var(--font-body)',
                       outline: 'none', boxSizing: 'border-box',
                     }}
@@ -338,21 +331,19 @@ export function ImageManager({
   )
 }
 
-// ── Status badge ──────────────────────────────────────────────
-
 function StatusBadge({ status }: { status: UploadItem['progress'] }) {
   const map: Record<UploadItem['progress'], { label: string; color: string }> = {
-    compressing: { label: 'Komprimieren…', color: '#ea580c' },
-    uploading:   { label: 'Hochladen…',   color: '#3b82f6' },
-    done:        { label: '✓ Fertig',      color: '#22c55e' },
-    error:       { label: '✗ Fehler',      color: '#ef4444' },
+    compressing: { label: 'Komprimieren…', color: '#8B1A1A' },
+    uploading:   { label: 'Hochladen…',   color: '#2563EB' },
+    done:        { label: '✓ Fertig',      color: '#16A34A' },
+    error:       { label: '✗ Fehler',      color: '#B91C1C' },
   }
   const { label, color } = map[status]
   return (
     <span style={{
       fontSize: 11, fontFamily: 'var(--font-body)', fontWeight: 600,
       color, padding: '2px 8px', borderRadius: 4,
-      backgroundColor: `${color}20`,
+      backgroundColor: `${color}18`,
     }}>
       {label}
     </span>

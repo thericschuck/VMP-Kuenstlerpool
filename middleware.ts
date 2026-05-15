@@ -25,9 +25,16 @@ export async function middleware(request: NextRequest) {
   )
 
   // Refresh session — required for SSR auth to stay up-to-date
-  const { data: { user } } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const { data } = await supabase.auth.getUser()
+    user = data.user
+  } catch {
+    // Supabase unreachable (paused project, network error) — treat as unauthenticated
+  }
 
   const { pathname } = request.nextUrl
+
   const isAdminRoute = pathname.startsWith('/admin')
   const isLoginPage  = pathname === '/admin/login'
 

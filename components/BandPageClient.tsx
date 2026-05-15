@@ -83,57 +83,25 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
   )
 }
 
-// ─── VideoPlaceholder ─────────────────────────────────────────────────
+// ─── YouTubeEmbed ─────────────────────────────────────────────────────
 
-function VideoPlaceholder({ title, large = false }: { title: string; large?: boolean }) {
-  const [hovered, setHovered] = useState(false)
+function getYouTubeId(url: string): string | null {
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?\s]+)/)
+  return m?.[1] ?? null
+}
+
+function YouTubeEmbed({ url, title, large = false }: { url: string; title: string; large?: boolean }) {
+  const id = getYouTubeId(url)
+  if (!id) return null
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        aspectRatio: '16/9',
-        background: '#111010',
-        borderRadius: large ? 12 : 8,
-        position: 'relative',
-        overflow: 'hidden',
-        cursor: 'pointer',
-        border: `1px solid ${hovered ? 'rgba(234,88,12,0.35)' : 'rgba(255,255,255,0.07)'}`,
-        transform: hovered ? 'scale(1.02)' : 'scale(1)',
-        transition: 'border-color 0.2s, transform 0.25s ease',
-      }}
-    >
-      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{
-          width: large ? 52 : 38,
-          height: large ? 52 : 38,
-          borderRadius: '50%',
-          background: 'var(--color-orange)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transform: hovered ? 'scale(1.15)' : 'scale(1)',
-          boxShadow: hovered ? '0 0 0 8px rgba(234,88,12,0.18)' : '0 0 0 0px rgba(234,88,12,0)',
-          transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-        }}>
-          <svg viewBox="0 0 24 24" fill="white" width={large ? 18 : 13} height={large ? 18 : 13}>
-            <polygon points="6,4 20,12 6,20" />
-          </svg>
-        </div>
-      </div>
-      <div style={{ position: 'absolute', bottom: 10, left: 12, right: 12 }}>
-        <span style={{
-          color: 'rgba(255,255,255,0.5)',
-          fontSize: large ? 12 : 10,
-          fontFamily: 'var(--font-body)',
-          display: 'block',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-        }}>
-          {title}
-        </span>
-      </div>
+    <div style={{ aspectRatio: '16/9', borderRadius: large ? 12 : 8, overflow: 'hidden', position: 'relative', backgroundColor: '#0a0a0a' }}>
+      <iframe
+        src={`https://www.youtube.com/embed/${id}`}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
+      />
     </div>
   )
 }
@@ -368,6 +336,8 @@ export default function BandPageClient({
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const openLightbox = useCallback((i: number) => setLightboxIndex(i), [])
   const closeLightbox = useCallback(() => setLightboxIndex(null), [])
+
+  const realVideos = band.videos.filter(v => getYouTubeId(v.url))
 
   const galleryImages = band.images.filter(Boolean)
 
@@ -711,18 +681,21 @@ export default function BandPageClient({
             >
 
               {/* Videos */}
-              {band.videos.length > 0 && (
+              {realVideos.length > 0 && (
                 <div style={{ marginBottom: 28 }}>
                   <EyebrowLabel>Videos</EyebrowLabel>
-                  <div style={{ marginBottom: 8 }}>
-                    <VideoPlaceholder title={band.videos[0]?.title ?? ''} large />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <YouTubeEmbed url={realVideos[0].url} title={realVideos[0].title} large />
+                    {realVideos.length === 2 && (
+                      <YouTubeEmbed url={realVideos[1].url} title={realVideos[1].title} large />
+                    )}
+                    {realVideos.length >= 3 && (
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                        <YouTubeEmbed url={realVideos[1].url} title={realVideos[1].title} />
+                        <YouTubeEmbed url={realVideos[2].url} title={realVideos[2].title} />
+                      </div>
+                    )}
                   </div>
-                  {band.videos.length > 1 && (
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                      <VideoPlaceholder title={band.videos[1]?.title ?? ''} />
-                      {band.videos[2] && <VideoPlaceholder title={band.videos[2].title} />}
-                    </div>
-                  )}
                 </div>
               )}
 
@@ -818,7 +791,7 @@ export default function BandPageClient({
                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                   </svg>
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, fontWeight: 600, color: '#1C1917' }}>
-                    Vivid Music Productions
+                    Facebook
                   </span>
                 </div>
                 <iframe

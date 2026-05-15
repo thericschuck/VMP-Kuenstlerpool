@@ -30,7 +30,14 @@
       "Bash(rm BandCard.tsx BandDescription.tsx BandGrid.tsx BandScroller.tsx ClickNote.tsx ContactForm.tsx FloatingNotes.tsx GalleryGrid.tsx HeroSlider.tsx KuenstlerpoolSection.tsx RevealCards.tsx ScrollEffects.tsx ScrollIndicator.tsx SiteFooter.tsx SoundwaveBackground.tsx VinylRecord.tsx CountUp.tsx)",
       "Bash(ls *.tsx)",
       "Bash(grep -E \"\\\\.tsx$\")",
-      "Bash(gh auth:*)"
+      "Bash(gh auth:*)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\07-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\" -Force)",
+      "PowerShell(head -100)",
+      "Bash(dir /s /b app\\\\*.tsx app\\\\*.ts)",
+      "Bash(npx next *)",
+      "Bash(dir \"c:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\07-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\public\\\\images\\\\hero\")",
+      "Bash(Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue)",
+      "Bash(Write-Host \"Cache gelöscht\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\eschu\\.claude",
