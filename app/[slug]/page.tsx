@@ -4,12 +4,10 @@ import Navbar from '@/components/Navbar'
 import VmpFooter from '@/components/VmpFooter'
 import BandPageClient from '@/components/BandPageClient'
 import { bandsData, bandsBySlug, getCategoryMeta } from '@/lib/bands-data'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
+import { storageUrl } from '@/lib/db-images'
 
-// ── Static params ──────────────────────────────────────────────────
-
-export function generateStaticParams() {
-  return bandsData.map((band) => ({ slug: band.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 // ── Metadata ───────────────────────────────────────────────────────
 
@@ -34,6 +32,20 @@ export default async function BandPage(
   const band = bandsBySlug[slug]
   if (!band) notFound()
 
+  const sb = await createServerSupabaseClient()
+  const [{ data: imgData }, { data: reviewData }] = await Promise.all([
+    sb.from('band_images').select('path, role').eq('band_slug', slug).order('sort_order', { ascending: true }),
+    sb.from('reviews').select('name, rating, text, date, platform').eq('band_slug', slug).order('created_at', { ascending: true }),
+  ])
+
+  const heroRecord = imgData?.find((img: { role: string }) => img.role === 'hero')
+  const heroUrl = heroRecord ? storageUrl((heroRecord as { path: string }).path) : undefined
+  const dbImages = imgData
+    ?.filter((img: { role: string }) => img.role === 'gallery')
+    .map((img: { path: string }) => storageUrl(img.path))
+
+  const reviews = (reviewData ?? []) as import('@/lib/bands-data').Review[]
+
   const { label: categoryLabel } = getCategoryMeta(band.category)
 
   const related = bandsData
@@ -52,8 +64,8 @@ export default async function BandPage(
     { label: 'Region',       value: band.region },
   ]
 
-  const avgRating = band.reviews?.length
-    ? Math.round(band.reviews.reduce((s, r) => s + r.rating, 0) / band.reviews.length)
+  const avgRating = reviews.length
+    ? Math.round(reviews.reduce((s, r) => s + r.rating, 0) / reviews.length)
     : null
 
   return (
@@ -68,6 +80,9 @@ export default async function BandPage(
         fbEmbedSrc={fbEmbedSrc}
         avgRating={avgRating}
         infoItems={infoItems}
+        heroUrl={heroUrl}
+        dbImages={dbImages?.length ? dbImages : undefined}
+        reviews={reviews}
       />
       <VmpFooter />
     </>

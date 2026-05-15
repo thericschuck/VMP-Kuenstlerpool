@@ -63,9 +63,17 @@ const FEATURES = [
   },
 ]
 
+// ─── Props ─────────────────────────────────────────────────────────────
+
+interface Props {
+  heroUrl?: string
+  introUrl?: string
+  teamUrls?: string[]
+}
+
 // ─── Main ──────────────────────────────────────────────────────────────
 
-export default function UeberUnsPageClient() {
+export default function UeberUnsPageClient({ heroUrl, introUrl, teamUrls }: Props) {
   const intro = useSection()
   const team  = useSection()
   const usp   = useSection()
@@ -81,7 +89,7 @@ export default function UeberUnsPageClient() {
       }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
           <Image
-            src="/images/veranstaltungsservice.avif"
+            src={heroUrl ?? '/images/veranstaltungsservice.avif'}
             alt=""
             fill
             style={{ objectFit: 'cover', opacity: 0.18 }}
@@ -238,7 +246,7 @@ export default function UeberUnsPageClient() {
             >
               <div style={{ borderRadius: 18, overflow: 'hidden', position: 'relative', aspectRatio: '4/3', boxShadow: '0 24px 64px rgba(0,0,0,0.12)' }}>
                 <Image
-                  src="/images/groove-control.avif"
+                  src={introUrl ?? '/images/groove-control.avif'}
                   alt="Das VMP-Team live auf der Bühne"
                   fill
                   style={{ objectFit: 'cover' }}
@@ -268,7 +276,9 @@ export default function UeberUnsPageClient() {
           </motion.div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 320px))', gap: 24 }}>
-            {TEAM.map((member, i) => (
+            {TEAM.map((member, i) => {
+              const memberImage = teamUrls?.[i] ?? member.image
+              return (
               <motion.div
                 key={member.name}
                 initial={{ opacity: 0, y: 24 }}
@@ -283,9 +293,9 @@ export default function UeberUnsPageClient() {
               >
                 {/* Photo */}
                 <div style={{ position: 'relative', aspectRatio: '3/4', backgroundColor: '#E8E0D4' }}>
-                  {member.image ? (
+                  {memberImage ? (
                     <Image
-                      src={member.image}
+                      src={memberImage}
                       alt={member.name}
                       fill
                       style={{ objectFit: 'cover', filter: 'grayscale(15%)' }}
@@ -320,7 +330,8 @@ export default function UeberUnsPageClient() {
                   </p>
                 </div>
               </motion.div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>

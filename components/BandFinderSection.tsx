@@ -1,21 +1,24 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import Image from 'next/image'
 
 const CATEGORIES = [
   {
+    key: 'firmenevents',
     title: 'Firmenevents & Galas',
     description: 'Bereits gebucht von Audi, Daimler und der Deutschen Bank – Entertainment auf höchstem Niveau für exklusive Anlässe.',
     image: '/images/firmenevents.avif',
   },
   {
+    key: 'stadtfeste',
     title: 'Stadtfeste & Festivals',
     description: 'Tribute-Acts und Partybands für große Open-Air-Events – europaweit gebucht, mit professioneller Bühnentechnik.',
     image: '/images/stadtfeste.avif',
   },
   {
+    key: 'hochzeiten',
     title: 'Hochzeiten und Privatveranstaltungen',
     description: 'Von der romantischen Trauung bis zur ausgelassenen Tanzfläche – wir finden die perfekte Band für Ihren großen Tag.',
     image: '/images/hochzeit.avif',
@@ -30,7 +33,6 @@ const TAGS = [
   { label: 'Jubiläen',               href: '#partybands' },
   { label: 'Messen & Ausstellungen', href: '#bands' },
 ]
-
 
 const BANDS_OF_WEEK = [
   {
@@ -120,9 +122,155 @@ function getBandOfWeek() {
   return BANDS_OF_WEEK[weekNumber % BANDS_OF_WEEK.length]
 }
 
-export default function BandFinderSection() {
+// ── Category image slider ─────────────────────────────────────────
+
+const slideVariants = {
+  enter: (d: number) => ({ x: d > 0 ? '100%' : '-100%' }),
+  center: { x: 0 },
+  exit:  (d: number) => ({ x: d > 0 ? '-100%' : '100%' }),
+}
+
+function CategoryImageSlider({ images, title }: { images: string[]; title: string }) {
+  const [active, setActive] = useState(0)
+  const [dir, setDir]       = useState(1)
+  const [hovered, setHovered] = useState(false)
+
+  const go = (next: number) => {
+    setDir(next > active ? 1 : -1)
+    setActive(next)
+  }
+  const prev = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const next = (active - 1 + images.length) % images.length
+    setDir(-1); setActive(next)
+  }
+  const next = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const n = (active + 1) % images.length
+    setDir(1); setActive(n)
+  }
+
+  return (
+    <div
+      className="relative w-full overflow-hidden"
+      style={{ height: 220 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Slides */}
+      <AnimatePresence custom={dir} mode="sync">
+        <motion.div
+          key={active}
+          custom={dir}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.42, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={images[active]}
+            alt={title}
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 768px) 100vw, 22vw"
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Arrows — only with multiple images, fade in on hover */}
+      {images.length > 1 && (
+        <>
+          <AnimatePresence>
+            {hovered && (
+              <>
+                <motion.button
+                  key="prev"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  onClick={prev}
+                  aria-label="Vorheriges Bild"
+                  style={{
+                    position: 'absolute', left: 0, top: 0, bottom: 0, zIndex: 10,
+                    width: 36, border: 'none', cursor: 'pointer', color: '#fff',
+                    backgroundColor: 'rgba(28,25,23,0.52)',
+                    backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(139,26,26,0.82)')}
+                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(28,25,23,0.52)')}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </motion.button>
+
+                <motion.button
+                  key="next"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  onClick={next}
+                  aria-label="Nächstes Bild"
+                  style={{
+                    position: 'absolute', right: 0, top: 0, bottom: 0, zIndex: 10,
+                    width: 36, border: 'none', cursor: 'pointer', color: '#fff',
+                    backgroundColor: 'rgba(28,25,23,0.52)',
+                    backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(139,26,26,0.82)')}
+                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(28,25,23,0.52)')}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </motion.button>
+              </>
+            )}
+          </AnimatePresence>
+
+          {/* Dots */}
+          <div style={{
+            position: 'absolute', bottom: 8, left: 0, right: 0, zIndex: 10,
+            display: 'flex', justifyContent: 'center', gap: 4, pointerEvents: 'none',
+          }}>
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={e => { e.stopPropagation(); go(i) }}
+                style={{
+                  width: i === active ? 16 : 5, height: 5, borderRadius: 3,
+                  border: 'none', cursor: 'pointer', padding: 0,
+                  backgroundColor: i === active ? 'var(--color-orange)' : 'rgba(255,255,255,0.65)',
+                  transition: 'width 0.3s ease, background-color 0.3s ease',
+                  pointerEvents: 'auto',
+                }}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+// ── Main ─────────────────────────────────────────────────────────────────
+
+export default function BandFinderSection({ categoryImages }: { categoryImages?: Record<string, string[]> }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  const cats = CATEGORIES.map(cat => ({
+    ...cat,
+    images: categoryImages?.[cat.key]?.length ? categoryImages[cat.key] : [cat.image],
+  }))
 
   return (
     <section className="w-full flex" ref={ref} style={{ minHeight: 'auto' }}>
@@ -151,13 +299,13 @@ export default function BandFinderSection() {
 
           {/* Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12 px-0 md:px-8 lg:px-16">
-            {CATEGORIES.map((cat, i) => (
+            {cats.map((cat, i) => (
               <motion.div
                 key={cat.title}
                 initial={{ opacity: 0, y: 28 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="flex flex-col group rounded-2xl overflow-hidden"
+                className="flex flex-col rounded-2xl overflow-hidden"
                 style={{
                   border: '1px solid var(--color-border)',
                   boxShadow: '0 2px 12px rgba(28,25,23,0.06)',
@@ -172,17 +320,9 @@ export default function BandFinderSection() {
                   e.currentTarget.style.transform = 'translateY(0)'
                 }}
               >
-                {/* Image */}
-                <div className="relative w-full overflow-hidden" style={{ height: 220 }}>
-                  <Image
-                    src={cat.image}
-                    alt={cat.title}
-                    fill
-                    style={{ objectFit: 'cover', transition: 'transform 0.5s ease' }}
-                    className="group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 22vw"
-                  />
-                </div>
+                {/* Image slider */}
+                <CategoryImageSlider images={cat.images} title={cat.title} />
+
                 {/* Text */}
                 <div className="px-5 py-4 bg-white">
                   <h3 className="font-body font-bold text-dark mb-1.5" style={{ fontSize: 14 }}>

@@ -290,9 +290,18 @@ function PhotoCard({ photo, index, onClick }: {
   )
 }
 
+type PhotoEntry = { src: string; label: string; col: number; row: number }
+
 // ─── Main ──────────────────────────────────────────────────────────────
 
-export default function GalleryPageClient() {
+export default function GalleryPageClient({
+  photos: photoProp,
+  headerBg,
+}: {
+  photos?: PhotoEntry[]
+  headerBg?: string
+}) {
+  const photos = photoProp?.length ? photoProp : PHOTOS
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   const openLightbox = useCallback((index: number) => setLightboxIndex(index), [])
@@ -310,7 +319,7 @@ export default function GalleryPageClient() {
         {/* Subtle background photo */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
           <Image
-            src="/images/gallery-3.avif"
+            src={headerBg ?? '/images/gallery-3.avif'}
             alt=""
             fill
             style={{ objectFit: 'cover', opacity: 0.18 }}
@@ -380,7 +389,7 @@ export default function GalleryPageClient() {
             gap: 8,
             gridAutoFlow: 'dense',
           }}>
-            {PHOTOS.map((photo, i) => (
+            {photos.map((photo, i) => (
               <PhotoCard
                 key={photo.src}
                 photo={photo}
@@ -396,7 +405,7 @@ export default function GalleryPageClient() {
       <AnimatePresence>
         {lightboxIndex !== null && (
           <Lightbox
-            photos={PHOTOS}
+            photos={photos}
             startIndex={lightboxIndex}
             onClose={closeLightbox}
           />

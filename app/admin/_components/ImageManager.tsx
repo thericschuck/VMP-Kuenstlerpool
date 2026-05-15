@@ -99,8 +99,9 @@ export function ImageManager({
 
         setQueue(q => q.map((item, idx) => idx === i ? { ...item, progress: 'done' } : item))
       } catch (err) {
-        console.error('Upload error:', err)
-        setQueue(q => q.map((item, idx) => idx === i ? { ...item, progress: 'error' } : item))
+        const msg = (err as { message?: string })?.message ?? JSON.stringify(err)
+        console.error('Upload error:', msg, err)
+        setQueue(q => q.map((item, idx) => idx === i ? { ...item, progress: 'error', name: item.name + ` (${msg})` } : item))
       }
     }
 
@@ -305,8 +306,8 @@ export function ImageManager({
                   )}
                 </div>
 
-                {/* Label input */}
-                {hasLabel && (
+                {/* Label input — only visible when hovered (empty) or when label has content */}
+                {hasLabel && (hoveredId === img.id || (img.label?.length ?? 0) > 0) && (
                   <input
                     defaultValue={img.label ?? ''}
                     placeholder="Beschriftung…"

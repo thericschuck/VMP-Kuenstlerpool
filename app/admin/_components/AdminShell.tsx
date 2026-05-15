@@ -77,14 +77,14 @@ export function AdminShell({
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#FAF6EE', fontFamily: 'var(--font-body)' }}>
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', backgroundColor: '#FAF6EE', fontFamily: 'var(--font-body)' }}>
 
       {/* ── Sidebar ─────────────────────────────────── */}
       <aside style={{
         width: 232, flexShrink: 0,
         backgroundColor: '#6B1414',
         display: 'flex', flexDirection: 'column',
-        position: 'sticky', top: 0, height: '100vh', overflowY: 'auto',
+        height: '100vh', overflowY: 'auto',
       }}>
         {/* Logo */}
         <div style={{ padding: '22px 20px 18px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -165,7 +165,7 @@ export function AdminShell({
       </aside>
 
       {/* ── Main content ────────────────────────────── */}
-      <main style={{ flex: 1, overflowY: 'auto', padding: '36px 40px', maxWidth: 1200 }}>
+      <main style={{ flex: 1, height: '100vh', overflowY: 'auto', padding: '36px 40px' }}>
         {children}
       </main>
     </div>

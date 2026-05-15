@@ -21,7 +21,9 @@ const SLIDES = [
 const H1_WORDS = ['Ihr', 'Künstler']
 
 
-export default function HeroSection() {
+export default function HeroSection({ slides: propSlides }: { slides?: { src: string; label: string }[] }) {
+  const slides = propSlides?.length ? propSlides : SLIDES
+
   const [active, setActive]           = useState(0)
   const [hovered, setHovered]         = useState(false)
   const [lightbox, setLightbox]       = useState<number | null>(null)
@@ -35,29 +37,32 @@ export default function HeroSection() {
     const id = setInterval(() => {
       if (!pauseRef.current) {
         setDirection(1)
-        setActive(s => (s + 1) % SLIDES.length)
+        setActive(s => (s + 1) % slides.length)
       }
     }, 9000)
     return () => clearInterval(id)
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slides.length])
 
   useEffect(() => { pauseRef.current = hovered || lightbox !== null }, [hovered, lightbox])
 
   const prev = useCallback(() => {
     setDirection(-1)
-    setActive(s => (s - 1 + SLIDES.length) % SLIDES.length)
-  }, [])
+    setActive(s => (s - 1 + slides.length) % slides.length)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slides.length])
 
   const next = useCallback(() => {
     setDirection(1)
-    setActive(s => (s + 1) % SLIDES.length)
-  }, [])
+    setActive(s => (s + 1) % slides.length)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slides.length])
 
   const openLightbox = (i: number) => setLightbox(i)
   const closeLightbox = () => setLightbox(null)
 
-  const lightboxPrev = () => setLightbox(i => i !== null ? (i - 1 + SLIDES.length) % SLIDES.length : null)
-  const lightboxNext = () => setLightbox(i => i !== null ? (i + 1) % SLIDES.length : null)
+  const lightboxPrev = () => setLightbox(i => i !== null ? (i - 1 + slides.length) % slides.length : null)
+  const lightboxNext = () => setLightbox(i => i !== null ? (i + 1) % slides.length : null)
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -72,9 +77,9 @@ export default function HeroSection() {
   }, [lightbox])
 
   const slideVariants = {
-    enter:  (d: number) => ({ opacity: 0, x: d > 0 ?  40 : -40 }),
-    center: { opacity: 1, x: 0 },
-    exit:   (d: number) => ({ opacity: 0, x: d > 0 ? -40 :  40 }),
+    enter:  (d: number) => ({ x: d > 0 ? '100%' : '-100%' }),
+    center: { x: 0 },
+    exit:   (d: number) => ({ x: d > 0 ? '-100%' : '100%' }),
   }
 
   return (
@@ -128,8 +133,8 @@ export default function HeroSection() {
               onClick={e => e.stopPropagation()}
             >
               <Image
-                src={SLIDES[lightbox].src}
-                alt={SLIDES[lightbox].label}
+                src={slides[lightbox].src}
+                alt={slides[lightbox].label}
                 fill
                 style={{ objectFit: 'contain' }}
                 sizes="(max-width: 768px) 90vw, 1100px"
@@ -140,7 +145,7 @@ export default function HeroSection() {
                   className="font-body font-semibold text-white px-4 py-1.5 rounded-full"
                   style={{ backgroundColor: 'rgba(28,25,23,0.7)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', fontSize: 13 }}
                 >
-                  {SLIDES[lightbox].label}
+                  {slides[lightbox].label}
                 </span>
               </div>
             </motion.div>
@@ -158,7 +163,7 @@ export default function HeroSection() {
 
             {/* Counter */}
             <div className="absolute bottom-5 left-1/2 -translate-x-1/2 font-body text-white" style={{ fontSize: 12, opacity: 0.5 }}>
-              {lightbox + 1} / {SLIDES.length}
+              {lightbox + 1} / {slides.length}
             </div>
           </motion.div>
         )}
@@ -366,7 +371,7 @@ export default function HeroSection() {
             }}
           >
             {/* Slides */}
-            <AnimatePresence custom={direction} mode="wait">
+            <AnimatePresence custom={direction} mode="sync">
               <motion.div
                 key={active}
                 custom={direction}
@@ -374,13 +379,13 @@ export default function HeroSection() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.55, ease: 'easeInOut' }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="absolute inset-0 cursor-pointer"
                 onClick={() => openLightbox(active)}
               >
                 <Image
-                  src={SLIDES[active].src}
-                  alt={SLIDES[active].label}
+                  src={slides[active].src}
+                  alt={slides[active].label}
                   fill
                   style={{ objectFit: 'cover' }}
                   sizes="(max-width: 1024px) 100vw, 58vw"
@@ -472,14 +477,14 @@ export default function HeroSection() {
                   transition={{ duration: 0.3 }}
                   className="inline-block px-4 py-2 font-body font-semibold text-white rounded-full"
                   style={{ backgroundColor: 'rgba(28,25,23,0.65)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', fontSize: 13 }}>
-                  {SLIDES[active].label}
+                  {slides[active].label}
                 </motion.span>
               </AnimatePresence>
             </div>
 
             {/* Dots */}
             <div className="absolute bottom-8 right-8 z-10 flex gap-2">
-              {SLIDES.map((_, i) => (
+              {slides.map((_, i) => (
                 <button key={i} onClick={() => { setDirection(i > active ? 1 : -1); setActive(i) }}
                   className="rounded-full"
                   style={{

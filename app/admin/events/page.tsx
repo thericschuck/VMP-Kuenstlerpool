@@ -9,7 +9,6 @@ const CATEGORIES = [
   { id: 'firmenevents', label: 'Firmenevents' },
   { id: 'stadtfeste',   label: 'Stadtfeste & Festivals' },
   { id: 'hochzeiten',   label: 'Hochzeiten' },
-  { id: 'empfaenge',    label: 'Empfänge & Dinner' },
 ]
 
 export default function EventsAdminPage() {

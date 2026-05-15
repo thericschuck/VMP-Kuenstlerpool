@@ -317,8 +317,23 @@ function TickerStrip() {
 
 // ─── Main component ───────────────────────────────────────────────
 
-export default function BandShowcase() {
+function applyImages<T extends { href: string; image: string }>(
+  bands: T[],
+  bandImages?: Record<string, string>,
+): T[] {
+  if (!bandImages) return bands
+  return bands.map(b => {
+    const slug = b.href.replace('/', '')
+    return bandImages[slug] ? { ...b, image: bandImages[slug] } : b
+  })
+}
+
+export default function BandShowcase({ bandImages }: { bandImages?: Record<string, string> }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  const partyBands   = applyImages(PARTY_BANDS,   bandImages)
+  const tributeBands = applyImages(TRIBUTE_BANDS, bandImages)
+  const easyBands    = applyImages(EASY_BANDS,    bandImages)
 
   const introRef   = useRef<HTMLDivElement>(null)
   const partyRef   = useRef<HTMLDivElement>(null)
@@ -457,7 +472,7 @@ export default function BandShowcase() {
           {/* Mobile: horizontal scroll */}
           <div className="flex md:hidden gap-3 pb-3 -mx-4 px-4"
             style={{ overflowX: 'auto', scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}>
-            {PARTY_BANDS.map((band, i) => (
+            {partyBands.map((band, i) => (
               <div key={band.name} style={{ width: '72vw', flexShrink: 0, scrollSnapAlign: 'start' }}>
                 <BandCard band={band} index={i} inView={partyInView} height={280} />
               </div>
@@ -466,12 +481,12 @@ export default function BandShowcase() {
           {/* Desktop: grid */}
           <div className="hidden md:block">
             <div className="grid grid-cols-2 gap-3 mb-3">
-              {PARTY_BANDS.filter(b => b.featured).map((band, i) => (
+              {partyBands.filter(b => b.featured).map((band, i) => (
                 <BandCard key={band.name} band={band} index={i} inView={partyInView} height={340} />
               ))}
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {PARTY_BANDS.filter(b => !b.featured).map((band, i) => (
+              {partyBands.filter(b => !b.featured).map((band, i) => (
                 <BandCard key={band.name} band={band} index={i + 2} inView={partyInView} height={220} />
               ))}
               <div className="col-span-2 flex items-center justify-center rounded-xl"
@@ -506,7 +521,7 @@ export default function BandShowcase() {
           {/* Mobile: horizontal scroll */}
           <div className="flex md:hidden gap-3 pb-3 -mx-4 px-4"
             style={{ overflowX: 'auto', scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}>
-            {TRIBUTE_BANDS.map((band, i) => (
+            {tributeBands.map((band, i) => (
               <div key={band.name} style={{ width: '72vw', flexShrink: 0, scrollSnapAlign: 'start' }}>
                 <BandCard band={band} index={i} inView={tributeInView} height={280} />
               </div>
@@ -514,7 +529,7 @@ export default function BandShowcase() {
           </div>
           {/* Desktop: grid */}
           <div className="hidden md:grid grid-cols-4 gap-3">
-            {TRIBUTE_BANDS.map((band, i) => (
+            {tributeBands.map((band, i) => (
               <BandCard key={band.name} band={band} index={i} inView={tributeInView} height={300} />
             ))}
           </div>
@@ -539,7 +554,7 @@ export default function BandShowcase() {
           {/* Mobile: horizontal scroll */}
           <div className="flex md:hidden gap-3 pb-3 -mx-4 px-4"
             style={{ overflowX: 'auto', scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}>
-            {EASY_BANDS.map((band, i) => (
+            {easyBands.map((band, i) => (
               <div key={band.name} style={{ width: '72vw', flexShrink: 0, scrollSnapAlign: 'start' }}>
                 <BandCard band={band} index={i} inView={easyInView} height={280} />
               </div>
@@ -547,7 +562,7 @@ export default function BandShowcase() {
           </div>
           {/* Desktop: grid */}
           <div className="hidden md:grid grid-cols-4 gap-3">
-            {EASY_BANDS.map((band, i) => (
+            {easyBands.map((band, i) => (
               <BandCard key={band.name} band={band} index={i} inView={easyInView} height={300} />
             ))}
             {/* Spacer CTA */}

@@ -37,7 +37,8 @@
       "Bash(npx next *)",
       "Bash(dir \"c:\\\\Users\\\\eschu\\\\Desktop\\\\Unternehmensstruktur\\\\07-Projekte\\\\Schuck-Webdesign\\\\Bobby_Stoker\\\\VMP\\\\public\\\\images\\\\hero\")",
       "Bash(Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue)",
-      "Bash(Write-Host \"Cache gelöscht\")"
+      "Bash(Write-Host \"Cache gelöscht\")",
+      "Bash(xargs grep -l \"images/\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\eschu\\.claude",

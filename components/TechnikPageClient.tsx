@@ -116,9 +116,18 @@ function VideoBox({ large = false, dark = true }: { large?: boolean; dark?: bool
   )
 }
 
+// ─── Props ────────────────────────────────────────────────────────────
+
+interface Props {
+  heroUrl?: string
+  mainUrl?: string
+  thumbnailUrls?: string[]
+  songwritingUrl?: string
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────
 
-export default function TechnikPageClient() {
+export default function TechnikPageClient({ heroUrl, mainUrl, thumbnailUrls, songwritingUrl }: Props) {
 
   const s1 = useSection()
   const s2 = useSection()
@@ -141,7 +150,7 @@ export default function TechnikPageClient() {
       }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
           <Image
-            src="/images/technik-1.avif"
+            src={heroUrl ?? '/images/technik-1.avif'}
             alt=""
             fill
             style={{ objectFit: 'cover', opacity: 0.2 }}
@@ -214,7 +223,7 @@ export default function TechnikPageClient() {
               {/* Main image */}
               <div style={{ borderRadius: 16, overflow: 'hidden', position: 'relative', aspectRatio: '4/3', marginBottom: 10 }}>
                 <Image
-                  src="/images/technik-1.avif"
+                  src={mainUrl ?? '/images/technik-1.avif'}
                   alt="PA-Anlage und Bühnentechnik"
                   fill
                   style={{ objectFit: 'cover' }}
@@ -222,13 +231,19 @@ export default function TechnikPageClient() {
                 />
               </div>
               {/* 3 smaller images */}
+              {(() => {
+                const fallbacks = ['/images/technik-2.avif', '/images/veranstaltungsservice.avif', '/images/hero-event.avif']
+                const thumbs = fallbacks.map((fb, i) => thumbnailUrls?.[i] ?? fb)
+                return (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-                {['/images/technik-2.avif', '/images/veranstaltungsservice.avif', '/images/hero-event.avif'].map((src, i) => (
+                {thumbs.map((src, i) => (
                   <div key={i} style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', aspectRatio: '1/1' }}>
                     <Image src={src} alt="" fill style={{ objectFit: 'cover' }} sizes="17vw" />
                   </div>
                 ))}
               </div>
+                )
+              })()}
             </motion.div>
 
             {/* Text */}
@@ -382,7 +397,7 @@ export default function TechnikPageClient() {
               {/* Melanie Thornton image */}
               <div style={{ borderRadius: 14, overflow: 'hidden', position: 'relative', aspectRatio: '16/9', border: '1px solid rgba(255,255,255,0.07)' }}>
                 <Image
-                  src="/images/melanie-thornton.avif"
+                  src={songwritingUrl ?? '/images/melanie-thornton.avif'}
                   alt="Melanie Thornton"
                   fill
                   style={{ objectFit: 'cover' }}

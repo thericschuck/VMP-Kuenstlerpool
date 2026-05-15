@@ -320,6 +320,9 @@ interface Props {
   fbEmbedSrc: string
   avgRating: number | null
   infoItems: { label: string; value: string }[]
+  heroUrl?: string
+  dbImages?: string[]
+  reviews?: Review[]
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────
@@ -327,6 +330,7 @@ interface Props {
 export default function BandPageClient({
   band, related, categoryLabel,
   mailtoHref, whatsappHref, fbEmbedSrc, avgRating, infoItems,
+  heroUrl, dbImages, reviews = [],
 }: Props) {
   const contentRef = useRef<HTMLDivElement>(null)
   const relatedRef = useRef<HTMLElement>(null)
@@ -339,7 +343,7 @@ export default function BandPageClient({
 
   const realVideos = band.videos.filter(v => getYouTubeId(v.url))
 
-  const galleryImages = band.images.filter(Boolean)
+  const galleryImages = dbImages?.length ? dbImages : band.images.filter(Boolean)
 
   return (
     <>
@@ -361,7 +365,7 @@ export default function BandPageClient({
         backgroundColor: 'var(--color-dark)',
         overflow: 'hidden',
       }}>
-        {band.images[0] && (
+        {(heroUrl ?? band.images[0]) && (
           <motion.div
             className="absolute inset-0"
             initial={{ scale: 1.07 }}
@@ -369,7 +373,7 @@ export default function BandPageClient({
             transition={{ duration: 1.4, ease: 'easeOut' }}
           >
             <Image
-              src={band.images[0]}
+              src={heroUrl ?? band.images[0]}
               alt={band.name}
               fill
               priority
@@ -385,25 +389,27 @@ export default function BandPageClient({
 
         {/* Content */}
         <div style={{ position: 'absolute', bottom: 48, left: 40, right: 200, zIndex: 2 }}>
-          <motion.span
-            initial={{ opacity: 0, y: -14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            style={{
-              display: 'inline-block',
-              backgroundColor: 'var(--color-orange)',
-              color: '#fff',
-              fontSize: 11,
-              fontWeight: 600,
-              padding: '4px 16px',
-              borderRadius: 30,
-              fontFamily: 'var(--font-body)',
-              letterSpacing: '0.06em',
-              marginBottom: 16,
-            }}
-          >
-            {categoryLabel}
-          </motion.span>
+          {categoryLabel && (
+            <motion.span
+              initial={{ opacity: 0, y: -14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              style={{
+                display: 'inline-block',
+                backgroundColor: 'var(--color-orange)',
+                color: '#fff',
+                fontSize: 11,
+                fontWeight: 600,
+                padding: '4px 16px',
+                borderRadius: 30,
+                fontFamily: 'var(--font-body)',
+                letterSpacing: '0.06em',
+                marginBottom: 16,
+              }}
+            >
+              {categoryLabel}
+            </motion.span>
+          )}
 
           {avgRating && (
             <motion.div
@@ -414,7 +420,7 @@ export default function BandPageClient({
             >
               <Stars rating={avgRating} />
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>
-                {band.reviews?.length} Bewertungen
+                {reviews?.length} Bewertungen
               </span>
             </motion.div>
           )}
@@ -519,29 +525,28 @@ export default function BandPageClient({
             <div>
 
               {/* Photo grid */}
+              {galleryImages.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
                 animate={contentInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5 }}
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gridTemplateRows: '240px 150px',
+                  gridTemplateColumns: galleryImages.length > 1 ? '1fr 1fr' : '1fr',
+                  gridTemplateRows: galleryImages.length > 1 ? '240px 150px' : '360px',
                   gap: 10,
                   marginBottom: 52,
                 }}
               >
-                {/* Main image */}
+                {/* Main image — spans both rows when grid has 2 cols */}
                 <button
                   onClick={() => openLightbox(0)}
                   className="group"
-                  style={{ gridRow: '1 / 3', borderRadius: 12, overflow: 'hidden', backgroundColor: '#E8E0D4', position: 'relative', border: 'none', padding: 0, cursor: 'pointer' }}
+                  style={{ gridRow: galleryImages.length > 1 ? '1 / 3' : undefined, borderRadius: 12, overflow: 'hidden', backgroundColor: '#E8E0D4', position: 'relative', border: 'none', padding: 0, cursor: 'pointer' }}
                 >
-                  {band.images[0] && (
-                    <Image src={band.images[0]} alt={band.name} fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="30vw" />
-                  )}
+                  <Image src={galleryImages[0]} alt={band.name} fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="30vw" />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
                     style={{ background: 'rgba(0,0,0,0.25)' }}>
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -551,46 +556,60 @@ export default function BandPageClient({
                 </button>
 
                 {/* Second image */}
-                <button
-                  onClick={() => openLightbox(Math.min(1, galleryImages.length - 1))}
-                  className="group"
-                  style={{ borderRadius: 12, overflow: 'hidden', backgroundColor: '#DDD6CC', position: 'relative', border: 'none', padding: 0, cursor: 'pointer' }}
-                >
-                  {band.images[1] && (
-                    <Image src={band.images[1]} alt={`${band.name} 2`} fill
+                {galleryImages[1] && (
+                  <button
+                    onClick={() => openLightbox(1)}
+                    className="group"
+                    style={{ borderRadius: 12, overflow: 'hidden', position: 'relative', border: 'none', padding: 0, cursor: 'pointer' }}
+                  >
+                    <Image src={galleryImages[1]} alt={`${band.name} 2`} fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="15vw" />
-                  )}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                    style={{ background: 'rgba(0,0,0,0.25)' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-                    </svg>
-                  </div>
-                </button>
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                      style={{ background: 'rgba(0,0,0,0.25)' }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                      </svg>
+                    </div>
+                  </button>
+                )}
 
-                {/* Gallery button */}
-                <button
-                  onClick={() => openLightbox(0)}
-                  className="group"
-                  style={{
-                    borderRadius: 12,
-                    overflow: 'hidden',
-                    backgroundColor: 'var(--color-dark)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    border: 'none',
-                  }}
-                >
-                  <span
-                    className="transition-transform duration-200 group-hover:scale-110 inline-block"
-                    style={{ color: 'var(--color-orange)', fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 700, letterSpacing: '0.06em' }}>
-                    + Galerie
-                  </span>
-                </button>
+                {/* Third image — +N overlay if more images exist */}
+                {galleryImages[2] && (
+                  <button
+                    onClick={() => openLightbox(2)}
+                    className="group"
+                    style={{ borderRadius: 12, overflow: 'hidden', position: 'relative', border: 'none', padding: 0, cursor: 'pointer' }}
+                  >
+                    <Image src={galleryImages[2]} alt={`${band.name} 3`} fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="15vw" />
+                    {galleryImages.length > 3 ? (
+                      <div style={{
+                        position: 'absolute', inset: 0,
+                        background: 'rgba(0,0,0,0.58)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        flexDirection: 'column', gap: 2,
+                      }}>
+                        <span style={{ color: '#fff', fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 700, lineHeight: 1 }}>
+                          +{galleryImages.length - 3}
+                        </span>
+                        <span style={{ color: 'rgba(255,255,255,0.65)', fontFamily: 'var(--font-body)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                          Fotos
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                        style={{ background: 'rgba(0,0,0,0.25)' }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                        </svg>
+                      </div>
+                    )}
+                  </button>
+                )}
               </motion.div>
+              )}
 
               {/* Über die Band */}
               <motion.div
@@ -646,7 +665,7 @@ export default function BandPageClient({
               </motion.div>
 
               {/* Reviews */}
-              {band.reviews && band.reviews.length > 0 && (
+              {reviews && reviews.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={contentInView ? { opacity: 1 } : {}}
@@ -658,13 +677,13 @@ export default function BandPageClient({
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
                         <Stars rating={avgRating} />
                         <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-muted)' }}>
-                          Ø {avgRating}.0 · {band.reviews.length} Bewertungen
+                          Ø {avgRating}.0 · {reviews.length} Bewertungen
                         </span>
                       </div>
                     )}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
-                    {band.reviews.map((review, i) => (
+                    {reviews.map((review, i) => (
                       <ReviewCard key={i} review={review} index={i} />
                     ))}
                   </div>

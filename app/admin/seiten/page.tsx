@@ -140,7 +140,8 @@ export default function SeitenAdminPage() {
             key={`${activePage}-${section.key}`}
             table="page_images"
             folder={`${activePage}/${section.key}`}
-            filter={{ column: 'section', value: section.key }}
+            filter={{ column: 'page', value: activePage }}
+            extraFilters={[{ column: 'section', value: section.key }]}
             insertExtra={{ page: activePage, section: section.key }}
             maxImages={section.maxImages}
             title={section.label}
