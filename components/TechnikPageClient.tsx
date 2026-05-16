@@ -83,38 +83,6 @@ function CtaLink({ href, children, light = false }: { href: string; children: Re
   )
 }
 
-// ─── Video placeholder ────────────────────────────────────────────────
-
-function VideoBox({ large = false, dark = true }: { large?: boolean; dark?: boolean }) {
-  return (
-    <div style={{
-      aspectRatio: '16/9',
-      borderRadius: large ? 16 : 12,
-      background: dark ? '#111010' : '#E8E0D4',
-      position: 'relative',
-      overflow: 'hidden',
-      border: `1px solid ${dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'}`,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-      <div style={{
-        width: large ? 52 : 40,
-        height: large ? 52 : 40,
-        borderRadius: '50%',
-        background: 'var(--color-orange)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: '0 0 0 12px rgba(234,88,12,0.12)',
-      }}>
-        <svg viewBox="0 0 24 24" fill="white" width={large ? 18 : 14} height={large ? 18 : 14}>
-          <polygon points="6,4 20,12 6,20"/>
-        </svg>
-      </div>
-    </div>
-  )
-}
 
 // ─── Props ────────────────────────────────────────────────────────────
 
@@ -282,63 +250,71 @@ export default function TechnikPageClient({ heroUrl, mainUrl, thumbnailUrls, son
       </section>
 
       {/* ── Section 2: Musikproduktion ────────────────────────────── */}
-      <section id="musikproduktion" style={{ background: '#F0EBE3', padding: '80px 0' }}>
-        <div ref={s2.ref} className="max-w-7xl mx-auto" style={{ padding: '0 40px' }}>
-          <div className="lg:grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+      <section id="musikproduktion" style={{ background: '#F0EBE3', padding: '80px 0', borderTop: '1px solid var(--color-border)' }}>
+        <div ref={s2.ref} className="max-w-5xl mx-auto" style={{ padding: '0 40px' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={s2.inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <Eyebrow>Musikproduktion</Eyebrow>
+            <SectionHeading>Werbejingles, Demos &amp; Auftragsproduktionen</SectionHeading>
+            <BodyText>
+              Seit 20 Jahren produzieren wir Songs für Verlage, Werbeagenturen und andere Künstler. Musik für TV-Werbejingles wie Cliff Duschgel, Focus Kontaktlinsen u.v.m. Fordern Sie Demos an oder vereinbaren Sie einen Termin.
+            </BodyText>
+          </motion.div>
 
-            {/* Text – left */}
-            <motion.div
-              initial={{ opacity: 0, x: -28 }}
-              animate={s2.inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Eyebrow>Musikproduktion</Eyebrow>
-              <SectionHeading>Werbejingles, Demos &amp; Auftragsproduktionen</SectionHeading>
-              <BodyText>
-                Seit 20 Jahren produzieren wir Songs für Verlage, Werbeagenturen und andere Künstler. Musik für TV-Werbejingles wie Cliff Duschgel, Focus Kontaktlinsen u.v.m. Fordern Sie Demos an oder vereinbaren Sie einen Termin.
-              </BodyText>
-
-              {/* Stats */}
-              <div style={{ display: 'flex', gap: 40, marginTop: 36 }}>
-                {[
-                  { value: '20+', label: 'Jahre Erfahrung' },
-                  { value: '100+', label: 'Produktionen' },
-                ].map(({ value, label }) => (
-                  <div key={label}>
-                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 36, color: 'var(--color-orange)', lineHeight: 1, marginBottom: 4 }}>{value}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-muted)', letterSpacing: '0.04em' }}>{label}</p>
-                  </div>
-                ))}
+          {/* Stats row */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={s2.inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+              gap: 2,
+              marginTop: 52,
+              borderRadius: 16,
+              overflow: 'hidden',
+              border: '1px solid var(--color-border)',
+            }}
+          >
+            {[
+              { value: '20+', label: 'Jahre Erfahrung' },
+              { value: '100+', label: 'Produktionen' },
+              { value: 'Gold', label: 'Melanie Thornton – Ready To Fly' },
+              { value: 'TV', label: 'Cliff Duschgel · Focus Kontaktlinsen' },
+            ].map(({ value, label }, i) => (
+              <div key={label} style={{
+                backgroundColor: i % 2 === 0 ? '#fff' : 'rgba(255,255,255,0.6)',
+                padding: '28px 32px',
+                borderRight: i < 3 ? '1px solid var(--color-border)' : 'none',
+              }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: 38, color: 'var(--color-orange)', lineHeight: 1, marginBottom: 8 }}>{value}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-muted)', lineHeight: 1.5 }}>{label}</p>
               </div>
+            ))}
+          </motion.div>
 
-              <CtaLink href="/#kontakt">Demo anfragen</CtaLink>
-            </motion.div>
-
-            {/* Video – right */}
-            <motion.div
-              initial={{ opacity: 0, x: 28 }}
-              animate={s2.inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              style={{ marginTop: 40 }}
-              className="lg:mt-0"
-            >
-              <VideoBox large dark />
-            </motion.div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={s2.inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.4, delay: 0.3 }}
+          >
+            <CtaLink href="/#kontakt">Demo anfragen</CtaLink>
+          </motion.div>
         </div>
       </section>
 
-      {/* ── Section 3: Songwriting (dark) ─────────────────────────── */}
-      <section id="songwriting" style={{ background: 'var(--color-dark)', padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
-        {/* Ambient light */}
+      {/* ── Section 3: Songwriting ────────────────────────────────── */}
+      <section id="songwriting" style={{ background: 'var(--color-bg)', padding: '80px 0', position: 'relative', overflow: 'hidden', borderTop: '1px solid var(--color-border)' }}>
+        {/* Diagonal hairline grid texture */}
         <div aria-hidden style={{
-          position: 'absolute', top: '30%', left: '10%',
-          width: 600, height: 400, borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(234,88,12,0.06) 0%, transparent 70%)',
-          pointerEvents: 'none',
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: `repeating-linear-gradient(-52deg, rgba(28,25,23,0.028) 0px, rgba(28,25,23,0.028) 1px, transparent 1px, transparent 22px), repeating-linear-gradient(38deg, rgba(28,25,23,0.016) 0px, rgba(28,25,23,0.016) 1px, transparent 1px, transparent 44px)`,
         }} />
 
-        <div ref={s3.ref} className="max-w-7xl mx-auto" style={{ padding: '0 40px' }}>
+        <div ref={s3.ref} className="max-w-7xl mx-auto" style={{ padding: '0 40px', position: 'relative' }}>
           <div className="lg:grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'start' }}>
 
             {/* Text – left */}
@@ -347,9 +323,9 @@ export default function TechnikPageClient({ heroUrl, mainUrl, thumbnailUrls, son
               animate={s3.inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              <Eyebrow light>Songwriting &amp; Arrangements</Eyebrow>
-              <SectionHeading light>Songs für Verlage, Künstler &amp; Werbung</SectionHeading>
-              <BodyText light>
+              <Eyebrow>Songwriting &amp; Arrangements</Eyebrow>
+              <SectionHeading>Songs für Verlage, Künstler &amp; Werbung</SectionHeading>
+              <BodyText>
                 Bobby Stöcker schreibt regelmäßig Songs von Pop &amp; Rock über Dance bis R&amp;B – auch für andere Künstler. Auf Wunsch auch mit Arrangement und Produktion.
               </BodyText>
 
@@ -360,10 +336,11 @@ export default function TechnikPageClient({ heroUrl, mainUrl, thumbnailUrls, son
                 transition={{ duration: 0.5, delay: 0.2 }}
                 style={{
                   marginTop: 32,
-                  backgroundColor: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(234,88,12,0.25)',
+                  backgroundColor: '#fff',
+                  border: '1px solid rgba(139,26,26,0.18)',
                   borderRadius: 14,
                   padding: '20px 22px',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
@@ -372,30 +349,29 @@ export default function TechnikPageClient({ heroUrl, mainUrl, thumbnailUrls, son
                     Gold-Status
                   </span>
                 </div>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: '#fff', fontWeight: 700, marginBottom: 6 }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--color-dark)', fontWeight: 700, marginBottom: 6 }}>
                   Melanie Thornton – Ready To Fly
                 </p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(255,255,255,0.55)', marginBottom: 4 }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-muted)', marginBottom: 4 }}>
                   150.000 verkaufte Alben · Platz 3 der deutschen Album-Charts
                 </p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-subtle)' }}>
                   + Top 10 DJ-Charts mit Ayla Presents Yell
                 </p>
               </motion.div>
 
-              <CtaLink href="/#kontakt" light>Termin vereinbaren</CtaLink>
+              <CtaLink href="/#kontakt">Termin vereinbaren</CtaLink>
             </motion.div>
 
-            {/* Images – right */}
+            {/* Image – right */}
             <motion.div
               initial={{ opacity: 0, x: 28 }}
               animate={s3.inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-              style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 40 }}
+              style={{ marginTop: 40 }}
               className="lg:mt-0"
             >
-              {/* Melanie Thornton image */}
-              <div style={{ borderRadius: 14, overflow: 'hidden', position: 'relative', aspectRatio: '16/9', border: '1px solid rgba(255,255,255,0.07)' }}>
+              <div style={{ borderRadius: 16, overflow: 'hidden', position: 'relative', aspectRatio: '4/3', border: '1px solid var(--color-border)', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}>
                 <Image
                   src={songwritingUrl ?? '/images/melanie-thornton.avif'}
                   alt="Melanie Thornton"
@@ -404,8 +380,6 @@ export default function TechnikPageClient({ heroUrl, mainUrl, thumbnailUrls, son
                   sizes="45vw"
                 />
               </div>
-              {/* Second video box */}
-              <VideoBox dark />
             </motion.div>
           </div>
         </div>

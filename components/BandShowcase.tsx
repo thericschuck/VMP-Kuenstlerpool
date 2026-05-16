@@ -375,7 +375,7 @@ export default function BandShowcase({ bandImages }: { bandImages?: Record<strin
               className="font-display font-bold"
               style={{ fontSize: 'clamp(30px, 5vw, 52px)', lineHeight: 1.1, color: 'var(--color-dark)' }}
             >
-              10 Bands.<br />
+              Live Musik.<br />
               <span style={{ color: 'var(--color-orange)' }}>Eine Adresse.</span>
             </h2>
           </motion.div>
@@ -491,7 +491,7 @@ export default function BandShowcase({ bandImages }: { bandImages?: Record<strin
               ))}
               <div className="col-span-2 flex items-center justify-center rounded-xl"
                 style={{ height: 220, border: '1px dashed var(--color-border-strong)', backgroundColor: 'var(--color-bg-alt)' }}>
-                <a href="#kontakt" className="font-body font-semibold transition-colors hover:opacity-70"
+                <a href="/#kontakt" className="font-body font-semibold transition-colors hover:opacity-70"
                   style={{ fontSize: 14, color: 'var(--color-orange)', textDecoration: 'none' }}>
                   Partyband anfragen →
                 </a>
@@ -528,10 +528,19 @@ export default function BandShowcase({ bandImages }: { bandImages?: Record<strin
             ))}
           </div>
           {/* Desktop: grid */}
-          <div className="hidden md:grid grid-cols-4 gap-3">
-            {tributeBands.map((band, i) => (
-              <BandCard key={band.name} band={band} index={i} inView={tributeInView} height={300} />
-            ))}
+          <div className="hidden md:block">
+            <div className="grid grid-cols-4 gap-3 mb-3">
+              {tributeBands.map((band, i) => (
+                <BandCard key={band.name} band={band} index={i} inView={tributeInView} height={300} />
+              ))}
+            </div>
+            <div className="flex items-center justify-center rounded-xl"
+              style={{ height: 72, border: '1px dashed var(--color-border-strong)', backgroundColor: 'var(--color-bg)' }}>
+              <a href="/#kontakt" className="font-body font-semibold transition-colors hover:opacity-70"
+                style={{ fontSize: 14, color: 'var(--color-orange)', textDecoration: 'none' }}>
+                Tribute Band anfragen →
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -567,11 +576,9 @@ export default function BandShowcase({ bandImages }: { bandImages?: Record<strin
             ))}
             {/* Spacer CTA */}
             <div className="col-span-2 flex items-center justify-center rounded-xl"
-              style={{ height: 300, border: '1.5px dashed var(--color-border)', backgroundColor: 'rgba(28,25,23,0.03)' }}>
-              <a href="#kontakt" className="font-body font-semibold transition-colors"
-                style={{ fontSize: 14, color: 'var(--color-subtle)', textDecoration: 'none' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-dark)')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-subtle)')}>
+              style={{ height: 300, border: '1px dashed var(--color-border-strong)', backgroundColor: 'var(--color-bg-alt)' }}>
+              <a href="/#kontakt" className="font-body font-semibold transition-colors hover:opacity-70"
+                style={{ fontSize: 14, color: 'var(--color-orange)', textDecoration: 'none' }}>
                 Easy Listening anfragen →
               </a>
             </div>

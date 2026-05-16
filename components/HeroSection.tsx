@@ -140,14 +140,16 @@ export default function HeroSection({ slides: propSlides }: { slides?: { src: st
                 sizes="(max-width: 768px) 90vw, 1100px"
               />
               {/* Caption */}
-              <div className="absolute bottom-0 left-0 right-0 text-center pb-3">
-                <span
-                  className="font-body font-semibold text-white px-4 py-1.5 rounded-full"
-                  style={{ backgroundColor: 'rgba(28,25,23,0.7)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', fontSize: 13 }}
-                >
-                  {slides[lightbox].label}
-                </span>
-              </div>
+              {slides[lightbox].label && (
+                <div className="absolute bottom-0 left-0 right-0 text-center pb-3">
+                  <span
+                    className="font-body font-semibold text-white px-4 py-1.5 rounded-full"
+                    style={{ backgroundColor: 'rgba(28,25,23,0.7)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', fontSize: 13 }}
+                  >
+                    {slides[lightbox].label}
+                  </span>
+                </div>
+              )}
             </motion.div>
 
             {/* Next */}
@@ -472,13 +474,15 @@ export default function HeroSection({ slides: propSlides }: { slides?: { src: st
             {/* Label */}
             <div className="absolute bottom-8 left-8 z-10">
               <AnimatePresence mode="wait">
-                <motion.span key={active}
-                  initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.3 }}
-                  className="inline-block px-4 py-2 font-body font-semibold text-white rounded-full"
-                  style={{ backgroundColor: 'rgba(28,25,23,0.65)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', fontSize: 13 }}>
-                  {slides[active].label}
-                </motion.span>
+                {slides[active].label && (
+                  <motion.span key={active}
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.3 }}
+                    className="inline-block px-4 py-2 font-body font-semibold text-white rounded-full"
+                    style={{ backgroundColor: 'rgba(28,25,23,0.65)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', fontSize: 13 }}>
+                    {slides[active].label}
+                  </motion.span>
+                )}
               </AnimatePresence>
             </div>
 

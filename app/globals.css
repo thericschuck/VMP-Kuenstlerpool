@@ -44,9 +44,10 @@
 }
 
 html {
-  /* scroll-behavior: smooth is Safari desktop ≥15.4 only; not supported on iOS.
-     Kept because it enhances anchor navigation on desktop without breaking iOS. */
-  scroll-behavior: smooth;
+  /* scroll-behavior is handled by SmoothScrollProvider in JS so that
+     cross-page navigation (e.g. /bands → /#kontakt) jumps instantly
+     while same-page anchor clicks still animate smoothly. */
+  scroll-behavior: auto;
   -webkit-text-size-adjust: 100%; /* prevents Safari from auto-scaling text */
   overflow-x: hidden;
 }

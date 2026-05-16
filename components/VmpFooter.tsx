@@ -157,7 +157,7 @@ export default function VmpFooter() {
           <p className="font-body" style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)' }}>
             © {new Date().getFullYear()} Vivid Music Productions. Alle Rechte vorbehalten.
           </p>
-          <div className="flex gap-6">
+          <div className="flex gap-6 items-center">
             {['Impressum', 'Datenschutz'].map(l => (
               <a
                 key={l}
@@ -170,6 +170,15 @@ export default function VmpFooter() {
                 {l}
               </a>
             ))}
+            <a
+              href="/admin"
+              className="font-body transition-colors"
+              style={{ fontSize: 12, color: 'rgba(255,255,255,0.12)', textDecoration: 'none' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.12)')}
+            >
+              Admin
+            </a>
           </div>
         </div>
 

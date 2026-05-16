@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import SmoothScrollProvider from '@/components/SmoothScrollProvider'
 
 // Safari/iOS: viewport-fit=cover enables content behind the notch safe area
 export const viewport: Viewport = {
@@ -43,7 +44,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {children}
+        <SmoothScrollProvider>
+          {children}
+        </SmoothScrollProvider>
       </body>
     </html>
   )

@@ -261,77 +261,122 @@ export default function UeberUnsPageClient({ heroUrl, introUrl, teamUrls }: Prop
       {/* ── Team ──────────────────────────────────────────────────── */}
       <section style={{ background: '#F0EBE3', padding: '80px 0' }}>
         <div ref={team.ref} className="max-w-7xl mx-auto" style={{ padding: '0 40px' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={team.inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            style={{ marginBottom: 48 }}
-          >
-            <p style={{ fontSize: 10, color: 'var(--color-orange)', textTransform: 'uppercase', letterSpacing: '0.2em', fontWeight: 600, fontFamily: 'var(--font-body)', marginBottom: 10 }}>
-              Unser Team
-            </p>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: 'var(--color-dark)', lineHeight: 1.1 }}>
-              Die Menschen dahinter
-            </h2>
-          </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 320px))', gap: 24 }}>
-            {TEAM.map((member, i) => {
-              const memberImage = teamUrls?.[i] ?? member.image
-              return (
+          <div className="lg:grid" style={{ gridTemplateColumns: '1fr auto', gap: 64, alignItems: 'start' }}>
+
+            {/* Left: header + cards */}
+            <div>
               <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={team.inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  borderRadius: 16,
-                  overflow: 'hidden',
-                  backgroundColor: '#fff',
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
-                }}
+                transition={{ duration: 0.5 }}
+                style={{ marginBottom: 48 }}
               >
-                {/* Photo */}
-                <div style={{ position: 'relative', aspectRatio: '3/4', backgroundColor: '#E8E0D4' }}>
-                  {memberImage ? (
-                    <Image
-                      src={memberImage}
-                      alt={member.name}
-                      fill
-                      style={{ objectFit: 'cover', filter: 'grayscale(15%)' }}
-                      sizes="320px"
-                    />
-                  ) : (
-                    <div style={{
-                      position: 'absolute', inset: 0,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      background: 'linear-gradient(135deg, #D4C9BC 0%, #C4B8AA 100%)',
-                    }}>
-                      <span style={{ fontFamily: 'var(--font-display)', fontSize: 52, fontWeight: 700, color: 'rgba(28,25,23,0.25)' }}>
-                        {member.initials}
-                      </span>
-                    </div>
-                  )}
-                  {/* Name overlay */}
-                  <div style={{
-                    position: 'absolute', bottom: 0, left: 0, right: 0,
-                    padding: '32px 20px 16px',
-                    background: 'linear-gradient(to top, rgba(28,25,23,0.75) 0%, transparent 100%)',
-                  }}>
-                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>
-                      {member.name}
-                    </p>
-                  </div>
-                </div>
-                {/* Role */}
-                <div style={{ padding: '14px 20px 18px' }}>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-muted)', lineHeight: 1.5 }}>
-                    {member.role}
-                  </p>
-                </div>
+                <p style={{ fontSize: 10, color: 'var(--color-orange)', textTransform: 'uppercase', letterSpacing: '0.2em', fontWeight: 600, fontFamily: 'var(--font-body)', marginBottom: 10 }}>
+                  Unser Team
+                </p>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: 'var(--color-dark)', lineHeight: 1.1 }}>
+                  Die Menschen dahinter
+                </h2>
               </motion.div>
-              )
-            })}
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 300px))', gap: 24 }}>
+                {TEAM.map((member, i) => {
+                  const memberImage = teamUrls?.[i] ?? member.image
+                  return (
+                  <motion.div
+                    key={member.name}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={team.inView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                    style={{
+                      borderRadius: 16,
+                      overflow: 'hidden',
+                      backgroundColor: '#fff',
+                      boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
+                    }}
+                  >
+                    {/* Photo */}
+                    <div style={{ position: 'relative', aspectRatio: '3/4', backgroundColor: '#E8E0D4' }}>
+                      {memberImage ? (
+                        <Image
+                          src={memberImage}
+                          alt={member.name}
+                          fill
+                          style={{ objectFit: 'cover', filter: 'grayscale(15%)' }}
+                          sizes="300px"
+                        />
+                      ) : (
+                        <div style={{
+                          position: 'absolute', inset: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          background: 'linear-gradient(135deg, #D4C9BC 0%, #C4B8AA 100%)',
+                        }}>
+                          <span style={{ fontFamily: 'var(--font-display)', fontSize: 52, fontWeight: 700, color: 'rgba(28,25,23,0.25)' }}>
+                            {member.initials}
+                          </span>
+                        </div>
+                      )}
+                      {/* Name overlay */}
+                      <div style={{
+                        position: 'absolute', bottom: 0, left: 0, right: 0,
+                        padding: '32px 20px 16px',
+                        background: 'linear-gradient(to top, rgba(28,25,23,0.75) 0%, transparent 100%)',
+                      }}>
+                        <p style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>
+                          {member.name}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Role */}
+                    <div style={{ padding: '14px 20px 18px' }}>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-muted)', lineHeight: 1.5 }}>
+                        {member.role}
+                      </p>
+                    </div>
+                  </motion.div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Right: Facebook embed */}
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              animate={team.inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="hidden lg:block mt-0"
+              style={{ marginTop: 0 }}
+            >
+              <p style={{ fontSize: 10, color: 'var(--color-orange)', textTransform: 'uppercase', letterSpacing: '0.2em', fontWeight: 600, fontFamily: 'var(--font-body)', marginBottom: 14 }}>
+                Auf Facebook
+              </p>
+              <div style={{
+                borderRadius: 16,
+                overflow: 'hidden',
+                border: '1px solid var(--color-border)',
+                backgroundColor: '#fff',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
+              }}>
+                <div style={{ padding: '12px 16px 10px', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                  </svg>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, fontWeight: 600, color: 'var(--color-dark)' }}>
+                    VMP Künstlerpool
+                  </span>
+                </div>
+                <iframe
+                  src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FVMPKuenstlerpool%2F&tabs=timeline&width=340&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true"
+                  width="340"
+                  height="500"
+                  style={{ border: 'none', overflow: 'hidden', display: 'block' }}
+                  scrolling="no"
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                />
+              </div>
+            </motion.div>
+
           </div>
         </div>
       </section>

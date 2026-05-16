@@ -829,8 +829,11 @@ export default function BandPageClient({
 
       {/* ── Related Bands ─────────────────────────────────────── */}
       {related.length > 0 && (
-        <section ref={relatedRef} style={{ backgroundColor: 'var(--color-dark)', padding: '60px 40px' }}>
-          <div className="max-w-7xl mx-auto">
+        <section ref={relatedRef} style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'var(--color-bg)', padding: '60px 40px', borderTop: '1px solid var(--color-border)' }}>
+          {/* Diagonal hairline grid texture */}
+          <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ zIndex: 0, backgroundImage: `repeating-linear-gradient(-52deg, rgba(28,25,23,0.028) 0px, rgba(28,25,23,0.028) 1px, transparent 1px, transparent 22px), repeating-linear-gradient(38deg, rgba(28,25,23,0.016) 0px, rgba(28,25,23,0.016) 1px, transparent 1px, transparent 44px)` }} />
+
+          <div className="max-w-7xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
             <motion.div
               initial={{ opacity: 0, y: 22 }}
               animate={relatedInView ? { opacity: 1, y: 0 } : {}}
@@ -840,7 +843,7 @@ export default function BandPageClient({
               <p style={{ fontSize: 10, color: 'var(--color-orange)', textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 600, fontFamily: 'var(--font-body)', marginBottom: 10 }}>
                 Weitere Bands
               </p>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.5vw, 36px)', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.5vw, 36px)', color: 'var(--color-dark)', fontWeight: 700, lineHeight: 1.1 }}>
                 Weitere Bands aus dieser Kategorie
               </h2>
             </motion.div>
